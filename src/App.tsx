@@ -1,21 +1,24 @@
 import { useMachine } from '@xstate/react'
 import { stopwatchMachine } from './stopwatchMachine'
+import { formatTime } from './utils'
 
 function App() {
   const [snapshot, send] = useMachine(stopwatchMachine)
-  const { ms, ss, mm, hh } = snapshot.context
 
   return (
     <main>
-      <div>
-        {hh !== '00' && `${hh}:`}
-        {`${mm}:${ss}.${ms}`}
-      </div>
-      {snapshot.matches('initialized') && (
+      <div>{formatTime(snapshot.context.elapsed)}</div>
+      {snapshot.context.laps.length > 0 && (
+        <div>{formatTime(snapshot.context.lapElapsed)}</div>
+      )}
+      {snapshot.matches('stopped') && (
         <button onClick={() => send({ type: 'start' })}>Start</button>
       )}
-      {snapshot.matches('running') && (
-        <button onClick={() => send({ type: 'pause' })}>Pause</button>
+      {snapshot.matches('started') && (
+        <>
+          <button onClick={() => send({ type: 'lap' })}>Lap</button>
+          <button onClick={() => send({ type: 'pause' })}>Stop</button>
+        </>
       )}
       {snapshot.matches('paused') && (
         <>
@@ -23,6 +26,13 @@ function App() {
           <button onClick={() => send({ type: 'resume' })}>Resume</button>
         </>
       )}
+      {snapshot.context.laps.length > 0 && <div>Lap Lap time Overall time</div>}
+      {snapshot.context.laps.map(({ id, elapsed, overall }, index) => (
+        <div key={id}>
+          {snapshot.context.laps.length - index} {formatTime(elapsed)}{' '}
+          {formatTime(overall)}
+        </div>
+      ))}
     </main>
   )
 }

@@ -1,125 +1,186 @@
-import { setup, assign } from 'xstate'
+import { nanoid } from 'nanoid'
+import { setup, assign, stateIn } from 'xstate'
+
+type Lap = {
+  id: string
+  elapsed: number
+  overall: number
+}
 
 export const stopwatchMachine = setup({
   types: {
     context: {} as {
-      originTime: number
-      elapsedTime: number
-      ms: string
-      ss: string
-      mm: string
-      hh: string
+      origin: number
+      elapsed: number
+      lapOrigin: number
+      lapElapsed: number
+      laps: Lap[]
     },
     events: {} as
       | { type: 'start' }
+      | { type: 'lap' }
       | { type: 'pause' }
       | { type: 'resume' }
       | { type: 'reset' },
   },
   actions: {
-    startStopwatch: assign(() => ({
-      originTime: Date.now(),
+    setElapsed: assign(({ context }) => ({
+      elapsed: Date.now() - context.origin,
     })),
-    updateElapsedTime: assign(({ context }) => {
-      const elapsedTime = Date.now() - context.originTime,
-        elapsedDateTime = new Date(elapsedTime),
-        ms = ('0' + Math.floor(elapsedDateTime.getMilliseconds() / 10)).slice(
-          -2,
-        ),
-        ss = ('0' + elapsedDateTime.getSeconds()).slice(-2),
-        mm = ('0' + elapsedDateTime.getUTCMinutes()).slice(-2),
-        hh = ('0' + elapsedDateTime.getUTCHours()).slice(-2)
-
-      return { elapsedTime, ms, ss, mm, hh }
-    }),
-    updateOriginTime: assign(({ context }) => ({
-      originTime: Date.now() - context.elapsedTime,
+    setOrigin: assign(({ context }) => ({
+      origin: Date.now() - context.elapsed,
+    })),
+    setLapOrigin: assign(({ context }) => ({
+      lapOrigin: Date.now() - context.lapElapsed,
+    })),
+    addLap: assign(({ context }) => ({
+      laps: [
+        ...context.laps,
+        {
+          id: nanoid(),
+          elapsed: context.lapElapsed || context.elapsed,
+          overall: context.elapsed,
+          // TODO stat: 'min' | 'max' | null
+        },
+      ],
+    })),
+    resetLapStopwatch: assign(() => ({
+      lapOrigin: Date.now(),
+      lapElapsed: 0,
+    })),
+    setLapElapsed: assign(({ context }) => ({
+      lapElapsed: Date.now() - context.lapOrigin,
     })),
     resetStopwatch: assign({
-      originTime: 0,
-      elapsedTime: 0,
-      ms: '00',
-      ss: '00',
-      mm: '00',
-      hh: '00',
+      origin: 0,
+      elapsed: 0,
+      lapOrigin: 0,
+      lapElapsed: 0,
+      laps: [],
     }),
   },
-  schemas: {
-    events: {
-      start: {
-        type: 'object',
-        properties: {},
-      },
-      pause: {
-        type: 'object',
-        properties: {},
-      },
-      resume: {
-        type: 'object',
-        properties: {},
-      },
-      reset: {
-        type: 'object',
-        properties: {},
-      },
-    },
-    context: {
-      elapsedTime: { type: 'number' },
-      originTime: { type: 'number' },
-      ms: { type: 'number' },
-      ss: { type: 'number' },
-      mm: { type: 'number' },
-      hh: { type: 'number' },
-    },
+  guards: {
+    isLapStopwatchStopped: stateIn({ started: { lapStopwatch: 'stopped' } }),
   },
 }).createMachine({
   context: {
-    originTime: 0,
-    elapsedTime: 0,
-    ms: '00',
-    ss: '00',
-    mm: '00',
-    hh: '00',
+    origin: 0,
+    elapsed: 0,
+    lapOrigin: 0,
+    lapElapsed: 0,
+    laps: [],
   },
   id: 'stopwatch',
-  initial: 'initialized',
+  initial: 'stopped',
   states: {
-    initialized: {
+    stopped: {
       on: {
         start: {
-          target: 'running',
+          target: 'started',
           actions: {
-            type: 'startStopwatch',
+            type: 'setOrigin',
           },
         },
       },
     },
-    running: {
+    started: {
+      type: 'parallel',
       on: {
         pause: {
           target: 'paused',
         },
       },
-      after: {
-        '73': {
-          target: 'running',
-          actions: {
-            type: 'updateElapsedTime',
+      states: {
+        mainStopwatch: {
+          initial: 'running',
+          on: {
+            lap: [
+              {
+                target: '#stopwatch.started.lapStopwatch.running',
+                actions: [
+                  {
+                    type: 'addLap',
+                  },
+                  {
+                    type: 'setLapOrigin',
+                  },
+                ],
+                guard: {
+                  type: 'isLapStopwatchStopped',
+                },
+              },
+              {
+                target: '#stopwatch.started.lapStopwatch.running',
+                actions: [
+                  {
+                    type: 'addLap',
+                  },
+                  {
+                    type: 'resetLapStopwatch',
+                  },
+                ],
+              },
+            ],
           },
-          reenter: true,
+          states: {
+            running: {
+              after: {
+                '73': {
+                  target: 'running',
+                  actions: {
+                    type: 'setElapsed',
+                  },
+                  reenter: true,
+                },
+              },
+            },
+          },
+        },
+        lapStopwatch: {
+          initial: 'stopped',
+          states: {
+            stopped: {},
+            running: {
+              after: {
+                '73': {
+                  target: 'running',
+                  actions: {
+                    type: 'setLapElapsed',
+                  },
+                  reenter: true,
+                },
+              },
+            },
+          },
         },
       },
     },
     paused: {
       on: {
-        resume: {
-          target: 'running',
-          actions: {
-            type: 'updateOriginTime',
+        resume: [
+          {
+            target: 'started',
+            actions: {
+              type: 'setOrigin',
+            },
+            guard: {
+              type: 'isLapStopwatchStopped',
+            },
           },
-        },
+          {
+            target: '#stopwatch.started.lapStopwatch.running',
+            actions: [
+              {
+                type: 'setLapOrigin',
+              },
+              {
+                type: 'setOrigin',
+              },
+            ],
+          },
+        ],
         reset: {
-          target: 'initialized',
+          target: 'stopped',
           actions: {
             type: 'resetStopwatch',
           },
