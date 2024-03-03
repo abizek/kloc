@@ -1,5 +1,6 @@
 import { useMachine } from '@xstate/react'
 import { stopwatchMachine } from './stopwatchMachine'
+import { Button } from './components/Button'
 import { formatTime } from './utils'
 
 function App() {
@@ -11,21 +12,37 @@ function App() {
       {snapshot.context.laps.length > 0 && (
         <div>{formatTime(snapshot.context.lapElapsed)}</div>
       )}
-      {snapshot.matches('stopped') && (
-        <button onClick={() => send({ type: 'start' })}>Start</button>
-      )}
-      {snapshot.matches('started') && (
-        <>
-          <button onClick={() => send({ type: 'lap' })}>Lap</button>
-          <button onClick={() => send({ type: 'pause' })}>Stop</button>
-        </>
-      )}
-      {snapshot.matches('paused') && (
-        <>
-          <button onClick={() => send({ type: 'reset' })}>Reset</button>
-          <button onClick={() => send({ type: 'resume' })}>Resume</button>
-        </>
-      )}
+      <div>
+        {snapshot.matches('stopped') && (
+          <>
+            <Button disabled variant="secondary">
+              Lap
+            </Button>
+            <Button onClick={() => send({ type: 'start' })}>Start</Button>
+          </>
+        )}
+        {snapshot.matches('started') && (
+          <>
+            <Button onClick={() => send({ type: 'lap' })} variant="secondary">
+              Lap
+            </Button>
+            <Button
+              onClick={() => send({ type: 'pause' })}
+              variant="destructive"
+            >
+              Stop
+            </Button>
+          </>
+        )}
+        {snapshot.matches('paused') && (
+          <>
+            <Button onClick={() => send({ type: 'reset' })} variant="secondary">
+              Reset
+            </Button>
+            <Button onClick={() => send({ type: 'resume' })}>Resume</Button>
+          </>
+        )}
+      </div>
       {snapshot.context.laps.length > 0 && <div>Lap Lap time Overall time</div>}
       {snapshot.context.laps.map(({ id, elapsed, overall }, index) => (
         <div key={id}>
