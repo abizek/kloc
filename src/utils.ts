@@ -2,17 +2,18 @@ import clsx from 'clsx'
 import { ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-export function formatTime(timeMS: number): string {
-  const date = new Date(timeMS),
-    hh = stringifyTimeUnit(date.getUTCHours()),
-    mm = stringifyTimeUnit(date.getUTCMinutes()),
-    ss = stringifyTimeUnit(date.getUTCSeconds()),
-    ms = stringifyTimeUnit(date.getUTCMilliseconds())
+export function formatTime(timeinMs: number, padding: number = 0): string {
+  const date = new Date(timeinMs),
+    hh = prefixZero(date.getUTCHours()),
+    mm = prefixZero(date.getUTCMinutes()),
+    ss = prefixZero(date.getUTCSeconds()),
+    ms = prefixZero(date.getUTCMilliseconds())
 
-  return `${hh !== '00' ? `${hh}:` : ''}${mm}:${ss}.${ms}`
+  const pad = '\u00A0'.repeat(padding)
+  return `${hh !== '00' ? `${hh}${pad}:${pad}` : ''}${mm}${pad}:${pad}${ss}${pad}.${pad}${ms}`
 }
 
-function stringifyTimeUnit(unit: number): string {
+export function prefixZero(unit: number): string {
   return `0${unit}`.slice(-2)
 }
 
