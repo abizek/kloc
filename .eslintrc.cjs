@@ -8,6 +8,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'prettier',
+    'plugin:tailwindcss/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
@@ -17,5 +18,11 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+  },
+  settings: {
+    tailwindcss: {
+      callees: ['cn', 'clsx', 'cva'],
+      config: 'tailwind.config.js',
+    },
   },
 }
