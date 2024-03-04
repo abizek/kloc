@@ -3,6 +3,7 @@ import { stopwatchMachine } from './stopwatchMachine'
 import { Button } from './components/Button'
 import { Stopwatch } from './components/Stopwatch'
 import { LapTimes } from './components/LapTimes'
+import { cn } from './utils'
 
 function App() {
   const [snapshot, send] = useMachine(stopwatchMachine)
@@ -10,7 +11,12 @@ function App() {
 
   return (
     <main className="grid min-h-svh w-full grid-rows-[auto_100px] bg-gray-100">
-      <div className="flex flex-col items-center place-self-center">
+      <div
+        className={cn(
+          'flex flex-col items-center',
+          laps.length > 0 ? 'place-self-center' : 'mt-[25svh]',
+        )}
+      >
         <Stopwatch timeInMs={elapsed} />
         {laps.length > 0 && (
           <>
