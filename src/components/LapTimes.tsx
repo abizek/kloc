@@ -14,14 +14,14 @@ export function LapTimes({ laps }: LapTimesProps) {
       transition={{ layout: { duration: 0 } }}
       className="mt-12"
     >
-      <div className="flex justify-between pl-4 text-xs font-medium tracking-tight text-gray-500/80">
+      <div className="flex justify-between pl-4 text-xs font-medium tracking-tight text-gray-500/80 sm:text-sm md:text-base">
         <span>Lap</span>
         <span>Lap times</span>
         <span className="pr-3">Overall time</span>
       </div>
       <div className="mb-5 mt-3 h-px bg-gray-200" />
-      <ScrollArea className="h-[30svh] w-64 text-gray-500">
-        <div className="flex flex-col gap-4 px-4 text-sm">
+      <ScrollArea className="h-[20svh] w-full text-gray-500 h-sm:h-[30svh]">
+        <div className="flex flex-col gap-4 px-4 text-sm sm:text-base md:text-lg">
           {laps.map(({ id, elapsed, overall }, index) => (
             <motion.div
               layout

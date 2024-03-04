@@ -9,8 +9,8 @@ interface StopwatchProps extends VariantProps<typeof stopwatchVariants> {
 const stopwatchVariants = cva('tracking-tight', {
   variants: {
     variant: {
-      default: 'text-[2.75rem] text-gray-800',
-      secondary: 'text-xl text-gray-600/90',
+      default: 'text-[2.75rem] text-gray-800 sm:text-5xl sm:leading-normal md:text-6xl md:leading-normal',
+      secondary: 'text-xl text-gray-600/90 sm:text-2xl md:text-[1.7rem]',
     },
   },
   defaultVariants: {

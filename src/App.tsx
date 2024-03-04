@@ -11,7 +11,7 @@ function App() {
   const { elapsed, lapElapsed, laps } = snapshot.context
 
   return (
-    <main className="grid min-h-svh w-full grid-rows-[auto_100px] bg-gray-100">
+    <main className="grid min-h-svh w-full grid-rows-[auto_max(100px,_15svh)] bg-gray-100">
       <motion.div
         layout
         className={cn(
@@ -26,7 +26,7 @@ function App() {
               exit={{
                 opacity: 0,
               }}
-              className="text-center"
+              className="w-64 text-center sm:w-72 md:w-[22rem]"
             >
               <Stopwatch timeInMs={lapElapsed} variant="secondary" />
               <LapTimes laps={laps} />
@@ -34,7 +34,7 @@ function App() {
           )}
         </AnimatePresence>
       </motion.div>
-      <div className="flex w-full justify-evenly self-start">
+      <div className="flex w-full max-w-screen-sm justify-evenly place-self-center self-start">
         {snapshot.matches('stopped') && (
           <>
             <Button disabled variant="secondary">
