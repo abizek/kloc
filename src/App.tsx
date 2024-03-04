@@ -2,29 +2,24 @@ import { useMachine } from '@xstate/react'
 import { stopwatchMachine } from './stopwatchMachine'
 import { Button } from './components/Button'
 import { Stopwatch } from './components/Stopwatch'
-import { formatTime } from './utils'
+import { LapTimes } from './components/LapTimes'
 
 function App() {
   const [snapshot, send] = useMachine(stopwatchMachine)
   const { elapsed, lapElapsed, laps } = snapshot.context
 
   return (
-    <main className="grid min-h-svh w-full grid-rows-[auto_100px] place-items-center bg-gray-100">
-      <div className="flex flex-col items-center">
+    <main className="grid min-h-svh w-full grid-rows-[auto_100px] bg-gray-100">
+      <div className="flex flex-col items-center place-self-center">
         <Stopwatch timeInMs={elapsed} />
         {laps.length > 0 && (
-          <Stopwatch timeInMs={lapElapsed} variant="secondary" />
+          <>
+            <Stopwatch timeInMs={lapElapsed} variant="secondary" />
+            <LapTimes laps={laps} />
+          </>
         )}
-        <div className="mt-4">
-          {laps.length > 0 && <div>Lap Lap time Overall time</div>}
-          {laps.map(({ id, elapsed, overall }, index) => (
-            <div key={id}>
-              {laps.length - index} {formatTime(elapsed)} {formatTime(overall)}
-            </div>
-          ))}
-        </div>
       </div>
-      <div className="flex w-full justify-evenly">
+      <div className="flex w-full justify-evenly self-start">
         {snapshot.matches('stopped') && (
           <>
             <Button disabled variant="secondary">

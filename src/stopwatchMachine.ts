@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid'
 import { setup, assign, stateIn } from 'xstate'
 
-type Lap = {
+export type Lap = {
   id: string
   elapsed: number
   overall: number
