@@ -35,13 +35,13 @@ export const stopwatchMachine = setup({
     })),
     addLap: assign(({ context }) => ({
       laps: [
-        ...context.laps,
         {
           id: nanoid(),
           elapsed: context.lapElapsed || context.elapsed,
           overall: context.elapsed,
           // TODO stat: 'min' | 'max' | null
         },
+        ...context.laps,
       ],
     })),
     resetLapStopwatch: assign(() => ({

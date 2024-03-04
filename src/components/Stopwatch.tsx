@@ -1,5 +1,6 @@
 import { VariantProps, cva } from 'class-variance-authority'
 import { formatTime } from '../utils'
+import { motion } from 'framer-motion'
 
 interface StopwatchProps extends VariantProps<typeof stopwatchVariants> {
   timeInMs: number
@@ -19,8 +20,12 @@ const stopwatchVariants = cva('tracking-tight', {
 
 export function Stopwatch({ timeInMs, variant }: StopwatchProps) {
   return (
-    <div className={stopwatchVariants({ variant })}>
+    <motion.div
+      layout
+      transition={{ layout: { duration: 0 } }}
+      className={stopwatchVariants({ variant })}
+    >
       {formatTime(timeInMs, variant === 'secondary' ? 2 : 1)}
-    </div>
+    </motion.div>
   )
 }

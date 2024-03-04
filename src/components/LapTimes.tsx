@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { Lap } from '../stopwatchMachine'
 import { formatTime, prefixZero } from '../utils'
 import { ScrollArea } from './ScrollArea'
@@ -8,7 +9,11 @@ type LapTimesProps = {
 
 export function LapTimes({ laps }: LapTimesProps) {
   return (
-    <div className="mt-12">
+    <motion.div
+      layout
+      transition={{ layout: { duration: 0 } }}
+      className="mt-12"
+    >
       <div className="flex justify-between pl-4 text-xs font-medium tracking-tight text-gray-500/80">
         <span>Lap</span>
         <span>Lap times</span>
@@ -18,14 +23,21 @@ export function LapTimes({ laps }: LapTimesProps) {
       <ScrollArea className="h-[30svh] w-64 text-gray-500">
         <div className="flex flex-col gap-4 px-4 text-sm">
           {laps.map(({ id, elapsed, overall }, index) => (
-            <div key={id} className="flex justify-between">
+            <motion.div
+              layout
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ layout: { duration: laps.length === 1 ? 0 : 0.3 } }}
+              key={id}
+              className="flex justify-between"
+            >
               <span>{prefixZero(laps.length - index)}</span>
               <span>{formatTime(elapsed)}</span>
               <span className="text-gray-800">{formatTime(overall)}</span>
-            </div>
+            </motion.div>
           ))}
         </div>
       </ScrollArea>
-    </div>
+    </motion.div>
   )
 }

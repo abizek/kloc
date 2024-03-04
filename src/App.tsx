@@ -1,4 +1,5 @@
 import { useMachine } from '@xstate/react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { stopwatchMachine } from './stopwatchMachine'
 import { Button } from './components/Button'
 import { Stopwatch } from './components/Stopwatch'
@@ -11,20 +12,28 @@ function App() {
 
   return (
     <main className="grid min-h-svh w-full grid-rows-[auto_100px] bg-gray-100">
-      <div
+      <motion.div
+        layout
         className={cn(
-          'flex flex-col items-center',
+          'flex w-full flex-col items-center',
           laps.length > 0 ? 'place-self-center' : 'mt-[25svh]',
         )}
       >
         <Stopwatch timeInMs={elapsed} />
-        {laps.length > 0 && (
-          <>
-            <Stopwatch timeInMs={lapElapsed} variant="secondary" />
-            <LapTimes laps={laps} />
-          </>
-        )}
-      </div>
+        <AnimatePresence>
+          {laps.length > 0 && (
+            <motion.div
+              exit={{
+                opacity: 0,
+              }}
+              className="text-center"
+            >
+              <Stopwatch timeInMs={lapElapsed} variant="secondary" />
+              <LapTimes laps={laps} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
       <div className="flex w-full justify-evenly self-start">
         {snapshot.matches('stopped') && (
           <>
