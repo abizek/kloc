@@ -9,7 +9,8 @@ interface StopwatchProps extends VariantProps<typeof stopwatchVariants> {
 const stopwatchVariants = cva('tracking-tight', {
   variants: {
     variant: {
-      default: 'text-[2.75rem] text-gray-800 sm:text-5xl sm:leading-normal md:text-6xl md:leading-normal',
+      default:
+        'text-[2.75rem] text-gray-800 sm:text-5xl sm:leading-normal md:text-6xl md:leading-normal',
       secondary: 'text-xl text-gray-600/90 sm:text-2xl md:text-[1.7rem]',
     },
   },
@@ -22,7 +23,7 @@ export function Stopwatch({ timeInMs, variant }: StopwatchProps) {
   return (
     <motion.div
       layout
-      transition={{ layout: { duration: 0 } }}
+      transition={{ duration: 0 }}
       className={stopwatchVariants({ variant })}
     >
       {formatTime(timeInMs, variant === 'secondary' ? 2 : 1)}

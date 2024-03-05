@@ -9,11 +9,7 @@ type LapTimesProps = {
 
 export function LapTimes({ laps }: LapTimesProps) {
   return (
-    <motion.div
-      layout
-      transition={{ layout: { duration: 0 } }}
-      className="mt-12"
-    >
+    <motion.div layout transition={{ duration: 0 }} className="mt-12">
       <div className="flex justify-between pl-4 text-xs font-medium tracking-tight text-gray-500/80 sm:text-sm md:text-base">
         <span>Lap</span>
         <span>Lap times</span>
