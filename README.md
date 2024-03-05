@@ -1,30 +1,19 @@
-# React + TypeScript + Vite
+# Stopwatch
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Stopwatch app with support for laps _"inspired"_ by the Samsung stopwatch.
+Made using [Xstate](https://stately.ai/) for maintaining the stopwatch state and [Framer Motion](https://www.framer.com/motion/) for animating the layouts.
 
-Currently, two official plugins are available:
+Check out the [stopwatch state machine](https://stately.ai/registry/editor/350b30e8-7251-4b58-bd6c-670bfee8af31?mode=design&machineId=b50146c3-1632-41cc-bd44-baa31457f6cf) on the stately.ai visualizer!
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> _Xstate is awesome._
 
-## Expanding the ESLint configuration
+> _Framer Motion is neat._
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+> _Got to give props to React + Typescript (pun unintended)._
 
-- Configure the top-level `parserOptions` property like this:
+## Running the app locally
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+1. `cd` into the directory root and run `npm i`.
+2. Run `npm run dev` and voila! The app should be served on `http://localhost:5173`.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+> BTW, I use node v20
