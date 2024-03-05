@@ -12,7 +12,7 @@ function App() {
   const { elapsed, lapElapsed, laps } = snapshot.context
 
   return (
-    <div className="grid min-h-svh w-full grid-rows-[48px_auto_max(100px,_15svh)] bg-gray-50 dark:bg-black">
+    <div className="grid max-h-svh min-h-svh w-full grid-rows-[48px_auto_max(100px,_15svh)] bg-gray-50 dark:bg-black">
       <header className="z-10 flex w-full justify-end p-6">
         <a
           href="https://github.com/abizek/stopwatch"
