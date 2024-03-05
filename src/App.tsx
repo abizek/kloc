@@ -20,13 +20,11 @@ function App() {
         )}
       >
         <Stopwatch timeInMs={elapsed} />
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {laps.length > 0 && (
             <motion.div
-              exit={{
-                opacity: 0,
-              }}
-              className="w-72 text-center sm:w-80 md:w-[23rem]"
+              exit={{ opacity: 0, y: 50 }}
+              className="w-80 text-center md:w-[23rem]"
             >
               <Stopwatch timeInMs={lapElapsed} variant="secondary" />
               <LapTimes laps={laps} />

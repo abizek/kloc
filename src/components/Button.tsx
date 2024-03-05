@@ -2,7 +2,7 @@ import { VariantProps, cva } from 'class-variance-authority'
 import { cn } from '../utils'
 
 const buttonVariants = cva(
-  'min-h-11 min-w-28 scale-95 rounded-full font-semibold md:scale-105',
+  'min-h-11 min-w-28 scale-[1.15] rounded-full font-semibold',
   {
     variants: {
       variant: {

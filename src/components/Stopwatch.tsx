@@ -10,9 +10,9 @@ const stopwatchVariants = cva('tracking-tight', {
   variants: {
     variant: {
       default:
-        'text-[2.75rem] text-gray-800 sm:text-5xl sm:leading-normal md:text-6xl md:leading-normal dark:text-gray-200',
+        'text-6xl leading-relaxed text-gray-800 md:text-7xl md:leading-relaxed dark:text-gray-50',
       secondary:
-        'text-xl text-gray-600/90 sm:text-2xl md:text-[1.7rem] dark:text-gray-500',
+        'text-3xl text-gray-600/90 md:text-[2rem] dark:text-gray-400',
     },
   },
   defaultVariants: {
