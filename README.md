@@ -3,6 +3,8 @@
 A Stopwatch app with support for laps _"inspired"_ by the Samsung stopwatch.
 Made using [Xstate](https://stately.ai/) for maintaining the stopwatch state and [Framer Motion](https://www.framer.com/motion/) for animating the layouts.
 
+Check out the [app](https://stopwatch-abizek.pages.dev/) _or..._ 
+
 Check out the [stopwatch state machine](https://stately.ai/registry/editor/350b30e8-7251-4b58-bd6c-670bfee8af31?mode=design&machineId=b50146c3-1632-41cc-bd44-baa31457f6cf) on the stately.ai visualizer!
 
 > _Xstate is awesome._
