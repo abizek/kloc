@@ -1,17 +1,28 @@
 import { useMachine } from '@xstate/react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { Github } from 'lucide-react'
 import { stopwatchMachine } from './stopwatchMachine'
 import { Stopwatch } from './components/Stopwatch'
 import { LapTimes } from './components/LapTimes'
-import { cn } from './utils'
 import { Footer } from './components/Footer'
+import { cn } from './utils'
 
 function App() {
   const [snapshot, send] = useMachine(stopwatchMachine)
   const { elapsed, lapElapsed, laps } = snapshot.context
 
   return (
-    <div className="grid min-h-svh w-full grid-rows-[auto_max(100px,_15svh)] bg-gray-50 dark:bg-black">
+    <div className="grid min-h-svh w-full grid-rows-[48px_auto_max(100px,_15svh)] bg-gray-50 dark:bg-black">
+      <header className="z-10 flex w-full justify-end p-6">
+        <a
+          href="https://github.com/abizek/stopwatch"
+          target="_blank"
+          rel="noreferrer"
+          className='h-fit'
+        >
+          <Github className="size-7 dark:stroke-gray-50" />
+        </a>
+      </header>
       <motion.main
         layout
         className={cn(
