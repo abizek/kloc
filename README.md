@@ -18,4 +18,4 @@ Check out the [stopwatch state machine](https://stately.ai/registry/editor/350b3
 1. `cd` into the directory root and run `npm i`.
 2. Run `npm run dev` and voila! The app should be served on `http://localhost:5173`.
 
-> BTW, I use node v20
+> BTW, I used node v20
