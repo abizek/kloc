@@ -7,7 +7,7 @@ export function formatTime(timeinMs: number, padding: number = 0): string {
     hh = prefixZero(date.getUTCHours()),
     mm = prefixZero(date.getUTCMinutes()),
     ss = prefixZero(date.getUTCSeconds()),
-    ms = prefixZero(date.getUTCMilliseconds())
+    ms = prefixZero(Math.floor(date.getUTCMilliseconds() / 10))
 
   const pad = '\u00A0'.repeat(padding)
   return `${hh !== '00' ? `${hh}${pad}:${pad}` : ''}${mm}${pad}:${pad}${ss}${pad}.${pad}${ms}`
