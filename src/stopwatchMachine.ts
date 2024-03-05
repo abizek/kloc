@@ -39,7 +39,6 @@ export const stopwatchMachine = setup({
           id: nanoid(),
           elapsed: context.lapElapsed || context.elapsed,
           overall: context.elapsed,
-          // TODO stat: 'min' | 'max' | null
         },
         ...context.laps,
       ],

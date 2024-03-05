@@ -26,7 +26,7 @@ function App() {
               exit={{
                 opacity: 0,
               }}
-              className="w-64 text-center sm:w-72 md:w-[22rem]"
+              className="w-72 text-center sm:w-80 md:w-[23rem]"
             >
               <Stopwatch timeInMs={lapElapsed} variant="secondary" />
               <LapTimes laps={laps} />

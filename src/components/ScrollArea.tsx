@@ -8,11 +8,7 @@ const ScrollArea = ({
   children,
   ...props
 }: ScrollAreaPrimitive.ScrollAreaProps) => (
-  <ScrollAreaPrimitive.Root
-    className={cn('relative', className)}
-    type="scroll"
-    {...props}
-  >
+  <ScrollAreaPrimitive.Root className={className} type="scroll" {...props}>
     <ScrollAreaPrimitive.Viewport className="size-full">
       {children}
     </ScrollAreaPrimitive.Viewport>
