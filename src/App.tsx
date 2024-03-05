@@ -11,7 +11,7 @@ function App() {
   const { elapsed, lapElapsed, laps } = snapshot.context
 
   return (
-    <main className="grid min-h-svh w-full grid-rows-[auto_max(100px,_15svh)] bg-gray-100">
+    <main className="grid min-h-svh w-full grid-rows-[auto_max(100px,_15svh)] bg-gray-50 dark:bg-black">
       <motion.div
         layout
         className={cn(

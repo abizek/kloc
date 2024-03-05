@@ -43,13 +43,13 @@ export function LapTimes({ laps }: LapTimesProps) {
 
   return (
     <motion.div layout transition={{ duration: 0 }} className="mt-12">
-      <div className="flex justify-between pl-6 text-xs font-medium tracking-tight text-gray-500/80 sm:text-sm md:text-base">
+      <div className="flex justify-between pl-6 text-xs font-medium tracking-tight text-gray-500/80 sm:text-sm md:text-base dark:text-gray-400">
         <span>Lap</span>
         <span>Lap times</span>
         <span className="pr-5">Overall time</span>
       </div>
-      <div className="mx-2 mb-5 mt-3 h-px bg-gray-200" />
-      <ScrollArea className="h-[20svh] w-full text-gray-500 h-sm:h-[30svh]">
+      <div className="mx-2 mb-5 mt-3 h-px bg-gray-200 dark:bg-gray-700/70" />
+      <ScrollArea className="h-[20svh] w-full text-gray-500 h-sm:h-[30svh] dark:text-gray-400">
         <div className="flex flex-col gap-4 px-6 text-sm sm:text-base md:text-lg">
           {laps.map(({ id, elapsed, overall }, index) => (
             <motion.div
@@ -69,24 +69,26 @@ export function LapTimes({ laps }: LapTimesProps) {
                     className="absolute -translate-x-6 translate-y-1 md:translate-y-1.5"
                   >
                     {id === minId && (
-                      <ArrowDown className="size-3 text-indigo-600 sm:size-3.5 md:size-4" />
+                      <ArrowDown className="size-3 stroke-indigo-600 sm:size-3.5 md:size-4 dark:stroke-indigo-800 dark:stroke-[3]" />
                     )}
                     {id === maxId && (
-                      <ArrowUp className="size-3 text-red-600 sm:size-3.5 md:size-4" />
+                      <ArrowUp className="size-3 stroke-red-600 sm:size-3.5 md:size-4 dark:stroke-red-800 dark:stroke-[3]" />
                     )}
                   </motion.div>
                 )}
               </AnimatePresence>
               <span
                 className={cn(
-                  id === minId && 'text-indigo-600',
-                  id === maxId && 'text-red-600',
+                  id === minId && 'text-indigo-600 dark:text-indigo-800',
+                  id === maxId && 'text-red-600 dark:text-red-800',
                 )}
               >
                 {prefixZero(laps.length - index)}
               </span>
               <span>{formatTime(elapsed)}</span>
-              <span className="text-gray-800">{formatTime(overall)}</span>
+              <span className="text-gray-800 dark:text-gray-200">
+                {formatTime(overall)}
+              </span>
             </motion.div>
           ))}
         </div>

@@ -34,7 +34,7 @@ const ScrollBar = ({
       style={
         { '--radix-scroll-area-thumb-width': '4px' } as React.CSSProperties
       }
-      className="relative rounded-full bg-gray-300"
+      className="relative rounded-full bg-gray-300 dark:bg-gray-800/60"
     />
   </ScrollAreaPrimitive.ScrollAreaScrollbar>
 )
