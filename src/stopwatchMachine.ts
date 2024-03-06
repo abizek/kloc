@@ -126,7 +126,7 @@ export const stopwatchMachine = setup({
           states: {
             running: {
               after: {
-                '73': {
+                '10': {
                   target: 'running',
                   actions: {
                     type: 'setElapsed',
@@ -143,7 +143,7 @@ export const stopwatchMachine = setup({
             stopped: {},
             running: {
               after: {
-                '73': {
+                '10': {
                   target: 'running',
                   actions: {
                     type: 'setLapElapsed',
