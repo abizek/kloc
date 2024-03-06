@@ -8,6 +8,7 @@ export function Header() {
           target="_blank"
           rel="noreferrer"
           className='h-fit'
+          aria-label="View source code"
         >
           <Github className="size-7 dark:stroke-gray-50" />
         </a>
