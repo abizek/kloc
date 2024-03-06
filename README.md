@@ -1,7 +1,7 @@
 # Stopwatch
 
-A Stopwatch app with support for laps _"inspired"_ by the Samsung stopwatch.
-Made using [Xstate](https://stately.ai/) for maintaining the stopwatch state and [Framer Motion](https://www.framer.com/motion/) for animating the layouts.
+Stopwatch app with accuracy upto 10ms and laps support _inspired_ by the Samsung stopwatch.
+Made using [Xstate](https://stately.ai/docs/xstate) for maintaining the stopwatch state and [Framer Motion](https://www.framer.com/motion/) for animating the layouts.
 
 Check out the [app](https://stopwatch-abizek.pages.dev/) _or..._ 
 
