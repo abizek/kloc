@@ -9,6 +9,7 @@ module.exports = {
     'plugin:react/jsx-runtime',
     'prettier',
     'plugin:tailwindcss/recommended',
+    'plugin:cypress/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
