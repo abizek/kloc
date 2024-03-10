@@ -42,7 +42,11 @@ export function LapTimes({ laps }: LapTimesProps) {
   }, [minId, maxId])
 
   return (
-    <motion.div layout transition={{ duration: 0 }} className="mt-12 font-medium">
+    <motion.div
+      layout
+      transition={{ duration: 0 }}
+      className="mt-12 font-medium"
+    >
       <div className="mx-2 grid grid-cols-[64px_1.5fr_1fr] tracking-tight text-gray-400 md:text-lg">
         <span>Lap</span>
         <span>Lap times</span>
