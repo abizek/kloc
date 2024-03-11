@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowDown, ArrowUp } from 'lucide-react'
 import { Lap } from '../stopwatchMachine'
-import { cn, formatTime, prefixZero } from '../utils'
+import { formatTime, prefixZero } from '../utils'
 import { ScrollArea } from './ScrollArea'
 
 type LapTimesProps = {
@@ -49,12 +49,12 @@ export function LapTimes({ laps }: LapTimesProps) {
     >
       <div className="mx-2 grid grid-cols-[64px_1.5fr_1fr] tracking-tight text-gray-400 md:text-lg">
         <span>Lap</span>
-        <span>Lap times</span>
+        <span>Lap time</span>
         <span>Overall time</span>
       </div>
       <div className="mb-5 mt-3 h-px bg-gray-200 dark:bg-gray-500/70" />
       <ScrollArea className="h-[20svh] w-full text-gray-400 h-sm:h-[30svh] dark:text-gray-300">
-        <div className="flex flex-col gap-4 text-base md:text-lg">
+        <div className="mb-4 flex flex-col gap-4 text-base md:text-lg">
           {laps.map(({ id, elapsed, overall }, index) => (
             <motion.div
               layout
@@ -82,15 +82,21 @@ export function LapTimes({ laps }: LapTimesProps) {
                 )}
               </AnimatePresence>
               <span
-                className={cn(
-                  id === minId && 'text-indigo-500 dark:text-indigo-400',
-                  id === maxId && 'text-red-600',
-                )}
+                data-cy={`lap-${laps.length - index}`}
+                data-stat={
+                  (id === minId && 'min') || (id === maxId && 'max') || null
+                }
+                className="data-[stat=max]:text-red-600 data-[stat=min]:text-indigo-500 data-[stat=min]:dark:text-indigo-400"
               >
                 {prefixZero(laps.length - index)}
               </span>
-              <span>{formatTime(elapsed)}</span>
-              <span className="text-gray-700/90 dark:text-gray-50">
+              <span data-cy={`lap-time-${laps.length - index}`}>
+                {formatTime(elapsed)}
+              </span>
+              <span
+                data-cy={`overall-time-${laps.length - index}`}
+                className="text-gray-700/90 dark:text-gray-50"
+              >
                 {formatTime(overall)}
               </span>
             </motion.div>

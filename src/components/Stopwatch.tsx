@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 
 interface StopwatchProps extends VariantProps<typeof stopwatchVariants> {
   timeInMs: number
+  id: string
 }
 
 const stopwatchVariants = cva('tracking-tight', {
@@ -19,9 +20,10 @@ const stopwatchVariants = cva('tracking-tight', {
   },
 })
 
-export function Stopwatch({ timeInMs, variant }: StopwatchProps) {
+export function Stopwatch({ timeInMs, variant, id }: StopwatchProps) {
   return (
     <motion.div
+      data-cy={id}
       layout
       transition={{ duration: 0 }}
       className={stopwatchVariants({ variant })}

@@ -17,18 +17,22 @@ function App() {
       <motion.main
         layout
         className={cn(
-          'flex w-full flex-col items-center',
+          'z-10 flex w-full flex-col items-center',
           laps.length > 0 ? 'place-self-center' : 'mt-[25svh]',
         )}
       >
-        <Stopwatch timeInMs={elapsed} />
+        <Stopwatch id="elapsed" timeInMs={elapsed} />
         <AnimatePresence>
           {laps.length > 0 && (
             <motion.div
               exit={{ opacity: 0 }}
               className="w-80 text-center md:w-[23rem]"
             >
-              <Stopwatch timeInMs={lapElapsed} variant="secondary" />
+              <Stopwatch
+                id="lap-elapsed"
+                timeInMs={lapElapsed}
+                variant="secondary"
+              />
               <LapTimes laps={laps} />
             </motion.div>
           )}

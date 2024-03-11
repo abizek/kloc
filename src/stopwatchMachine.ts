@@ -39,7 +39,8 @@ export const stopwatchMachine = setup({
       laps: [
         {
           id: nanoid(),
-          elapsed: context.lapElapsed || context.elapsed,
+          elapsed:
+            context.laps.length > 0 ? context.lapElapsed : context.elapsed || 0,
           overall: context.elapsed,
         },
         ...context.laps,

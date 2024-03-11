@@ -15,18 +15,25 @@ export function Footer({ send, stopped, started, paused }: FooterProps) {
       <div className="flex w-full max-w-screen-sm justify-evenly place-self-center self-start">
         {stopped && (
           <>
-            <Button disabled variant="secondary">
+            <Button data-cy="lap" disabled variant="secondary">
               Lap
             </Button>
-            <Button onClick={() => send({ type: 'start' })}>Start</Button>
+            <Button data-cy="start" onClick={() => send({ type: 'start' })}>
+              Start
+            </Button>
           </>
         )}
         {started && (
           <>
-            <Button onClick={() => send({ type: 'lap' })} variant="secondary">
+            <Button
+              data-cy="lap"
+              onClick={() => send({ type: 'lap' })}
+              variant="secondary"
+            >
               Lap
             </Button>
             <Button
+              data-cy="pause"
               onClick={() => send({ type: 'pause' })}
               variant="destructive"
             >
@@ -36,10 +43,16 @@ export function Footer({ send, stopped, started, paused }: FooterProps) {
         )}
         {paused && (
           <>
-            <Button onClick={() => send({ type: 'reset' })} variant="secondary">
+            <Button
+              data-cy="reset"
+              onClick={() => send({ type: 'reset' })}
+              variant="secondary"
+            >
               Reset
             </Button>
-            <Button onClick={() => send({ type: 'resume' })}>Resume</Button>
+            <Button data-cy="resume" onClick={() => send({ type: 'resume' })}>
+              Resume
+            </Button>
           </>
         )}
       </div>
