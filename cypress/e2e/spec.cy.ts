@@ -1,5 +1,5 @@
-describe('My First Test', () => {
-  it('Gets, types and asserts', () => {
+describe('Stopwatch E2E Test', () => {
+  it('should start, stop, resume, lap and reset', () => {
     cy.clock(Date.now())
     cy.visit('/')
 
@@ -109,7 +109,6 @@ describe('My First Test', () => {
     cy.get('[data-cy="lap-elapsed"]').contains('00 : 02 . 11')
 
     cy.get('[data-cy="reset"]').should('be.visible').click()
-    cy.tick(10000)
     cy.get('[data-cy="elapsed"]').contains('00 : 00 . 00')
     cy.get('[data-cy="lap-elapsed"]').should('not.be.visible')
     cy.get('[data-radix-scroll-area-viewport]').should('not.be.visible')
