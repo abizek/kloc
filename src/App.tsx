@@ -2,14 +2,14 @@ import { useMachine } from '@xstate/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { stopwatchMachine } from './stopwatchMachine'
 import { Header } from './components/Header'
-import { Stopwatch } from './components/Stopwatch'
+import { TimeView } from './components/TimeView'
 import { LapTimes } from './components/LapTimes'
 import { Footer } from './components/Footer'
 import { cn } from './utils'
 
 function App() {
-  const [snapshot, send] = useMachine(stopwatchMachine)
-  const { elapsed, lapElapsed, laps } = snapshot.context
+  const [stopwatch, send] = useMachine(stopwatchMachine)
+  const { elapsed, lapElapsed, laps } = stopwatch.context
 
   return (
     <div className="grid h-svh w-full grid-rows-[48px_auto_max(100px,_15svh)] bg-gray-50 dark:bg-black">
@@ -21,14 +21,14 @@ function App() {
           laps.length > 0 ? 'place-self-center' : 'mt-[25svh]',
         )}
       >
-        <Stopwatch id="elapsed" timeInMs={elapsed} />
+        <TimeView id="elapsed" timeInMs={elapsed} />
         <AnimatePresence>
           {laps.length > 0 && (
             <motion.div
               exit={{ opacity: 0 }}
               className="w-80 text-center md:w-[23rem]"
             >
-              <Stopwatch
+              <TimeView
                 id="lap-elapsed"
                 timeInMs={lapElapsed}
                 variant="secondary"
@@ -39,9 +39,9 @@ function App() {
         </AnimatePresence>
       </motion.main>
       <Footer
-        stopped={snapshot.matches('stopped')}
-        started={snapshot.matches('started')}
-        paused={snapshot.matches('paused')}
+        stopped={stopwatch.matches('stopped')}
+        started={stopwatch.matches('started')}
+        paused={stopwatch.matches('paused')}
         send={send}
       />
     </div>
