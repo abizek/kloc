@@ -3,14 +3,18 @@ import { ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
 export function formatTime(timeinMs: number, padding: number = 0): string {
-  const date = new Date(timeinMs),
-    hh = prefixZero(date.getUTCHours()),
-    mm = prefixZero(date.getUTCMinutes()),
-    ss = prefixZero(date.getUTCSeconds()),
-    ms = prefixZero(Math.floor(date.getUTCMilliseconds() / 10))
+  const date = new Date(timeinMs)
+  const [hh, mm, ss, ms] = [
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+    Math.floor(date.getUTCMilliseconds() / 10),
+  ].map(prefixZero)
 
-  const pad = '\u00A0'.repeat(padding)
-  return `${hh !== '00' ? `${hh}${pad}:${pad}` : ''}${mm}${pad}:${pad}${ss}${pad}.${pad}${ms}`
+  return `${hh !== '00' ? `${hh} : ` : ''}${mm} : ${ss} . ${ms}`.replace(
+    / /g,
+    '\u00A0'.repeat(padding),
+  )
 }
 
 export function prefixZero(unit: number): string {
