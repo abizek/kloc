@@ -1,7 +1,5 @@
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area'
-
 import { cn } from '../utils'
-import React from 'react'
 
 const ScrollArea = ({
   className,
