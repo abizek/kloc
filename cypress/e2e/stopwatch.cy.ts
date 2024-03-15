@@ -1,7 +1,8 @@
-describe('Stopwatch E2E Test', () => {
+describe('Stopwatch', () => {
   beforeEach(() => {
     cy.clock(Date.now())
     cy.visit('/')
+    cy.get('[data-cy="stopwatch-trigger"]').click()
   })
 
   describe('Basics', () => {
@@ -192,7 +193,7 @@ describe('Stopwatch E2E Test', () => {
         })
       cy.get('[data-cy="lap-time-1"]').should('not.be.visible')
       cy.get('[data-cy="overall-time-1"]').should('not.be.visible')
-      cy.get('[data-radix-scroll-area-viewport]').scrollTo(0, 100)
+      cy.get('[data-cy="lap-time-1"]').click()
       cy.get('[data-cy="lap-time-6"]').should('not.be.visible')
       cy.get('[data-cy="overall-time-6"]').should('not.be.visible')
       cy.get('[data-cy="lap-time-1"]').should('be.visible')
