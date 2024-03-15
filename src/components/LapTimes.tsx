@@ -1,9 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowDown, ArrowUp } from 'lucide-react'
-import { Lap } from '../stopwatchMachine'
-import { formatTime, prefixZero } from '../utils'
+import type { Lap } from '../stopwatchMachine'
+import { prefixZero } from '../utils'
 import { ScrollArea } from './ScrollArea'
+import { TimeView } from './TimeView'
 
 type LapTimesProps = {
   laps: Lap[]
@@ -90,14 +91,19 @@ export function LapTimes({ laps }: LapTimesProps) {
               >
                 {prefixZero(laps.length - index)}
               </span>
-              <span data-cy={`lap-time-${laps.length - index}`}>
-                {formatTime(elapsed)}
+              <span>
+                <TimeView
+                  variant="unstyled"
+                  id={`lap-time-${laps.length - index}`}
+                  timeInMs={elapsed}
+                />
               </span>
-              <span
-                data-cy={`overall-time-${laps.length - index}`}
-                className="text-gray-700/90 dark:text-gray-50"
-              >
-                {formatTime(overall)}
+              <span className="text-gray-700/90 dark:text-gray-50">
+                <TimeView
+                  variant="unstyled"
+                  id={`overall-time-${laps.length - index}`}
+                  timeInMs={overall}
+                />
               </span>
             </motion.div>
           ))}
