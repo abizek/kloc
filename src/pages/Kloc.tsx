@@ -7,12 +7,16 @@ export function Kloc() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentTime(Date.now())
-    }, 10)
+    }, 100)
 
     return () => {
       clearInterval(intervalId)
     }
   }, [])
 
-  return <TimeView id="kloc" timeInMs={currentTime} />
+  return (
+    <div className='relative z-20 grid size-full place-items-center'>
+      <TimeView id="kloc" timeInMs={currentTime} currentTimeZone hideMs />
+    </div>
+  )
 }
