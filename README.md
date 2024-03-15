@@ -1,3 +1,7 @@
+# Kloc
+
+🚧 Coming soon 🚧
+
 # Stopwatch
 
 Stopwatch app with 10ms accuracy and lap support _inspired_ by the Samsung stopwatch.
