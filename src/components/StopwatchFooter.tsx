@@ -8,11 +8,16 @@ type StopwatchFooterProps = {
   paused: boolean
 }
 
-export function StopwatchFooter({ send, stopped, started, paused }: StopwatchFooterProps) {
+export function StopwatchFooter({
+  send,
+  stopped,
+  started,
+  paused,
+}: StopwatchFooterProps) {
   return (
-    <footer className="absolute grid min-h-svh w-full grid-rows-[auto_max(100px,_15svh)]">
+    <footer className="absolute z-10 grid h-svh w-full grid-rows-[auto_160px] place-items-center">
       <div />
-      <div className="flex w-full max-w-screen-sm justify-evenly place-self-center self-start">
+      <div className="mb-20 flex w-full max-w-screen-sm justify-evenly">
         {stopped && (
           <>
             <Button data-cy="lap" disabled variant="secondary">
