@@ -12,7 +12,7 @@ const TabsList = ({ ...props }: TabsPrimitive.TabsListProps) => (
   <div className="absolute grid h-svh w-full grid-rows-[auto_80px] place-items-center">
     <div />
     <TabsPrimitive.List
-      className="z-10 flex h-10 rounded-md bg-slate-50 p-1 text-black"
+      className="z-10 flex h-10 gap-1 p-1"
       {...props}
     />
   </div>
@@ -21,7 +21,7 @@ TabsList.displayName = TabsPrimitive.List.displayName
 
 const TabsTrigger = ({ ...props }: TabsPrimitive.TabsTriggerProps) => (
   <TabsPrimitive.Trigger
-    className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm"
+    className="inline-flex items-center justify-center rounded-full px-3 py-1.5 font-semibold text-gray-800 decoration-2 underline-offset-8 transition-all data-[state=inactive]:text-gray-400 data-[state=active]:underline data-[state=inactive]:hover:bg-gray-200 dark:text-gray-200 data-[state=inactive]:dark:text-gray-500 data-[state=inactive]:dark:hover:bg-gray-900"
     {...props}
   />
 )
