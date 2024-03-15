@@ -4,20 +4,26 @@ import { Stopwatch } from './pages/Stopwatch'
 
 export default function App() {
   return (
-    <Tabs defaultValue="stopwatch">
-      <TabsContent value="kloc" data-cy="kloc">
+    <Tabs defaultValue="kloc">
+      <TabsContent value="kloc" data-cy="kloc-content">
         <Kloc />
       </TabsContent>
-      <TabsContent value="stopwatch" data-cy="stopwatch">
+      <TabsContent value="stopwatch" data-cy="stopwatch-content">
         <Stopwatch />
       </TabsContent>
-      <TabsContent value="timer" data-cy="timer">
+      <TabsContent value="timer" data-cy="timer-content">
         Coming soon
       </TabsContent>
       <TabsList>
-        <TabsTrigger value="kloc">Kloc</TabsTrigger>
-        <TabsTrigger value="stopwatch">Stopwatch</TabsTrigger>
-        <TabsTrigger value="timer">Timer</TabsTrigger>
+        <TabsTrigger value="kloc" data-cy="kloc-trigger">
+          Kloc
+        </TabsTrigger>
+        <TabsTrigger value="stopwatch" data-cy="stopwatch-trigger">
+          Stopwatch
+        </TabsTrigger>
+        <TabsTrigger value="timer" data-cy="timer-trigger">
+          Timer
+        </TabsTrigger>
       </TabsList>
     </Tabs>
   )
