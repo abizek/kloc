@@ -2,7 +2,7 @@ import * as TabsPrimitive from '@radix-ui/react-tabs'
 
 const Tabs = ({ ...props }: TabsPrimitive.TabsProps) => (
   <TabsPrimitive.Root
-    className="grid h-svh w-full grid-rows-[auto_80px] place-items-center overflow-hidden bg-gray-50 dark:bg-black"
+    className="grid h-svh w-full grid-rows-[76px_auto_80px] place-items-center overflow-hidden bg-gray-50 dark:bg-black"
     {...props}
   />
 )
@@ -11,10 +11,7 @@ Tabs.displayName = TabsPrimitive.Root.displayName
 const TabsList = ({ ...props }: TabsPrimitive.TabsListProps) => (
   <div className="absolute grid h-svh w-full grid-rows-[auto_80px] place-items-center">
     <div />
-    <TabsPrimitive.List
-      className="z-10 flex h-10 gap-1 p-1"
-      {...props}
-    />
+    <TabsPrimitive.List className="z-10 flex h-10 gap-1 p-1" {...props} />
   </div>
 )
 TabsList.displayName = TabsPrimitive.List.displayName

@@ -15,7 +15,7 @@ export function StopwatchFooter({
   paused,
 }: StopwatchFooterProps) {
   return (
-    <footer className="absolute z-10 grid h-svh w-full grid-rows-[auto_160px] place-items-center">
+    <footer className="absolute z-10 grid h-[calc(100svh_-_76px)] w-full grid-rows-[auto_160px] place-items-center">
       <div />
       <div className="mb-20 flex w-full max-w-screen-sm justify-evenly">
         {stopped && (

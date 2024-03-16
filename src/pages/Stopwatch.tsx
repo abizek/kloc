@@ -1,6 +1,5 @@
 import { useMachine } from '@xstate/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Header } from '../components/Header'
 import { StopwatchFooter } from '../components/StopwatchFooter'
 import { TimeView } from '../components/TimeView'
 import { LapTimes } from '../components/LapTimes'
@@ -12,13 +11,12 @@ export function Stopwatch() {
   const { elapsed, lapElapsed, laps } = stopwatch.context
 
   return (
-    <div className="grid size-full grid-rows-[48px_auto_80px]">
-      <Header />
+    <div className="grid size-full grid-rows-[auto_80px]">
       <motion.main
         layout
         className={cn(
           'z-20 flex w-full flex-col items-center',
-          laps.length > 0 ? 'place-self-center' : 'mt-[28svh]',
+          laps.length > 0 ? 'place-self-center' : 'mt-[20svh]',
         )}
       >
         <TimeView id="elapsed" timeInMs={elapsed} />

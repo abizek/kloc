@@ -1,3 +1,4 @@
+import { Header } from './components/Header'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/Tabs'
 import { Kloc } from './pages/Kloc'
 import { Stopwatch } from './pages/Stopwatch'
@@ -5,6 +6,7 @@ import { Stopwatch } from './pages/Stopwatch'
 export default function App() {
   return (
     <Tabs defaultValue="kloc">
+      <Header />
       <TabsContent value="kloc" data-cy="kloc-content">
         <Kloc />
       </TabsContent>
