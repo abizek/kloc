@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { StopwatchFooter } from '../components/StopwatchFooter'
 import { TimeView } from '../components/TimeView'
 import { LapTimes } from '../components/LapTimes'
-import { stopwatchMachine } from '../stopwatchMachine'
+import { stopwatchMachine } from '../machines/stopwatch'
 import { cn } from '../utils'
 
 export function Stopwatch() {

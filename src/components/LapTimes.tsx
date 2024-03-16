@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
 import { ArrowDown, ArrowUp } from 'lucide-react'
-import type { Lap } from '../stopwatchMachine'
+import type { Lap } from '../machines/stopwatch'
 import { prefixZero } from '../utils'
 import { ScrollArea } from './ScrollArea'
 import { TimeView } from './TimeView'

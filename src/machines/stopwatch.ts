@@ -7,7 +7,7 @@ export type Lap = {
   overall: number
 }
 
-export type Events =
+export type StopwatchEvents =
   | { type: 'start' }
   | { type: 'lap' }
   | { type: 'pause' }
@@ -23,7 +23,7 @@ export const stopwatchMachine = setup({
       lapElapsed: number
       laps: Lap[]
     },
-    events: {} as Events,
+    events: {} as StopwatchEvents,
   },
   actions: {
     setElapsed: assign(({ context }) => ({

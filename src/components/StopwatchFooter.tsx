@@ -1,8 +1,8 @@
-import { Events } from '../stopwatchMachine'
+import type { StopwatchEvents } from '../machines/stopwatch'
 import { Button } from './Button'
 
 type StopwatchFooterProps = {
-  send: (event: Events) => void
+  send: (event: StopwatchEvents) => void
   stopped: boolean
   started: boolean
   paused: boolean
