@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { prefixZero } from '../utils'
 import { useMachine } from '@xstate/react'
 import { timerMachine } from '../machines/timer'
-import { TimeView } from '../components/TimeView'
+import { TimeView } from '../components/TimeViewOld'
 
 export function Timer() {
   const hoursRef = useRef<HTMLSelectElement>(null!)

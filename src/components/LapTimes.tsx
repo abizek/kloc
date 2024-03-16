@@ -4,7 +4,7 @@ import { ArrowDown, ArrowUp } from 'lucide-react'
 import type { Lap } from '../machines/stopwatch'
 import { prefixZero } from '../utils'
 import { ScrollArea } from './ScrollArea'
-import { TimeView } from './TimeView'
+import { StopwatchTimeView } from './TimeView'
 
 type LapTimesProps = {
   laps: Lap[]
@@ -92,14 +92,14 @@ export function LapTimes({ laps }: LapTimesProps) {
                 {prefixZero(laps.length - index)}
               </span>
               <span>
-                <TimeView
+                <StopwatchTimeView
                   variant="unstyled"
                   id={`lap-time-${laps.length - index}`}
                   time={elapsed}
                 />
               </span>
               <span className="text-gray-700/90 dark:text-gray-50">
-                <TimeView
+                <StopwatchTimeView
                   variant="unstyled"
                   id={`overall-time-${laps.length - index}`}
                   time={overall}

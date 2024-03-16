@@ -1,7 +1,7 @@
 import { useMachine } from '@xstate/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { StopwatchFooter } from '../components/StopwatchFooter'
-import { TimeView } from '../components/TimeView'
+import { StopwatchTimeView } from '../components/TimeView'
 import { LapTimes } from '../components/LapTimes'
 import { stopwatchMachine } from '../machines/stopwatch'
 import { cn } from '../utils'
@@ -19,14 +19,14 @@ export function Stopwatch() {
           laps.length > 0 ? 'place-self-center' : 'mt-[20svh]',
         )}
       >
-        <TimeView id="elapsed" time={elapsed} />
+        <StopwatchTimeView id="elapsed" time={elapsed} />
         <AnimatePresence>
           {laps.length > 0 && (
             <motion.div
               exit={{ opacity: 0 }}
               className="w-80 text-center md:w-[23rem]"
             >
-              <TimeView
+              <StopwatchTimeView
                 id="lap-elapsed"
                 time={lapElapsed}
                 variant="secondary"

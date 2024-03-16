@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { TimeView } from '../components/TimeView'
+import { KlocTimeView } from '../components/TimeView'
 
 export function Kloc() {
   const [currentTime, setCurrentTime] = useState(Date.now())
@@ -16,7 +16,7 @@ export function Kloc() {
 
   return (
     <div className="relative z-20 grid size-full place-items-center">
-      <TimeView id="kloc" time={currentTime} currentTimeZone hideMs />
+      <KlocTimeView time={currentTime} />
     </div>
   )
 }
