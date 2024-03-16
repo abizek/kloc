@@ -2,6 +2,7 @@ import { Header } from './components/Header'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/Tabs'
 import { Kloc } from './pages/Kloc'
 import { Stopwatch } from './pages/Stopwatch'
+import { Timer } from './pages/Timer'
 
 export default function App() {
   return (
@@ -14,7 +15,7 @@ export default function App() {
         <Stopwatch />
       </TabsContent>
       <TabsContent value="timer" data-cy="timer-content">
-        Coming soon
+        <Timer />
       </TabsContent>
       <TabsList>
         <TabsTrigger value="kloc" data-cy="kloc-trigger">
