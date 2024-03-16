@@ -95,14 +95,14 @@ export function LapTimes({ laps }: LapTimesProps) {
                 <TimeView
                   variant="unstyled"
                   id={`lap-time-${laps.length - index}`}
-                  timeInMs={elapsed}
+                  time={elapsed}
                 />
               </span>
               <span className="text-gray-700/90 dark:text-gray-50">
                 <TimeView
                   variant="unstyled"
                   id={`overall-time-${laps.length - index}`}
-                  timeInMs={overall}
+                  time={overall}
                 />
               </span>
             </motion.div>

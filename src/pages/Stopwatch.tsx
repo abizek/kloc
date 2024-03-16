@@ -19,7 +19,7 @@ export function Stopwatch() {
           laps.length > 0 ? 'place-self-center' : 'mt-[20svh]',
         )}
       >
-        <TimeView id="elapsed" timeInMs={elapsed} />
+        <TimeView id="elapsed" time={elapsed} />
         <AnimatePresence>
           {laps.length > 0 && (
             <motion.div
@@ -28,7 +28,7 @@ export function Stopwatch() {
             >
               <TimeView
                 id="lap-elapsed"
-                timeInMs={lapElapsed}
+                time={lapElapsed}
                 variant="secondary"
               />
               <LapTimes laps={laps} />

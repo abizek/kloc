@@ -15,8 +15,8 @@ export function Kloc() {
   }, [])
 
   return (
-    <div className='relative z-20 grid size-full place-items-center'>
-      <TimeView id="kloc" timeInMs={currentTime} currentTimeZone hideMs />
+    <div className="relative z-20 grid size-full place-items-center">
+      <TimeView id="kloc" time={currentTime} currentTimeZone hideMs />
     </div>
   )
 }

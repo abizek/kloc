@@ -3,7 +3,7 @@ import { prefixZero } from '../utils'
 import { motion } from 'framer-motion'
 
 interface TimeViewProps extends VariantProps<typeof timeViewVariants> {
-  timeInMs: number
+  time: number
   id: string
   currentTimeZone?: boolean
   hideMs?: boolean
@@ -24,13 +24,13 @@ const timeViewVariants = cva('tracking-tight', {
 })
 
 export function TimeView({
-  timeInMs,
+  time,
   variant,
   id,
   currentTimeZone = false,
   hideMs = false,
 }: TimeViewProps) {
-  const date = new Date(timeInMs)
+  const date = new Date(time)
   let padding: number
   let hh: string, mm: string, ss: string, ms: string, amPm: string
 
