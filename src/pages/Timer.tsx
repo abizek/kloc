@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { prefixZero } from '../utils'
 import { useMachine } from '@xstate/react'
 import { timerMachine } from '../machines/timer'
-import { TimeView } from '../components/TimeViewOld'
+import { TimerTimeView } from '../components/TimeView'
 
 export function Timer() {
   const hoursRef = useRef<HTMLSelectElement>(null!)
@@ -11,7 +11,7 @@ export function Timer() {
   const [timer, send] = useMachine(timerMachine)
 
   return (
-    <div className="relative z-10 size-full bg-gray-200">
+    <div className="relative z-10 size-full">
       <label>
         Hours:
         <select name="hours" ref={hoursRef} defaultValue="00">
@@ -91,7 +91,7 @@ export function Timer() {
           Cancel
         </button>
       )}
-      <TimeView id="timer" time={timer.context.remaining} />
+      <TimerTimeView time={timer.context.remaining} />
     </div>
   )
 }
