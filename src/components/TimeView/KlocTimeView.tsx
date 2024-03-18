@@ -12,12 +12,10 @@ export function KlocTimeView({ time }: KlocTimeViewProps) {
   const amPm = hours < 12 ? 'AM' : 'PM'
   hours %= 12
   if (hours === 0) hours = 12
-  
-  const [hh, mm, ss] = [
-    hours,
-    date.getMinutes(),
-    date.getSeconds(),
-  ].map(prefixZero)
+
+  const [hh, mm, ss] = [hours, date.getMinutes(), date.getSeconds()].map(
+    prefixZero,
+  )
 
   return (
     <TimeView id="kloc">

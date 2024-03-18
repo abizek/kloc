@@ -14,7 +14,12 @@ export function Timer() {
     <div className="relative z-10 size-full">
       <label>
         Hours:
-        <select name="hours" ref={hoursRef} defaultValue="00">
+        <select
+          data-cy="hours-select"
+          name="hours"
+          ref={hoursRef}
+          defaultValue="00"
+        >
           {Array(100)
             .fill(0)
             .map((_, index) => (
@@ -26,7 +31,12 @@ export function Timer() {
       </label>
       <label>
         Minutes:
-        <select name="minutes" ref={minutesRef} defaultValue="00">
+        <select
+          data-cy="minutes-select"
+          name="minutes"
+          ref={minutesRef}
+          defaultValue="00"
+        >
           {Array(60)
             .fill(0)
             .map((_, index) => (
@@ -38,7 +48,12 @@ export function Timer() {
       </label>
       <label>
         Seconds:
-        <select name="seconds" ref={secondsRef} defaultValue="00">
+        <select
+          data-cy="seconds-select"
+          name="seconds"
+          ref={secondsRef}
+          defaultValue="00"
+        >
           {Array(60)
             .fill(0)
             .map((_, index) => (
@@ -50,6 +65,7 @@ export function Timer() {
       </label>
       {timer.matches('stopped') && (
         <button
+          data-cy="start"
           onClick={() => {
             send({
               type: 'start',
@@ -66,6 +82,7 @@ export function Timer() {
       )}
       {timer.matches('running') && (
         <button
+          data-cy="pause"
           onClick={() => {
             send({ type: 'pause' })
           }}
@@ -75,6 +92,7 @@ export function Timer() {
       )}
       {timer.matches('paused') && (
         <button
+          data-cy="resume"
           onClick={() => {
             send({ type: 'resume' })
           }}
@@ -84,6 +102,7 @@ export function Timer() {
       )}
       {!timer.matches('stopped') && (
         <button
+          data-cy="reset"
           onClick={() => {
             send({ type: 'reset' })
           }}
@@ -91,7 +110,9 @@ export function Timer() {
           Cancel
         </button>
       )}
-      <TimerTimeView time={timer.context.remaining} />
+      {!timer.matches('stopped') && (
+        <TimerTimeView time={timer.context.remaining} />
+      )}
     </div>
   )
 }
