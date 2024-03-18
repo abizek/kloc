@@ -6,9 +6,7 @@ type TimerFooterProps = {
   stopped: boolean
   running: boolean
   paused: boolean
-  hoursRef: React.MutableRefObject<HTMLSelectElement>
-  minutesRef: React.MutableRefObject<HTMLSelectElement>
-  secondsRef: React.MutableRefObject<HTMLSelectElement>
+  timeInput: number
 }
 
 export function TimerFooter({
@@ -16,23 +14,18 @@ export function TimerFooter({
   stopped,
   running,
   paused,
-  hoursRef,
-  minutesRef,
-  secondsRef,
+  timeInput,
 }: TimerFooterProps) {
   return (
     <div className="flex w-full max-w-screen-sm justify-evenly">
       {stopped && (
         <Button
           data-cy="start"
+          disabled={timeInput === 0}
           onClick={() => {
             send({
               type: 'start',
-              time:
-                (+secondsRef.current.value +
-                  +minutesRef.current.value * 60 +
-                  +hoursRef.current.value * 60 * 60) *
-                1000,
+              time: timeInput,
             })
           }}
         >

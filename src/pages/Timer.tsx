@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useState } from 'react'
 import { prefixZero } from '../utils'
 import { useMachine } from '@xstate/react'
 import { timerMachine } from '../machines/timer'
@@ -6,9 +6,9 @@ import { TimerTimeView } from '../components/TimeView'
 import { TimerFooter } from '../components/TimerFooter'
 
 export function Timer() {
-  const hoursRef = useRef<HTMLSelectElement>(null!)
-  const minutesRef = useRef<HTMLSelectElement>(null!)
-  const secondsRef = useRef<HTMLSelectElement>(null!)
+  const [hours, setHours] = useState('00')
+  const [minutes, setMinutes] = useState('00')
+  const [seconds, setSeconds] = useState('00')
   const [timer, send] = useMachine(timerMachine)
 
   return (
@@ -20,8 +20,10 @@ export function Timer() {
             <select
               data-cy="hours-select"
               name="hours"
-              ref={hoursRef}
-              defaultValue="00"
+              value={hours}
+              onChange={(event) => {
+                setHours(event.target.value)
+              }}
             >
               {Array(100)
                 .fill(0)
@@ -37,8 +39,10 @@ export function Timer() {
             <select
               data-cy="minutes-select"
               name="minutes"
-              ref={minutesRef}
-              defaultValue="00"
+              value={minutes}
+              onChange={(event) => {
+                setMinutes(event.target.value)
+              }}
             >
               {Array(60)
                 .fill(0)
@@ -54,8 +58,10 @@ export function Timer() {
             <select
               data-cy="seconds-select"
               name="seconds"
-              ref={secondsRef}
-              defaultValue="00"
+              value={seconds}
+              onChange={(event) => {
+                setSeconds(event.target.value)
+              }}
             >
               {Array(60)
                 .fill(0)
@@ -75,9 +81,7 @@ export function Timer() {
         stopped={timer.matches('stopped')}
         running={timer.matches('running')}
         paused={timer.matches('paused')}
-        hoursRef={hoursRef}
-        minutesRef={minutesRef}
-        secondsRef={secondsRef}
+        timeInput={(+seconds + +minutes * 60 + +hours * 60 * 60) * 1000}
       />
     </div>
   )
