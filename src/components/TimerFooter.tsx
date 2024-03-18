@@ -1,4 +1,5 @@
 import type { TimerEvents } from '../machines/timer'
+import { Button } from './Button'
 
 type TimerFooterProps = {
   send: (event: TimerEvents) => void
@@ -20,9 +21,9 @@ export function TimerFooter({
   secondsRef,
 }: TimerFooterProps) {
   return (
-    <div className='flex w-full max-w-screen-sm justify-evenly'>
+    <div className="flex w-full max-w-screen-sm justify-evenly">
       {stopped && (
-        <button
+        <Button
           data-cy="start"
           onClick={() => {
             send({
@@ -36,37 +37,39 @@ export function TimerFooter({
           }}
         >
           Start
-        </button>
-      )}
-      {running && (
-        <button
-          data-cy="pause"
-          onClick={() => {
-            send({ type: 'pause' })
-          }}
-        >
-          Pause
-        </button>
+        </Button>
       )}
       {paused && (
-        <button
+        <Button
           data-cy="resume"
           onClick={() => {
             send({ type: 'resume' })
           }}
         >
           Resume
-        </button>
+        </Button>
+      )}
+      {running && (
+        <Button
+          data-cy="pause"
+          onClick={() => {
+            send({ type: 'pause' })
+          }}
+          variant="destructive"
+        >
+          Pause
+        </Button>
       )}
       {!stopped && (
-        <button
+        <Button
           data-cy="reset"
           onClick={() => {
             send({ type: 'reset' })
           }}
+          variant="secondary"
         >
           Cancel
-        </button>
+        </Button>
       )}
     </div>
   )
