@@ -1,6 +1,6 @@
 import { setup, assign, assertEvent } from 'xstate'
 
-type TimerEvents =
+export type TimerEvents =
   | { type: 'start'; time: number }
   | { type: 'pause' }
   | { type: 'resume' }
