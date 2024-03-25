@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import { prefixZero } from '../utils'
-import { useMachine } from '@xstate/react'
 import { timerMachine } from '../machines/timer'
 import { TimerTimeView } from '../components/TimeView'
 import { TimerFooter } from '../components/TimerFooter'
 import { TimerInput } from '../components/TimerInput'
+import { usePersistedMachine } from '../hooks/usePersistedMachine'
 
 export function Timer() {
   const [hours, setHours] = useState('00')
   const [minutes, setMinutes] = useState('00')
   const [seconds, setSeconds] = useState('00')
-  const [timer, send] = useMachine(timerMachine)
+  const [timer, send] = usePersistedMachine('timer', timerMachine)
 
   return (
     <div className="relative z-10 grid size-full grid-rows-[auto_80px] place-items-center">

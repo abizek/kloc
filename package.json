@@ -20,6 +20,7 @@
     "eslint-plugin-cypress": "^2.15.1",
     "eslint-plugin-tailwindcss": "^3.14.3",
     "framer-motion": "^11.0.8",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.344.0",
     "nanoid": "^5.0.6",
     "react": "^18.2.0",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@cypress/code-coverage": "^3.12.29",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@types/lodash": "^4.17.0",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^7.0.2",

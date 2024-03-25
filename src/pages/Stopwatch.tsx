@@ -1,14 +1,14 @@
-import { useMachine } from '@xstate/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { StopwatchFooter } from '../components/StopwatchFooter'
 import { StopwatchTimeView } from '../components/TimeView'
 import { LapTimes } from '../components/LapTimes'
 import { stopwatchMachine } from '../machines/stopwatch'
 import { cn } from '../utils'
+import { usePersistedMachine } from '../hooks/usePersistedMachine'
 
 export function Stopwatch() {
-  const [stopwatch, send] = useMachine(stopwatchMachine)
-  const { elapsed, lapElapsed, laps } = stopwatch.context
+  const [stopwatch, send] = usePersistedMachine('stopwatch', stopwatchMachine)
+  const { laps, elapsed, lapElapsed } = stopwatch.context
 
   return (
     <div className="grid size-full grid-rows-[auto_80px]">
