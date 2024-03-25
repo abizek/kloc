@@ -13,6 +13,7 @@ export type StopwatchEvents =
   | { type: 'pause' }
   | { type: 'resume' }
   | { type: 'reset' }
+  | { type: 'jumpstart' }
 
 export const stopwatchMachine = setup({
   types: {
@@ -91,6 +92,17 @@ export const stopwatchMachine = setup({
         pause: {
           target: 'paused',
         },
+        jumpstart: [
+          {
+            target: 'started',
+            guard: {
+              type: 'isLapStopwatchStopped',
+            },
+          },
+          {
+            target: '#stopwatch.started.lapStopwatch.running',
+          },
+        ],
       },
       states: {
         mainStopwatch: {

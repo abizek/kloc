@@ -1,10 +1,11 @@
-import { setup, assign, assertEvent } from 'xstate'
+import { setup, assign, assertEvent, stateIn } from 'xstate'
 
 export type TimerEvents =
   | { type: 'start'; time: number }
   | { type: 'pause' }
   | { type: 'resume' }
   | { type: 'reset' }
+  | { type: 'jumpstart' }
 
 export const timerMachine = setup({
   types: {
@@ -33,6 +34,7 @@ export const timerMachine = setup({
   },
   guards: {
     isComplete: ({ context }) => context.remaining < 0,
+    isRunning: stateIn('running'),
   },
 }).createMachine({
   context: {
@@ -41,6 +43,14 @@ export const timerMachine = setup({
   },
   id: 'timer',
   initial: 'stopped',
+  on: {
+    jumpstart: {
+      target: '#timer.running',
+      guard: {
+        type: 'isRunning',
+      },
+    },
+  },
   states: {
     stopped: {
       on: {
