@@ -207,4 +207,68 @@ describe('Stopwatch', () => {
       cy.get('[data-cy="lap-elapsed"]').contains('01 : 00 : 00 . 00')
     })
   })
+
+  describe('Persist state', () => {
+    it('paused', () => {
+      cy.get('[data-cy="start"]').click()
+      cy.tick(1000)
+      cy.get('[data-cy="elapsed"]').contains('00 : 01 . 00')
+      cy.get('[data-cy="pause"]').click()
+      cy.get('[data-cy="resume"]').should('be.visible')
+
+      switchTabs()
+      cy.get('[data-cy="resume"]').should('be.visible')
+      cy.get('[data-cy="elapsed"]').contains('00 : 01 . 00')
+    })
+
+    it('stopped', () => {
+      cy.get('[data-cy="start"]').click()
+      cy.tick(1000)
+      cy.get('[data-cy="elapsed"]').contains('00 : 01 . 00')
+      cy.get('[data-cy="pause"]').click()
+      cy.get('[data-cy="reset"]').click()
+      cy.get('[data-cy="start"]').should('be.visible')
+
+      switchTabs()
+      cy.get('[data-cy="start"]').should('be.visible')
+      cy.get('[data-cy="elapsed"]').contains('00 : 00 . 00')
+    })
+
+    it('started', () => {
+      cy.get('[data-cy="start"]').click()
+      cy.get('[data-cy="pause"]').should('be.visible')
+      cy.tick(1000)
+      cy.get('[data-cy="elapsed"]').contains('00 : 01 . 00')
+
+      switchTabs()
+      cy.get('[data-cy="pause"]').should('be.visible')
+      cy.get('[data-cy="lap-elapsed"]').should('not.exist')
+      cy.get('[data-cy="elapsed"]').contains('00 : 01 . 00')
+      cy.tick(1000)
+      cy.get('[data-cy="elapsed"]').contains('00 : 02 . 00')
+    })
+
+    it('lap started', () => {
+      cy.get('[data-cy="start"]').click()
+      cy.get('[data-cy="pause"]').should('be.visible')
+      cy.tick(1000)
+      cy.get('[data-cy="elapsed"]').contains('00 : 01 . 00')
+      cy.get('[data-cy="lap"]').click()
+      cy.get('[data-cy="lap-elapsed"]').contains('00 : 00 . 00')
+      cy.tick(1000)
+      cy.get('[data-cy="lap-elapsed"]').contains('00 : 01 . 00')
+      cy.get('[data-cy="elapsed"]').contains('00 : 02 . 00')
+
+      switchTabs()
+      cy.get('[data-cy="pause"]').should('be.visible')
+      cy.tick(1000)
+      cy.get('[data-cy="lap-elapsed"]').contains('00 : 02 . 00')
+      cy.get('[data-cy="elapsed"]').contains('00 : 03 . 00')
+    })
+
+    function switchTabs() {
+      cy.get('[data-cy="kloc-trigger"]').click()
+      cy.get('[data-cy="stopwatch-trigger"]').click()
+    }
+  })
 })
