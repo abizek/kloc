@@ -13,6 +13,10 @@ export const timerMachine = setup({
     events: {} as TimerEvents,
   },
   actions: {
+    resetTimer: assign({
+      remaining: 0,
+      destination: 0,
+    }),
     startTimer: assign(({ event }) => {
       assertEvent(event, 'start')
 
@@ -21,16 +25,12 @@ export const timerMachine = setup({
         remaining: 0,
       }
     }),
-    updateRemaining: assign(({ context }) => ({
-      remaining: context.destination - Date.now(),
-    })),
     resumeTimer: assign(({ context }) => ({
       destination: Date.now() + context.remaining,
     })),
-    resetTimer: assign({
-      remaining: 0,
-      destination: 0,
-    }),
+    updateRemaining: assign(({ context }) => ({
+      remaining: context.destination - Date.now(),
+    })),
   },
   guards: {
     isComplete: ({ context }) => context.remaining < 0,
@@ -61,6 +61,9 @@ export const timerMachine = setup({
           },
         },
       },
+      entry: {
+        type: 'resetTimer',
+      },
     },
     running: {
       on: {
@@ -69,28 +72,22 @@ export const timerMachine = setup({
         },
         reset: {
           target: 'stopped',
-          actions: {
-            type: 'resetTimer',
-          },
         },
       },
       after: {
         '10': {
           target: 'running',
-          actions: {
-            type: 'updateRemaining',
-          },
           reenter: true,
         },
       },
       always: {
         target: 'stopped',
-        actions: {
-          type: 'resetTimer',
-        },
         guard: {
           type: 'isComplete',
         },
+      },
+      entry: {
+        type: 'updateRemaining',
       },
     },
     paused: {
@@ -103,9 +100,6 @@ export const timerMachine = setup({
         },
         reset: {
           target: 'stopped',
-          actions: {
-            type: 'resetTimer',
-          },
         },
       },
     },
