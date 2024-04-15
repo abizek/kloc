@@ -86,4 +86,70 @@ describe('Timer', () => {
       cy.get('[data-cy="timer"]').contains('59m 55s 00ms')
     })
   })
+
+  describe('Persist State', () => {
+    describe('Local Storage', () => {
+      it('input', () => {
+        cy.get('[data-cy="hours-input"]').should('have.value', '00')
+        cy.get('[data-cy="minutes-input"]').should('have.value', '00')
+        cy.get('[data-cy="seconds-input"]').should('have.value', '00')
+        cy.get('[data-cy="hours-input"]').type('{selectall}01')
+        cy.get('[data-cy="minutes-input"]').type('{selectall}02')
+        cy.get('[data-cy="seconds-input"]').type('{selectall}03')
+        cy.reload()
+        cy.get('[data-cy="timer-trigger"]').click()
+        cy.get('[data-cy="hours-input"]').should('have.value', '01')
+        cy.get('[data-cy="minutes-input"]').should('have.value', '02')
+        cy.get('[data-cy="seconds-input"]').should('have.value', '03')
+      })
+    })
+
+    describe('Session Storage', () => {
+      it('paused', () => {
+        cy.get('[data-cy="seconds-input"]').type('{selectall}01')
+        cy.get('[data-cy="start"]').click()
+        cy.tick(500)
+        cy.get('[data-cy="timer"]').contains('50ms')
+        cy.get('[data-cy="pause"]').click()
+        cy.get('[data-cy="resume"]').should('be.visible')
+
+        switchTabs()
+        cy.get('[data-cy="resume"]').should('be.visible')
+        cy.get('[data-cy="timer"]').contains('50ms')
+      })
+
+      it('stopped', () => {
+        cy.get('[data-cy="seconds-input"]').type('{selectall}01')
+        cy.get('[data-cy="start"]').click()
+        cy.tick(500)
+        cy.get('[data-cy="timer"]').contains('50ms')
+        cy.get('[data-cy="pause"]').click()
+        cy.get('[data-cy="reset"]').click()
+        cy.get('[data-cy="start"]').should('be.visible')
+
+        switchTabs()
+        cy.get('[data-cy="start"]').should('be.visible')
+        cy.get('[data-cy="timer"]').should('not.exist')
+      })
+
+      it('started', () => {
+        cy.get('[data-cy="seconds-input"]').type('{selectall}03')
+        cy.get('[data-cy="start"]').click()
+        cy.get('[data-cy="pause"]').should('be.visible')
+        cy.tick(500)
+        cy.get('[data-cy="timer"]').contains('02s 50ms')
+
+        switchTabs()
+        cy.get('[data-cy="pause"]').should('be.visible')
+        cy.get('[data-cy="timer"]').contains('02s 50ms')
+        cy.tick(1000)
+        cy.get('[data-cy="timer"]').contains('01s 50ms')
+      })
+
+      function switchTabs() {
+        cy.get('[data-cy="kloc-trigger"]').click()
+        cy.get('[data-cy="timer-trigger"]').click()
+      }
+    })
+  })
 })
