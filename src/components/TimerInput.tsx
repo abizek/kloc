@@ -12,6 +12,7 @@ export function TimerInput() {
         <input
           type="number"
           name="hours"
+          data-cy="hours-input"
           value={hours}
           onChange={(event) => {
             event.preventDefault()
@@ -24,6 +25,7 @@ export function TimerInput() {
         <input
           type="number"
           name="minutes"
+          data-cy="minutes-input"
           value={minutes}
           onChange={(event) => {
             event.preventDefault()
@@ -36,6 +38,7 @@ export function TimerInput() {
         <input
           type="number"
           name="seconds"
+          data-cy="seconds-input"
           value={seconds}
           onChange={(event) => {
             event.preventDefault()

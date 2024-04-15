@@ -7,7 +7,7 @@ describe('Timer', () => {
 
   describe('Actions', () => {
     it('start', () => {
-      cy.get('[data-cy="seconds-select"]').select('01')
+      cy.get('[data-cy="seconds-input"]').type('{selectall}01')
       cy.get('[data-cy="start"]').contains('Start').click()
       cy.get('[data-cy="start"]').should('not.exist')
       cy.tick(500)
@@ -15,7 +15,7 @@ describe('Timer', () => {
     })
 
     it('pause', () => {
-      cy.get('[data-cy="seconds-select"]').select('01')
+      cy.get('[data-cy="seconds-input"]').type('{selectall}01')
       cy.get('[data-cy="start"]').click()
       cy.tick(500)
       cy.get('[data-cy="pause"]').contains('Pause').click()
@@ -24,7 +24,7 @@ describe('Timer', () => {
     })
 
     it('resume', () => {
-      cy.get('[data-cy="seconds-select"]').select('01')
+      cy.get('[data-cy="seconds-input"]').type('{selectall}01')
       cy.get('[data-cy="start"]').click()
       cy.tick(500)
       cy.get('[data-cy="pause"]').click()
@@ -36,7 +36,7 @@ describe('Timer', () => {
     })
 
     it('cancel', () => {
-      cy.get('[data-cy="seconds-select"]').select('01')
+      cy.get('[data-cy="seconds-input"]').type('{selectall}01')
       cy.get('[data-cy="start"]').click()
       cy.tick(500)
       cy.get('[data-cy="reset"]').contains('Cancel').click()
@@ -48,7 +48,7 @@ describe('Timer', () => {
 
   describe('Time View', () => {
     it('milliseconds', () => {
-      cy.get('[data-cy="seconds-select"]').select('01')
+      cy.get('[data-cy="seconds-input"]').type('{selectall}01')
       cy.get('[data-cy="start"]').click()
       cy.tick(500)
       cy.get('[data-cy="timer"]').contains('50ms')
@@ -57,7 +57,7 @@ describe('Timer', () => {
     })
 
     it('seconds', () => {
-      cy.get('[data-cy="seconds-select"]').select('05')
+      cy.get('[data-cy="seconds-input"]').type('{selectall}05')
       cy.get('[data-cy="start"]').click()
       cy.tick(2500)
       cy.get('[data-cy="timer"]').contains('02s 50ms')
@@ -66,8 +66,8 @@ describe('Timer', () => {
     })
 
     it('minutes', () => {
-      cy.get('[data-cy="minutes-select"]').select('05')
-      cy.get('[data-cy="seconds-select"]').select('01')
+      cy.get('[data-cy="minutes-input"]').type('{selectall}05')
+      cy.get('[data-cy="seconds-input"]').type('{selectall}01')
       cy.get('[data-cy="start"]').click()
       cy.tick(1000)
       cy.get('[data-cy="timer"]').contains('05m 00s 00ms')
@@ -78,7 +78,7 @@ describe('Timer', () => {
     })
 
     it('hours', () => {
-      cy.get('[data-cy="hours-select"]').select('02')
+      cy.get('[data-cy="hours-input"]').type('{selectall}02')
       cy.get('[data-cy="start"]').click()
       cy.tick(1000 * 60 * 60)
       cy.get('[data-cy="timer"]').contains('01h 00m 00s 00ms')
