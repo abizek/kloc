@@ -11,7 +11,7 @@ describe('Timer', () => {
       cy.get('[data-cy="start"]').contains('Start').click()
       cy.get('[data-cy="start"]').should('not.exist')
       cy.tick(500)
-      cy.get('[data-cy="timer"]').should('be.visible').contains('50ms')
+      cy.get('[data-cy="timer"]').should('be.visible').contains('50')
     })
 
     it('pause', () => {
@@ -20,7 +20,7 @@ describe('Timer', () => {
       cy.tick(500)
       cy.get('[data-cy="pause"]').contains('Pause').click()
       cy.get('[data-cy="pause"]').should('not.exist')
-      cy.get('[data-cy="timer"]').contains('50ms')
+      cy.get('[data-cy="timer"]').contains('50')
     })
 
     it('resume', () => {
@@ -32,7 +32,7 @@ describe('Timer', () => {
       cy.get('[data-cy="resume"]').contains('Resume').click()
       cy.get('[data-cy="resume"]').should('not.exist')
       cy.tick(250)
-      cy.get('[data-cy="timer"]').contains('25ms')
+      cy.get('[data-cy="timer"]').contains('25')
     })
 
     it('cancel', () => {
@@ -51,18 +51,18 @@ describe('Timer', () => {
       cy.get('[data-cy="seconds-input"]').type('{selectall}01')
       cy.get('[data-cy="start"]').click()
       cy.tick(500)
-      cy.get('[data-cy="timer"]').contains('50ms')
+      cy.get('[data-cy="timer"]').contains('50')
       cy.tick(250)
-      cy.get('[data-cy="timer"]').contains('25ms')
+      cy.get('[data-cy="timer"]').contains('25')
     })
 
     it('seconds', () => {
       cy.get('[data-cy="seconds-input"]').type('{selectall}05')
       cy.get('[data-cy="start"]').click()
       cy.tick(2500)
-      cy.get('[data-cy="timer"]').contains('02s 50ms')
+      cy.get('[data-cy="timer"]').contains('02 : 50')
       cy.tick(2000)
-      cy.get('[data-cy="timer"]').contains('50ms')
+      cy.get('[data-cy="timer"]').contains('50')
     })
 
     it('minutes', () => {
@@ -70,20 +70,20 @@ describe('Timer', () => {
       cy.get('[data-cy="seconds-input"]').type('{selectall}01')
       cy.get('[data-cy="start"]').click()
       cy.tick(1000)
-      cy.get('[data-cy="timer"]').contains('05m 00s 00ms')
+      cy.get('[data-cy="timer"]').contains('05 : 00 : 00')
       cy.tick(1000 * 60 * 2.5)
-      cy.get('[data-cy="timer"]').contains('02m 30s 00ms')
+      cy.get('[data-cy="timer"]').contains('02 : 30 : 00')
       cy.tick(1000 * 60 * 2)
-      cy.get('[data-cy="timer"]').contains('30s 00ms')
+      cy.get('[data-cy="timer"]').contains('30 : 00')
     })
 
     it('hours', () => {
       cy.get('[data-cy="hours-input"]').type('{selectall}02')
       cy.get('[data-cy="start"]').click()
       cy.tick(1000 * 60 * 60)
-      cy.get('[data-cy="timer"]').contains('01h 00m 00s 00ms')
+      cy.get('[data-cy="timer"]').contains('01 : 00 : 00 : 00')
       cy.tick(1000 * 5)
-      cy.get('[data-cy="timer"]').contains('59m 55s 00ms')
+      cy.get('[data-cy="timer"]').contains('59 : 55 : 00')
     })
   })
 
@@ -109,20 +109,20 @@ describe('Timer', () => {
         cy.get('[data-cy="seconds-input"]').type('{selectall}01')
         cy.get('[data-cy="start"]').click()
         cy.tick(500)
-        cy.get('[data-cy="timer"]').contains('50ms')
+        cy.get('[data-cy="timer"]').contains('50')
         cy.get('[data-cy="pause"]').click()
         cy.get('[data-cy="resume"]').should('be.visible')
 
         switchTabs()
         cy.get('[data-cy="resume"]').should('be.visible')
-        cy.get('[data-cy="timer"]').contains('50ms')
+        cy.get('[data-cy="timer"]').contains('50')
       })
 
       it('stopped', () => {
         cy.get('[data-cy="seconds-input"]').type('{selectall}01')
         cy.get('[data-cy="start"]').click()
         cy.tick(500)
-        cy.get('[data-cy="timer"]').contains('50ms')
+        cy.get('[data-cy="timer"]').contains('50')
         cy.get('[data-cy="pause"]').click()
         cy.get('[data-cy="reset"]').click()
         cy.get('[data-cy="start"]').should('be.visible')
@@ -137,13 +137,13 @@ describe('Timer', () => {
         cy.get('[data-cy="start"]').click()
         cy.get('[data-cy="pause"]').should('be.visible')
         cy.tick(500)
-        cy.get('[data-cy="timer"]').contains('02s 50ms')
+        cy.get('[data-cy="timer"]').contains('02 : 50')
 
         switchTabs()
         cy.get('[data-cy="pause"]').should('be.visible')
-        cy.get('[data-cy="timer"]').contains('02s 50ms')
+        cy.get('[data-cy="timer"]').contains('02 : 50')
         cy.tick(1000)
-        cy.get('[data-cy="timer"]').contains('01s 50ms')
+        cy.get('[data-cy="timer"]').contains('01 : 50')
       })
 
       function switchTabs() {

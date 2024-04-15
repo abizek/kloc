@@ -18,10 +18,10 @@ export function TimerTimeView({ time }: TimerTimeViewProps) {
 
   return (
     <TimeView id="timer">
-      {hh !== '00' && `${hh}h `}
-      {(hh !== '00' || mm !== '00') && `${mm}m `}
-      {(hh !== '00' || mm !== '00' || ss !== '00') && `${ss}s `}
-      {ms}ms
+      {hh !== '00' && `${hh} : `}
+      {(hh !== '00' || mm !== '00') && `${mm} : `}
+      {(hh !== '00' || mm !== '00' || ss !== '00') && `${ss} : `}
+      {ms}
     </TimeView>
   )
 }
