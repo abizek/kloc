@@ -1,87 +1,48 @@
-import { useMotionValueEvent, useScroll } from 'framer-motion'
-import { useEffect, useRef } from 'react'
+import { useLocalStorage } from '@uidotdev/usehooks'
 
-type TimerInputProps = {
-  label: string
-  values: string[]
-  onChange: (value: string) => void
-  persistedValue: string
-  hideSeparator?: boolean
-}
-
-type ValueItemProps = {
-  value: string
-  containerRef: React.RefObject<HTMLDivElement>
-  onChange: (value: string) => void
-  persistedValue: string
-}
-
-export function TimerInput({
-  label,
-  values,
-  onChange,
-  persistedValue,
-  hideSeparator = false,
-}: TimerInputProps) {
-  const ref = useRef<HTMLDivElement>(null)
+export function TimerInput() {
+  const [hours, setHours] = useLocalStorage('timer-input-hours', '00')
+  const [minutes, setMinutes] = useLocalStorage('timer-input-minutes', '00')
+  const [seconds, setSeconds] = useLocalStorage('timer-input-seconds', '00')
 
   return (
-    <div className="dark:text-white">
-      <div className="mb-4">{label}</div>
-      <div className="flex items-center gap-4 text-2xl">
-        <div
-          ref={ref}
-          className="relative h-64 snap-y snap-mandatory overflow-y-scroll text-3xl no-scrollbar"
-        >
-          {values.map((value) => (
-            <ValueItem
-              key={value}
-              value={value}
-              containerRef={ref}
-              onChange={onChange}
-              persistedValue={persistedValue}
-            />
-          ))}
-        </div>
-        {!hideSeparator && ':'}
-      </div>
-    </div>
-  )
-}
-
-function ValueItem({
-  value,
-  containerRef,
-  onChange,
-  persistedValue,
-}: ValueItemProps) {
-  const ref = useRef<HTMLDivElement>(null!)
-  const { scrollYProgress } = useScroll({
-    container: containerRef,
-    target: ref,
-    layoutEffect: false,
-  })
-
-  useEffect(() => {
-    if (value === persistedValue) {
-      // initial scroll to the persisted value
-      ref.current.scrollIntoView({ behavior: 'instant', block: 'center' })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    if (latest === 0.5) {
-      onChange(value)
-    }
-  })
-
-  return (
-    <div
-      ref={ref}
-      className="flex h-24 snap-center items-center justify-center"
-    >
-      {value}
+    <div className="flex items-center gap-4 text-gray-800 dark:text-gray-50 [&_input]:w-10 [&_input]:bg-gray-50 [&_input]:dark:bg-black [&_label]:flex [&_label]:gap-4">
+      <label>
+        Hours:
+        <input
+          type="number"
+          name="hours"
+          value={hours}
+          onChange={(event) => {
+            event.preventDefault()
+            setHours(event.target.value)
+          }}
+        />
+      </label>
+      <label>
+        Minutes:
+        <input
+          type="number"
+          name="minutes"
+          value={minutes}
+          onChange={(event) => {
+            event.preventDefault()
+            setMinutes(event.target.value)
+          }}
+        />
+      </label>
+      <label>
+        Seconds:
+        <input
+          type="number"
+          name="seconds"
+          value={seconds}
+          onChange={(event) => {
+            event.preventDefault()
+            setSeconds(event.target.value)
+          }}
+        />
+      </label>
     </div>
   )
 }
