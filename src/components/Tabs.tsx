@@ -1,4 +1,5 @@
 import * as TabsPrimitive from '@radix-ui/react-tabs'
+import { AnimatePresence, motion } from 'framer-motion'
 
 const Tabs = ({ ...props }: TabsPrimitive.TabsProps) => (
   <TabsPrimitive.Root
@@ -18,15 +19,58 @@ TabsList.displayName = TabsPrimitive.List.displayName
 
 const TabsTrigger = ({ ...props }: TabsPrimitive.TabsTriggerProps) => (
   <TabsPrimitive.Trigger
-    className="inline-flex items-center justify-center rounded-full px-3 py-1.5 font-semibold text-gray-800 decoration-2 underline-offset-8 transition-all data-[state=inactive]:text-gray-400 data-[state=active]:underline data-[state=inactive]:hover:bg-gray-200 dark:text-gray-200 data-[state=inactive]:dark:text-gray-500 data-[state=inactive]:dark:hover:bg-gray-900"
+    className="relative inline-flex items-center justify-center rounded-full px-3 py-1.5 font-semibold text-gray-800 transition-all data-[state=inactive]:text-gray-400 data-[state=inactive]:hover:bg-gray-200 dark:text-gray-200 data-[state=inactive]:dark:text-gray-500 data-[state=inactive]:dark:hover:bg-gray-900"
     {...props}
   />
 )
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
 
-const TabsContent = ({ ...props }: TabsPrimitive.TabsContentProps) => (
-  <TabsPrimitive.Content className="size-full" {...props} />
-)
+type Direction = 'left' | 'right'
+
+const variants = {
+  enter: (direction: Direction) => ({
+    x: direction === 'left' ? 50 : -50,
+    opacity: 0,
+  }),
+  center: { x: 0, opacity: 1 },
+  exit: (direction: Direction) => ({
+    x: direction === 'left' ? -50 : 50,
+    opacity: 0,
+  }),
+}
+
+const TabsContent = ({
+  children,
+  previousValue,
+  value,
+  ...props
+}: TabsPrimitive.TabsContentProps & { previousValue: Tab; value: Tab }) => {
+  let direction: Direction
+  if (previousValue === 'kloc' || value === 'timer') {
+    direction = 'left'
+  } else {
+    direction = 'right'
+  }
+
+  return (
+    <TabsPrimitive.Content className="z-10 size-full" value={value} {...props}>
+      <AnimatePresence mode="wait" custom={direction}>
+        <motion.div
+          key={value}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.2 }}
+          className="size-full"
+        >
+          {children}
+        </motion.div>
+      </AnimatePresence>
+    </TabsPrimitive.Content>
+  )
+}
 TabsContent.displayName = TabsPrimitive.Content.displayName
 
 export { Tabs, TabsList, TabsTrigger, TabsContent }

@@ -1,8 +1,9 @@
 describe('Timer', () => {
   beforeEach(() => {
-    cy.clock(Date.now())
     cy.visit('/')
     cy.get('[data-cy="timer-trigger"]').click()
+    cy.get('[data-cy="start"]')
+    cy.clock(Date.now())
   })
 
   describe('Actions', () => {
@@ -90,6 +91,7 @@ describe('Timer', () => {
   describe('Persist State', () => {
     describe('Local Storage', () => {
       it('input', () => {
+        cy.clock().invoke('restore')
         cy.get('[data-cy="hours-input"]').should('have.value', '00')
         cy.get('[data-cy="minutes-input"]').should('have.value', '00')
         cy.get('[data-cy="seconds-input"]').should('have.value', '00')

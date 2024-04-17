@@ -1,8 +1,9 @@
 describe('Stopwatch', () => {
   beforeEach(() => {
-    cy.clock(Date.now())
     cy.visit('/')
     cy.get('[data-cy="stopwatch-trigger"]').click()
+    cy.get('[data-cy="start"]')
+    cy.clock(Date.now())
   })
 
   describe('Basics', () => {
@@ -120,8 +121,8 @@ describe('Stopwatch', () => {
       cy.get('[data-cy="lap-elapsed"]').contains('00 : 01 . 05')
       cy.get('[data-cy="pause"]').click()
       cy.get('[data-cy="reset"]').click()
-      cy.get('[data-cy="lap-elapsed"]').should('not.be.visible')
-      cy.get('[data-radix-scroll-area-viewport]').should('not.be.visible')
+      cy.get('[data-cy="lap-elapsed"]').should('not.exist')
+      cy.get('[data-radix-scroll-area-viewport]').should('not.exist')
     })
 
     it('immediate laps', () => {

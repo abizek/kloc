@@ -11,5 +11,6 @@ export default defineConfig({
     },
     viewportHeight: 720,
     viewportWidth: 1280,
+    experimentalRunAllSpecs: true,
   },
 })
