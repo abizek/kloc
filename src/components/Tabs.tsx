@@ -44,7 +44,10 @@ const TabsContent = ({
   previousValue,
   value,
   ...props
-}: TabsPrimitive.TabsContentProps & { previousValue: Tab; value: Tab }) => {
+}: TabsPrimitive.TabsContentProps & {
+  previousValue: Tab | null
+  value: Tab
+}) => {
   let direction: Direction
   if (previousValue === 'kloc' || value === 'timer') {
     direction = 'left'

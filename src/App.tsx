@@ -1,56 +1,45 @@
 import { useState } from 'react'
-import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { usePrevious } from '@uidotdev/usehooks'
 import { motion } from 'framer-motion'
 import { Header } from './components/Header'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/Tabs'
-import { Kloc } from './pages/Kloc'
-import { Stopwatch } from './pages/Stopwatch'
-import { Timer } from './pages/Timer'
-
-type TabData = {
-  tab: Tab
-  label: string
-  content: ReactNode
-}
-
-const tabsRecord: Record<Tab, TabData> = {
-  kloc: {
-    tab: 'kloc',
-    label: 'Kloc',
-    content: <Kloc />,
-  },
-  stopwatch: {
-    tab: 'stopwatch',
-    label: 'Stopwatch',
-    content: <Stopwatch />,
-  },
-  timer: {
-    tab: 'timer',
-    label: 'Timer',
-    content: <Timer />,
-  },
-}
-
-const tabs = Object.values(tabsRecord)
+import { usePathname } from './hooks/usePathname'
+import {
+  handleTabChange,
+  isRoute,
+  redirectToHome,
+  routeTabRecord,
+  tabs,
+  tabsRecord,
+} from './utils'
 
 export default function App() {
-  const [selectedTab, setSelectedTab] = useState(tabs[0].tab)
+  const path = usePathname()
+  const [selectedTab, setSelectedTab] = useState<Tab | null>(null)
   const previousTab = usePrevious(selectedTab)
-  const selectedTabData = tabsRecord[selectedTab]
+
+  if (!isRoute(path)) {
+    redirectToHome()
+    return null
+  }
+
+  if (routeTabRecord[path] !== selectedTab) {
+    setSelectedTab(routeTabRecord[path])
+  }
+
+  if (selectedTab === null) return null
+
+  const { Content } = tabsRecord[selectedTab]
 
   return (
-    <Tabs
-      value={selectedTab}
-      onValueChange={setSelectedTab as Dispatch<SetStateAction<string>>}
-    >
+    <Tabs value={selectedTab} onValueChange={handleTabChange}>
       <Header />
       <TabsContent
         value={selectedTab}
         previousValue={previousTab}
-        data-cy={`${selectedTabData.tab}-content`}
+        data-cy={`${selectedTab}-content`}
       >
-        {selectedTabData.content}
+        <Content />
       </TabsContent>
       <TabsList>
         {tabs.map(({ tab, label }) => (
