@@ -1,8 +1,6 @@
 describe('Timer', () => {
   beforeEach(() => {
-    cy.visit('/')
-    cy.get('[data-cy="timer-trigger"]').click()
-    cy.get('[data-cy="start"]')
+    cy.visit('/timer')
     cy.clock(Date.now())
   })
 

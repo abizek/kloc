@@ -1,8 +1,6 @@
 describe('Stopwatch', () => {
   beforeEach(() => {
-    cy.visit('/')
-    cy.get('[data-cy="stopwatch-trigger"]').click()
-    cy.get('[data-cy="start"]')
+    cy.visit('/stopwatch')
     cy.clock(Date.now())
   })
 
