@@ -3,6 +3,28 @@ describe('Root', () => {
     cy.visit('/')
   })
 
+  describe('Handle 404', () => {
+    it('redirects to home', () => {
+      cy.visit('/abcd')
+      cy.location('pathname').should('eq', '/')
+      cy.get('[data-cy="kloc-trigger"]')
+        .should('have.attr', 'data-state')
+        .and('match', /active/)
+      cy.get('[data-cy="kloc-content"]')
+        .should('have.attr', 'data-state')
+        .and('match', /active/)
+
+      cy.get('[data-cy="stopwatch-trigger"]')
+        .should('have.attr', 'data-state')
+        .and('match', /inactive/)
+      cy.get('[data-cy="stopwatch-content"]').should('not.exist')
+      cy.get('[data-cy="timer-trigger"]')
+        .should('have.attr', 'data-state')
+        .and('match', /inactive/)
+      cy.get('[data-cy="timer-content"]').should('not.exist')
+    })
+  })
+
   describe('Tab Switch', () => {
     const tabs = [
       { tab: 'kloc', label: 'Kloc', route: '/' },
