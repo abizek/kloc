@@ -25,11 +25,11 @@ const TabsTrigger = ({ ...props }: TabsPrimitive.TabsTriggerProps) => (
 )
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
 
-type Direction = 'left' | 'right'
+type Direction = 'left' | 'right' | 'none'
 
 const variants = {
   enter: (direction: Direction) => ({
-    x: direction === 'left' ? 50 : -50,
+    x: direction === 'none' ? 0 : direction === 'left' ? 50 : -50,
     opacity: 0,
   }),
   center: { x: 0, opacity: 1 },
@@ -49,7 +49,9 @@ const TabsContent = ({
   value: Tab
 }) => {
   let direction: Direction
-  if (previousValue === 'kloc' || value === 'timer') {
+  if (previousValue === null) {
+    direction = 'none'
+  } else if (previousValue === 'kloc' || value === 'timer') {
     direction = 'left'
   } else {
     direction = 'right'
