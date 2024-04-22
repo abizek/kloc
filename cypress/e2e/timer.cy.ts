@@ -84,6 +84,19 @@ describe('Timer', () => {
       cy.tick(1000 * 5)
       cy.get('[data-cy="timer"]').contains('59 : 55 : 00')
     })
+
+    it('progressbar color', () => {
+      cy.get('[data-cy="seconds-input"]').type('{selectall}06')
+      cy.get('[data-cy="start"]').click()
+      cy.tick(1000)
+      cy.get('[data-test-id="CircularProgressbar"] path:last')
+        .should('have.class', 'stroke-indigo-500')
+        .should('have.class', 'dark:stroke-indigo-900')
+      cy.tick(10)
+      cy.get('[data-test-id="CircularProgressbar"] path:last')
+        .should('have.class', 'stroke-red-500')
+        .should('have.class', 'dark:stroke-red-800')
+    })
   })
 
   describe('Persist State', () => {
