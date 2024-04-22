@@ -16,7 +16,10 @@ export function Timer() {
       {timer.matches('stopped') ? (
         <TimerInput />
       ) : (
-        <TimerTimeView time={timer.context.remaining} />
+        <TimerTimeView
+          time={timer.context.remaining}
+          maxValue={(+seconds + +minutes * 60 + +hours * 60 * 60) * 1000}
+        />
       )}
       <TimerFooter
         send={send}

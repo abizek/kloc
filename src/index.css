@@ -6,4 +6,8 @@
   body {
     font-family: 'Open Sans', sans-serif;
   }
+
+  [data-test-id='CircularProgressbarWithChildren'] {
+    @apply h-[50vh];
+  }
 }
