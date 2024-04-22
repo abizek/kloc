@@ -1,5 +1,5 @@
 import { VariantProps } from 'class-variance-authority'
-import { prefixZero } from '../../utils'
+import { cn, prefixZero } from '../../utils'
 import { timeViewVariants } from './timeView.variants'
 import { TimeView } from './TimeView'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar'
@@ -25,7 +25,10 @@ export function TimerTimeView({ time, maxValue }: TimerTimeViewProps) {
       classes={{
         root: 'size-full align-middle',
         background: '',
-        path: 'stroke-indigo-500 stroke-[1.5px] transition-none [stroke-linecap:round] dark:stroke-indigo-900',
+        path: cn(
+          'stroke-indigo-500 stroke-[1.5px] transition-colors duration-700 [stroke-linecap:round] dark:stroke-indigo-900',
+          +ss <= 4 && 'stroke-red-500 dark:stroke-red-800',
+        ),
         text: '',
         trail: 'stroke-gray-300/60 stroke-[0.5px] dark:stroke-gray-900',
       }}
