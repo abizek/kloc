@@ -8,6 +8,10 @@
   }
 
   [data-test-id='CircularProgressbarWithChildren'] {
-    @apply h-[50vh];
+    @apply max-w-md w-full;
+  }
+
+  [data-test-id='CircularProgressbarWithChildren__children'] {
+    @apply bottom-0;
   }
 }
