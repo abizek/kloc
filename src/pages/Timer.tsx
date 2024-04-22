@@ -18,7 +18,7 @@ export function Timer() {
       ) : (
         <TimerTimeView
           time={timer.context.remaining}
-          maxValue={(+seconds + +minutes * 60 + +hours * 60 * 60) * 1000}
+          maxValue={timer.context.duration}
         />
       )}
       <TimerFooter

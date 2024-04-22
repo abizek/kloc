@@ -9,18 +9,20 @@ export type TimerEvents =
 
 export const timerMachine = setup({
   types: {
-    context: {} as { remaining: number; destination: number },
+    context: {} as { remaining: number; destination: number; duration: number },
     events: {} as TimerEvents,
   },
   actions: {
     resetTimer: assign({
       remaining: 0,
       destination: 0,
+      duration: 0,
     }),
     startTimer: assign(({ event }) => {
       assertEvent(event, 'start')
 
       return {
+        duration: event.time,
         destination: Date.now() + event.time,
         remaining: 0,
       }
@@ -40,6 +42,7 @@ export const timerMachine = setup({
   context: {
     remaining: 0,
     destination: 0,
+    duration: 0,
   },
   id: 'timer',
   initial: 'stopped',
