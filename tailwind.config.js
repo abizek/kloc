@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 import defaultTheme from 'tailwindcss/defaultTheme'
 import plugin from 'tailwindcss/plugin'
+import tailwindCssAnimatePlugin from 'tailwindcss-animate'
 
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
@@ -23,5 +24,6 @@ export default {
         },
       })
     }),
+    tailwindCssAnimatePlugin,
   ],
 }

@@ -1,4 +1,5 @@
 import { setup, assign, assertEvent, stateIn } from 'xstate'
+import { playBeep, stopBeep } from '../beep'
 
 export type TimerEvents =
   | { type: 'start'; time: number }
@@ -6,6 +7,7 @@ export type TimerEvents =
   | { type: 'resume' }
   | { type: 'reset' }
   | { type: 'jumpstart' }
+  | { type: 'stopBeep' }
 
 export const timerMachine = setup({
   types: {
@@ -33,6 +35,9 @@ export const timerMachine = setup({
     updateRemaining: assign(({ context }) => ({
       remaining: context.destination - Date.now(),
     })),
+    playBeep,
+    stopBeep,
+    onComplete: () => {},
   },
   guards: {
     isComplete: ({ context }) => context.remaining < 0,
@@ -56,6 +61,7 @@ export const timerMachine = setup({
   },
   states: {
     stopped: {
+      initial: 'beepStopped',
       on: {
         start: {
           target: 'running',
@@ -66,6 +72,22 @@ export const timerMachine = setup({
       },
       entry: {
         type: 'resetTimer',
+      },
+      states: {
+        beepStopped: {},
+        beepPlaying: {
+          on: {
+            stopBeep: {
+              target: 'beepStopped',
+            },
+          },
+          entry: {
+            type: 'playBeep',
+          },
+          exit: {
+            type: 'stopBeep',
+          },
+        },
       },
     },
     running: {
@@ -84,7 +106,10 @@ export const timerMachine = setup({
         },
       },
       always: {
-        target: 'stopped',
+        target: '#timer.stopped.beepPlaying',
+        actions: {
+          type: 'onComplete',
+        },
         guard: {
           type: 'isComplete',
         },
