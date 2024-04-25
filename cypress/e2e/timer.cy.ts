@@ -1,10 +1,13 @@
 describe('Timer', () => {
   beforeEach(() => {
     cy.visit('/timer')
-    cy.clock(Date.now())
   })
 
   describe('Actions', () => {
+    beforeEach(() => {
+      cy.clock(Date.now())
+    })
+
     it('start', () => {
       cy.get('[data-cy="seconds-input"]').type('{selectall}01')
       cy.get('[data-cy="start"]').contains('Start').click()
@@ -84,9 +87,22 @@ describe('Timer', () => {
         expect(beep.paused).eq(true)
       })
     })
+
+    it('tab change dismiss', () => {
+      cy.clock().invoke('restore')
+      cy.get('[data-cy="stopwatch-trigger"]').click()
+      cy.get('[data-cy="time-up-toast"]').should('not.exist')
+      cy.then(() => {
+        expect(beep.paused).eq(true)
+      })
+    })
   })
 
   describe('Time View', () => {
+    beforeEach(() => {
+      cy.clock(Date.now())
+    })
+
     it('milliseconds', () => {
       cy.get('[data-cy="seconds-input"]').type('{selectall}01')
       cy.get('[data-cy="start"]').click()
@@ -141,6 +157,10 @@ describe('Timer', () => {
   })
 
   describe('Persist State', () => {
+    beforeEach(() => {
+      cy.clock(Date.now())
+    })
+
     describe('Local Storage', () => {
       it('input', () => {
         cy.clock().invoke('restore')
