@@ -52,8 +52,7 @@ export function Timer() {
       stopBeep()
       dismiss()
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [dismiss],
   )
 
   return (
