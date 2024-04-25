@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useLocalStorage } from '@uidotdev/usehooks'
+import { BellRing } from 'lucide-react'
 import { timerMachine } from '../machines/timer'
 import { TimerTimeView } from '../components/TimeView'
 import { TimerFooter } from '../components/TimerFooter'
@@ -21,7 +22,11 @@ export function Timer() {
       actions: {
         onComplete: () => {
           toast({
-            title: "Time's up",
+            title: (
+              <div className='flex items-center gap-3'>
+                <BellRing /> Time&apos;s up
+              </div>
+            ),
             action: (
               <ToastAction altText="Dismiss" asChild>
                 <Button
