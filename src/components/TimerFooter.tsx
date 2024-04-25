@@ -3,6 +3,7 @@ import { Button } from './Button'
 
 type TimerFooterProps = {
   send: (event: TimerEvents) => void
+  dismiss: () => void
   stopped: boolean
   running: boolean
   paused: boolean
@@ -11,6 +12,7 @@ type TimerFooterProps = {
 
 export function TimerFooter({
   send,
+  dismiss,
   stopped,
   running,
   paused,
@@ -23,6 +25,7 @@ export function TimerFooter({
           data-cy="start"
           disabled={timeInput === 0}
           onClick={() => {
+            dismiss()
             send({
               type: 'start',
               time: timeInput,

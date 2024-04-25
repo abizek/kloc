@@ -23,7 +23,7 @@ export function Timer() {
         onComplete: () => {
           toast({
             title: (
-              <div className='flex items-center gap-3'>
+              <div className="flex items-center gap-3">
                 <BellRing /> Time&apos;s up
               </div>
             ),
@@ -67,6 +67,7 @@ export function Timer() {
       )}
       <TimerFooter
         send={send}
+        dismiss={dismiss}
         stopped={timer.matches('stopped')}
         running={timer.matches('running')}
         paused={timer.matches('paused')}
