@@ -164,6 +164,44 @@ describe('Timer', () => {
     })
   })
 
+  describe('Destination Preview', () => {
+    beforeEach(() => {
+      cy.clock()
+    })
+
+    it('simple', () => {
+      cy.get('[data-cy="seconds-input"]').type('{selectall}10')
+      cy.get('[data-cy="start"]').click()
+      cy.get('[data-cy="destination"]').contains('12:00 AM')
+      cy.get('[data-cy="reset"]').click()
+      cy.get('[data-cy="minutes-input"]').type('{selectall}01')
+      cy.get('[data-cy="start"]').click()
+      cy.get('[data-cy="destination"]').contains('12:01 AM')
+      cy.get('[data-cy="reset"]').click()
+      cy.get('[data-cy="minutes-input"]').type('{selectall}10')
+      cy.get('[data-cy="start"]').click()
+      cy.get('[data-cy="destination"]').contains('12:10 AM')
+      cy.get('[data-cy="reset"]').click()
+      cy.get('[data-cy="hours-input"]').type('{selectall}01')
+      cy.get('[data-cy="start"]').click()
+      cy.get('[data-cy="destination"]').contains('1:10 AM')
+      cy.get('[data-cy="reset"]').click()
+      cy.get('[data-cy="hours-input"]').type('{selectall}10')
+      cy.get('[data-cy="start"]').click()
+      cy.get('[data-cy="destination"]').contains('10:10 AM')
+    })
+
+    it('AM PM & handle 0 hours', () => {
+      cy.get('[data-cy="minutes-input"]').type('{selectall}01')
+      cy.get('[data-cy="start"]').click()
+      cy.get('[data-cy="destination"]').contains('12:01 AM')
+      cy.get('[data-cy="reset"]').click()
+      cy.get('[data-cy="hours-input"]').type('{selectall}12')
+      cy.get('[data-cy="start"]').click()
+      cy.get('[data-cy="destination"]').contains('12:01 PM')
+    })
+  })
+
   describe('Persist State', () => {
     beforeEach(() => {
       cy.clock(Date.now())

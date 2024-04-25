@@ -63,6 +63,8 @@ export function Timer() {
         <TimerTimeView
           time={timer.context.remaining}
           maxValue={timer.context.duration}
+          destination={timer.context.destination}
+          running={timer.matches('running')}
         />
       )}
       <TimerFooter
