@@ -17,6 +17,7 @@ export function Toaster() {
         return (
           <Toast
             key={id}
+            data-cy="time-up-toast"
             onSwipeEnd={stopBeep}
             onEscapeKeyDown={stopBeep}
             {...props}

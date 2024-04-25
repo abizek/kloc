@@ -25,6 +25,7 @@ export function Timer() {
             action: (
               <ToastAction altText="Dismiss" asChild>
                 <Button
+                  data-cy="dismiss"
                   variant="secondary"
                   className="scale-90"
                   onClick={() => {

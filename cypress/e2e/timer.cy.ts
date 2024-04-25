@@ -45,6 +45,47 @@ describe('Timer', () => {
     })
   })
 
+  describe("Time's up toast", () => {
+    let beep: HTMLAudioElement
+
+    beforeEach(() => {
+      cy.visit('/timer', {
+        onBeforeLoad: (win) => {
+          const Audio = win.Audio
+          cy.stub(win, 'Audio').callsFake(() => {
+            beep = new Audio('/beep.mp3')
+            return beep
+          })
+        },
+      })
+      cy.clock(Date.now())
+      cy.get('[data-cy="seconds-input"]').type('{selectall}01')
+      cy.get('[data-cy="start"]').contains('Start').click()
+      cy.tick(1010)
+    })
+
+    it('presence', () => {
+      cy.get('[data-cy="time-up-toast"]').should('exist')
+      expect(beep.paused).eq(false)
+    })
+
+    it('dismiss', () => {
+      cy.get('[data-cy="dismiss"]').contains('Dismiss').click()
+      cy.get('[data-cy="time-up-toast"]').should('not.exist')
+      cy.then(() => {
+        expect(beep.paused).eq(true)
+      })
+    })
+
+    it('esc key dismiss', () => {
+      cy.get('#root').type('{esc}')
+      cy.get('[data-cy="time-up-toast"]').should('not.exist')
+      cy.then(() => {
+        expect(beep.paused).eq(true)
+      })
+    })
+  })
+
   describe('Time View', () => {
     it('milliseconds', () => {
       cy.get('[data-cy="seconds-input"]').type('{selectall}01')
