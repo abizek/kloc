@@ -91,15 +91,12 @@ export const stopwatchMachine = setup({
       type: 'parallel',
       on: {
         pause: { target: 'paused' },
-        jumpstart: [
-          { target: 'started', guard: { type: 'isLapStopwatchStopped' } },
-          { target: '#stopwatch.started.lapStopwatch.started' },
-        ],
       },
       entry: { type: 'setOrigin' },
       states: {
         mainStopwatch: {
           initial: 'running',
+          on: { jumpstart: { target: 'mainStopwatch' } },
           states: {
             running: {
               after: { '10': { target: 'running', reenter: true } },
@@ -123,6 +120,7 @@ export const stopwatchMachine = setup({
                   actions: [{ type: 'addLap' }, { type: 'resetLapElapsed' }],
                   reenter: true,
                 },
+                jumpstart: { target: 'started' },
               },
               entry: { type: 'setLapOrigin' },
               states: {
