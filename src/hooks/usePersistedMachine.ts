@@ -1,6 +1,5 @@
 import { useMachine } from '@xstate/react'
-import { throttle } from 'lodash'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import type { Actor, AnyStateMachine, EventFromLogic, StateFrom } from 'xstate'
 
 export function usePersistedMachine<TMachine extends AnyStateMachine>(
@@ -9,29 +8,22 @@ export function usePersistedMachine<TMachine extends AnyStateMachine>(
 ): [StateFrom<TMachine>, Actor<TMachine>['send'], Actor<TMachine>] {
   const persistedState = sessionStorage.getItem(storageKey)
 
-  const [snapshot, send, actorRef] = useMachine(machine, {
+  const [snapshot, rawSend, actorRef] = useMachine(machine, {
     ...(persistedState && { snapshot: JSON.parse(persistedState) }),
   })
 
   useEffect(() => {
-    // To execute actions when restoring from persisted state
-    send({ type: 'jumpstart' } as EventFromLogic<TMachine>)
-  }, [send])
+    // To jumpstart 'always' actions when restoring from persisted state
+    rawSend({ type: 'jumpstart' } as EventFromLogic<TMachine>)
+  }, [rawSend])
 
-  useEffect(() => {
-    const persist = throttle(() => {
-      sessionStorage.setItem(
-        storageKey,
-        JSON.stringify(actorRef.getPersistedSnapshot()),
-      )
-    }, 500)
-    const { unsubscribe } = actorRef.subscribe(persist)
-
-    return () => {
-      unsubscribe()
-      persist.flush()
-    }
-  }, [actorRef, storageKey])
+  const send = useCallback((event: EventFromLogic<TMachine>) => {
+    rawSend(event)
+    sessionStorage.setItem(
+      storageKey,
+      JSON.stringify(actorRef.getPersistedSnapshot()),
+    )
+  }, [actorRef, rawSend, storageKey])
 
   return [snapshot, send, actorRef]
 }
