@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import { setup, assign, stateIn } from 'xstate'
+import { setup, assign } from 'xstate'
 
 export type Lap = {
   id: string
@@ -70,7 +70,7 @@ export const stopwatchMachine = setup({
     }),
   },
   guards: {
-    isLapStopwatchStopped: stateIn({ started: { lapStopwatch: 'stopped' } }),
+    isLapStopwatchStopped: ({ context }) => context.laps.length === 0,
   },
 }).createMachine({
   context: {
