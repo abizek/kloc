@@ -17,7 +17,6 @@ export function Timer() {
   const [seconds] = useLocalStorage('timer-input-seconds', '00')
   const { toast, dismiss } = useToast()
   const [timer, send] = useMachine(
-    'timer',
     timerMachine.provide({
       actions: {
         onComplete: () => {

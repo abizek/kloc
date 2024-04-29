@@ -1,22 +1,22 @@
 import { useMachine as useMachineRaw } from '@xstate/react'
-import { isEqual, omit } from 'lodash'
-import { useCallback, useEffect } from 'react'
+import { isEmpty, isEqual, omit } from 'lodash'
+import { useCallback, useEffect, useMemo } from 'react'
 import type { Actor, AnyStateMachine, EventFromLogic, StateFrom } from 'xstate'
 
 export function useMachine<TMachine extends AnyStateMachine>(
-  storageKey: string,
   machine: TMachine,
 ): [StateFrom<TMachine>, Actor<TMachine>['send'], Actor<TMachine>] {
-  const persistedSnapshot = JSON.parse(
-    sessionStorage.getItem(storageKey) ?? 'null',
-  )
+  const storageKey = useMemo(() => machine.config.id!, [machine.config.id])
+  const persistedSnapshotUnparsed = sessionStorage.getItem(storageKey)
+  const persistedSnapshot = useMemo(() => {
+    const snapshot = JSON.parse(persistedSnapshotUnparsed ?? 'null')
+
+    return { ...snapshot, children: {} } as StateFrom<TMachine>
+  }, [persistedSnapshotUnparsed])
 
   const [snapshot, rawSend, actorRef] = useMachineRaw(machine, {
-    ...(persistedSnapshot && {
-      snapshot: {
-        ...persistedSnapshot,
-        children: {},
-      },
+    ...(!isEmpty(omit(persistedSnapshot, 'children')) && {
+      snapshot: { ...persistedSnapshot },
     }),
   })
 
