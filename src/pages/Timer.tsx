@@ -8,7 +8,7 @@ import { TimerInput } from '../components/TimerInput'
 import { ToastAction } from '../components/Toast/Toast'
 import { Button } from '../components/Button'
 import { useToast } from '../components/Toast/useToast'
-import { usePersistedMachine } from '../hooks/usePersistedMachine'
+import { useMachine } from '../hooks/useMachine'
 import { stopBeep } from '../beep'
 
 export function Timer() {
@@ -16,7 +16,7 @@ export function Timer() {
   const [minutes] = useLocalStorage('timer-input-minutes', '00')
   const [seconds] = useLocalStorage('timer-input-seconds', '00')
   const { toast, dismiss } = useToast()
-  const [timer, send] = usePersistedMachine(
+  const [timer, send] = useMachine(
     'timer',
     timerMachine.provide({
       actions: {
@@ -24,7 +24,7 @@ export function Timer() {
           toast({
             title: (
               <div className="flex items-center gap-3">
-                <BellRing /> Time&apos;s up
+                <BellRing /> {"Time's up"}
               </div>
             ),
             action: (

@@ -4,10 +4,10 @@ import { StopwatchTimeView } from '../components/TimeView'
 import { LapTimes } from '../components/LapTimes'
 import { stopwatchMachine } from '../machines/stopwatch'
 import { cn } from '../utils'
-import { usePersistedMachine } from '../hooks/usePersistedMachine'
+import { useMachine } from '../hooks/useMachine'
 
 export function Stopwatch() {
-  const [stopwatch, send] = usePersistedMachine('stopwatch', stopwatchMachine)
+  const [stopwatch, send] = useMachine('stopwatch', stopwatchMachine)
   const { laps, elapsed, lapElapsed } = stopwatch.context
 
   return (
