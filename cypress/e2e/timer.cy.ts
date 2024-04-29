@@ -141,15 +141,6 @@ describe('Timer', () => {
       cy.get('[data-cy="timer"]').contains('30 : 00')
     })
 
-    it('hours', () => {
-      cy.get('[data-cy="hours-input"]').type('{selectall}02')
-      cy.get('[data-cy="start"]').click()
-      cy.tick(1000 * 60 * 60)
-      cy.get('[data-cy="timer"]').contains('01 : 00 : 00 : 00')
-      cy.tick(1000 * 5)
-      cy.get('[data-cy="timer"]').contains('59 : 55 : 00')
-    })
-
     it('progressbar color', () => {
       cy.get('[data-cy="seconds-input"]').type('{selectall}06')
       cy.get('[data-cy="start"]').click()

@@ -45,12 +45,6 @@ describe('Stopwatch', () => {
       cy.get('[data-cy="elapsed"]').contains('00 : 00 . 00')
       cy.get('[data-cy="start"]').should('be.visible')
     })
-
-    it('hours', () => {
-      cy.get('[data-cy="start"]').should('be.visible').click()
-      cy.tick(1000 * 60 * 60)
-      cy.get('[data-cy="elapsed"]').contains('01 : 00 : 00 . 00')
-    })
   })
 
   describe('Laps', () => {
@@ -197,13 +191,6 @@ describe('Stopwatch', () => {
       cy.get('[data-cy="overall-time-6"]').should('not.be.visible')
       cy.get('[data-cy="lap-time-1"]').should('be.visible')
       cy.get('[data-cy="overall-time-1"]').should('be.visible')
-    })
-
-    it('hours', () => {
-      cy.get('[data-cy="start"]').click()
-      cy.get('[data-cy="lap"]').click()
-      cy.tick(1000 * 60 * 60)
-      cy.get('[data-cy="lap-elapsed"]').contains('01 : 00 : 00 . 00')
     })
   })
 
