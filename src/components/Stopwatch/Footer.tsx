@@ -1,19 +1,19 @@
-import type { StopwatchEvents } from '../machines/stopwatch'
-import { Button } from './Button'
+import type { StopwatchEvents } from '../../machines/stopwatch'
+import { Button } from '../Button'
 
-type StopwatchFooterProps = {
+type FooterProps = {
   send: (event: StopwatchEvents) => void
   stopped: boolean
   started: boolean
   paused: boolean
 }
 
-export function StopwatchFooter({
+export function Footer({
   send,
   stopped,
   started,
   paused,
-}: StopwatchFooterProps) {
+}: FooterProps) {
   return (
     <footer className="absolute z-10 grid h-[calc(100svh_-_76px)] w-full grid-rows-[auto_160px] place-items-center">
       <div />

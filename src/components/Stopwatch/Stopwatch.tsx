@@ -1,10 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { StopwatchFooter } from '../components/StopwatchFooter'
-import { StopwatchTimeView } from '../components/TimeView'
-import { LapTimes } from '../components/LapTimes'
-import { stopwatchMachine } from '../machines/stopwatch'
-import { cn } from '../utils'
-import { useMachine } from '../hooks/useMachine'
+import { Footer } from './Footer'
+import { TimeView } from './TimeView'
+import { LapTimes } from './LapTimes'
+import { stopwatchMachine } from '../../machines/stopwatch'
+import { cn } from '../../utils'
+import { useMachine } from '../../hooks/useMachine'
 
 export function Stopwatch() {
   const [stopwatch, send] = useMachine(stopwatchMachine)
@@ -19,14 +19,14 @@ export function Stopwatch() {
           laps.length > 0 ? 'place-self-center' : 'mt-[20svh]',
         )}
       >
-        <StopwatchTimeView id="elapsed" time={elapsed} />
+        <TimeView id="elapsed" time={elapsed} />
         <AnimatePresence>
           {laps.length > 0 && (
             <motion.div
               exit={{ opacity: 0 }}
               className="w-80 text-center md:w-[23rem]"
             >
-              <StopwatchTimeView
+              <TimeView
                 id="lap-elapsed"
                 time={lapElapsed}
                 variant="secondary"
@@ -36,7 +36,7 @@ export function Stopwatch() {
           )}
         </AnimatePresence>
       </motion.main>
-      <StopwatchFooter
+      <Footer
         stopped={stopwatch.matches('stopped')}
         started={stopwatch.matches('started')}
         paused={stopwatch.matches('paused')}

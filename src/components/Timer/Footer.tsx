@@ -1,7 +1,7 @@
-import type { TimerEvents } from '../machines/timer'
-import { Button } from './Button'
+import type { TimerEvents } from '../../machines/timer'
+import { Button } from '../Button'
 
-type TimerFooterProps = {
+type FooterProps = {
   send: (event: TimerEvents) => void
   dismiss: () => void
   stopped: boolean
@@ -10,14 +10,14 @@ type TimerFooterProps = {
   timeInput: number
 }
 
-export function TimerFooter({
+export function Footer({
   send,
   dismiss,
   stopped,
   running,
   paused,
   timeInput,
-}: TimerFooterProps) {
+}: FooterProps) {
   return (
     <div className="flex w-full max-w-screen-sm justify-evenly">
       {stopped && (

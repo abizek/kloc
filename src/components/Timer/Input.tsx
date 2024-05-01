@@ -1,6 +1,6 @@
 import { useLocalStorage } from '@uidotdev/usehooks'
 
-export function TimerInput() {
+export function Input() {
   const [hours, setHours] = useLocalStorage('timer-input-hours', '00')
   const [minutes, setMinutes] = useLocalStorage('timer-input-minutes', '00')
   const [seconds, setSeconds] = useLocalStorage('timer-input-seconds', '00')

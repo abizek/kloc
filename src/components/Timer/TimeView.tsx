@@ -1,23 +1,23 @@
 import { VariantProps } from 'class-variance-authority'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar'
 import { cn, prefixZero } from '../../utils'
-import { timeViewVariants } from './timeView.variants'
-import { TimeView } from './TimeView'
-import { TimerDestinationPreview } from '../TimerDestinationPreview'
+import { timeViewVariants } from '../TimeView/timeView.variants'
+import { TimeView as TimeViewBase } from '../TimeView/TimeView'
+import { DestinationPreview } from './DestinationPreview'
 
-interface TimerTimeViewProps extends VariantProps<typeof timeViewVariants> {
+interface TimeViewProps extends VariantProps<typeof timeViewVariants> {
   time: number
   maxValue: number
   destination: number
   running: boolean
 }
 
-export function TimerTimeView({
+export function TimeView({
   time,
   maxValue,
   destination,
   running,
-}: TimerTimeViewProps) {
+}: TimeViewProps) {
   const date = new Date(time)
   const [hh, mm, ss, ms] = [
     date.getUTCHours(),
@@ -41,13 +41,13 @@ export function TimerTimeView({
         trail: 'stroke-gray-300/60 stroke-[0.5px] dark:stroke-gray-900',
       }}
     >
-      <TimeView id="timer">
+      <TimeViewBase id="timer">
         {hh !== '00' && `${hh} : `}
         {(hh !== '00' || mm !== '00') && `${mm} : `}
         {(hh !== '00' || mm !== '00' || ss !== '00') && `${ss} : `}
         {ms}
-      </TimeView>
-      <TimerDestinationPreview destination={destination} running={running} />
+      </TimeViewBase>
+      <DestinationPreview destination={destination} running={running} />
     </CircularProgressbarWithChildren>
   )
 }

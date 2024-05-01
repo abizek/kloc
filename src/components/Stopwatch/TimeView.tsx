@@ -1,18 +1,18 @@
 import { VariantProps } from 'class-variance-authority'
 import { prefixZero } from '../../utils'
-import { timeViewVariants } from './timeView.variants'
-import { TimeView } from './TimeView'
+import { timeViewVariants } from '../TimeView/timeView.variants'
+import { TimeView as TimeViewBase } from '../TimeView/TimeView'
 
-interface StopwatchTimeViewProps extends VariantProps<typeof timeViewVariants> {
+interface TimeViewProps extends VariantProps<typeof timeViewVariants> {
   time: number
   id: string
 }
 
-export function StopwatchTimeView({
+export function TimeView({
   time,
   variant,
   id,
-}: StopwatchTimeViewProps) {
+}: TimeViewProps) {
   let padding: number
   switch (variant) {
     case 'unstyled':
@@ -34,11 +34,11 @@ export function StopwatchTimeView({
   ].map(prefixZero)
 
   return (
-    <TimeView id={id} variant={variant}>
+    <TimeViewBase id={id} variant={variant}>
       {`${hh !== '00' ? `${hh} : ` : ''}${mm} : ${ss} . ${ms}`.replace(
         / /g,
         '\u00A0'.repeat(padding),
       )}
-    </TimeView>
+    </TimeViewBase>
   )
 }

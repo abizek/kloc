@@ -1,11 +1,11 @@
 import { prefixZero } from '../../utils'
-import { TimeView } from './TimeView'
+import { TimeView as TimeViewBase } from '../TimeView/TimeView'
 
-interface KlocTimeViewProps {
+interface TimeViewProps {
   time: number
 }
 
-export function KlocTimeView({ time }: KlocTimeViewProps) {
+export function TimeView({ time }: TimeViewProps) {
   const date = new Date(time)
 
   let hours = date.getHours()
@@ -18,10 +18,10 @@ export function KlocTimeView({ time }: KlocTimeViewProps) {
   )
 
   return (
-    <TimeView id="kloc">
+    <TimeViewBase id="kloc">
       {`${hh} : ${mm} : ${ss}`}
 
       <span className="text-xl md:text-3xl"> {amPm!}</span>
-    </TimeView>
+    </TimeViewBase>
   )
 }

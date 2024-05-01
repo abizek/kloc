@@ -1,15 +1,15 @@
 import { Bell } from 'lucide-react'
-import { prefixZero } from '../utils'
+import { prefixZero } from '../../utils'
 
-type TimerDestinationPreviewProps = {
+type DestinationPreviewProps = {
   destination: number
   running: boolean
 }
 
-export function TimerDestinationPreview({
+export function DestinationPreview({
   destination,
   running,
-}: TimerDestinationPreviewProps) {
+}: DestinationPreviewProps) {
   const date = new Date(destination)
 
   let hh = date.getHours()

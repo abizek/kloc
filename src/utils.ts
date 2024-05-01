@@ -3,9 +3,9 @@ import type { ClassValue } from 'clsx'
 import { invert } from 'lodash'
 import type { FC } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { Kloc } from './pages/Kloc'
-import { Stopwatch } from './pages/Stopwatch'
-import { Timer } from './pages/Timer'
+import { Kloc } from './components/Kloc/Kloc'
+import { Stopwatch } from './components/Stopwatch/Stopwatch'
+import { Timer } from './components/Timer/Timer'
 
 export function prefixZero(unit: number): string {
   return `0${unit}`.slice(-2)

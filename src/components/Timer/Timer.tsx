@@ -1,15 +1,15 @@
 import { useEffect } from 'react'
 import { useLocalStorage } from '@uidotdev/usehooks'
 import { BellRing } from 'lucide-react'
-import { timerMachine } from '../machines/timer'
-import { TimerTimeView } from '../components/TimeView'
-import { TimerFooter } from '../components/TimerFooter'
-import { TimerInput } from '../components/TimerInput'
-import { ToastAction } from '../components/Toast/Toast'
-import { Button } from '../components/Button'
-import { useToast } from '../components/Toast/useToast'
-import { useMachine } from '../hooks/useMachine'
-import { stopBeep } from '../beep'
+import { timerMachine } from '../../machines/timer'
+import { TimeView } from './TimeView'
+import { Footer } from './Footer'
+import { Input } from './Input'
+import { ToastAction } from '../Toast/Toast'
+import { Button } from '../Button'
+import { useToast } from '../Toast/useToast'
+import { useMachine } from '../../hooks/useMachine'
+import { stopBeep } from '../../beep'
 
 export function Timer() {
   const [hours] = useLocalStorage('timer-input-hours', '00')
@@ -57,16 +57,16 @@ export function Timer() {
   return (
     <div className="relative z-10 grid size-full grid-rows-[auto_80px] place-items-center">
       {timer.matches('stopped') ? (
-        <TimerInput />
+        <Input />
       ) : (
-        <TimerTimeView
+        <TimeView
           time={timer.context.remaining}
           maxValue={timer.context.duration}
           destination={timer.context.destination}
           running={timer.matches('running')}
         />
       )}
-      <TimerFooter
+      <Footer
         send={send}
         dismiss={dismiss}
         stopped={timer.matches('stopped')}
