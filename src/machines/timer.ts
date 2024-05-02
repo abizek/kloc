@@ -1,5 +1,5 @@
-import { setup, assign, assertEvent, stateIn } from 'xstate'
-import { playBeep, stopBeep } from '../beep'
+import { assertEvent, assign, setup, stateIn } from 'xstate';
+import { playBeep, stopBeep } from '../beep';
 
 export type TimerEvents =
   | { type: 'start'; time: number }
@@ -9,9 +9,11 @@ export type TimerEvents =
   | { type: 'jumpstart' }
   | { type: 'stopBeep' }
 
+export type TimerContext = { remaining: number; destination: number; duration: number }
+
 export const timerMachine = setup({
   types: {
-    context: {} as { remaining: number; destination: number; duration: number },
+    context: {} as TimerContext,
     events: {} as TimerEvents,
   },
   actions: {
@@ -54,9 +56,7 @@ export const timerMachine = setup({
   on: {
     jumpstart: {
       target: '#timer.running',
-      guard: {
-        type: 'isRunning',
-      },
+      guard: { type: 'isRunning' },
     },
   },
   states: {
@@ -65,70 +65,41 @@ export const timerMachine = setup({
       on: {
         start: {
           target: 'running',
-          actions: {
-            type: 'startTimer',
-          },
+          actions: { type: 'startTimer' },
         },
       },
-      entry: {
-        type: 'resetTimer',
-      },
+      entry: { type: 'resetTimer' },
       states: {
         beepStopped: {},
         beepPlaying: {
-          on: {
-            stopBeep: {
-              target: 'beepStopped',
-            },
-          },
-          entry: {
-            type: 'playBeep',
-          },
-          exit: {
-            type: 'stopBeep',
-          },
+          on: { stopBeep: { target: 'beepStopped' } },
+          entry: { type: 'playBeep' },
+          exit: { type: 'stopBeep' },
         },
       },
     },
     running: {
       on: {
-        pause: {
-          target: 'paused',
-        },
-        reset: {
-          target: 'stopped',
-        },
+        pause: { target: 'paused' },
+        reset: { target: 'stopped' },
       },
       after: {
-        '10': {
-          target: 'running',
-          reenter: true,
-        },
+        '10': { target: 'running', reenter: true },
       },
       always: {
         target: '#timer.stopped.beepPlaying',
-        actions: {
-          type: 'onComplete',
-        },
-        guard: {
-          type: 'isComplete',
-        },
+        actions: { type: 'onComplete' },
+        guard: { type: 'isComplete' },
       },
-      entry: {
-        type: 'updateRemaining',
-      },
+      entry: { type: 'updateRemaining' },
     },
     paused: {
       on: {
         resume: {
           target: 'running',
-          actions: {
-            type: 'resumeTimer',
-          },
+          actions: { type: 'resumeTimer' },
         },
-        reset: {
-          target: 'stopped',
-        },
+        reset: { target: 'stopped' },
       },
     },
   },

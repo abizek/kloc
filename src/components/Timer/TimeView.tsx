@@ -1,23 +1,15 @@
-import { VariantProps } from 'class-variance-authority'
+import { useContext } from 'react'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar'
+import { TimerMachineContext } from '../../providers/TimerMachineProvider'
 import { cn, prefixZero } from '../../utils'
-import { timeViewVariants } from '../TimeView/timeView.variants'
 import { TimeView as TimeViewBase } from '../TimeView/TimeView'
 import { DestinationPreview } from './DestinationPreview'
 
-interface TimeViewProps extends VariantProps<typeof timeViewVariants> {
-  time: number
-  maxValue: number
-  destination: number
-  running: boolean
-}
-
-export function TimeView({
-  time,
-  maxValue,
-  destination,
-  running,
-}: TimeViewProps) {
+export function TimeView() {
+  const { timer } = useContext(TimerMachineContext)
+  const {
+    context: { remaining: time, duration: maxValue, destination },
+  } = timer
   const date = new Date(time)
   const [hh, mm, ss, ms] = [
     date.getUTCHours(),
@@ -47,7 +39,10 @@ export function TimeView({
         {(hh !== '00' || mm !== '00' || ss !== '00') && `${ss} : `}
         {ms}
       </TimeViewBase>
-      <DestinationPreview destination={destination} running={running} />
+      <DestinationPreview
+        destination={destination}
+        running={timer.matches('running')}
+      />
     </CircularProgressbarWithChildren>
   )
 }

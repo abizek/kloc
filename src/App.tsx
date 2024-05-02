@@ -1,9 +1,10 @@
-import { useState } from 'react'
 import { usePrevious } from '@uidotdev/usehooks'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 import { Header } from './components/Header'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/Tabs'
 import { usePathname } from './hooks/usePathname'
+import { TimerMachineProvider } from './providers/TimerMachineProvider'
 import {
   handleTabChange,
   isRoute,
@@ -39,7 +40,9 @@ export default function App() {
         previousValue={previousTab}
         data-cy={`${selectedTab}-content`}
       >
-        <Content />
+        <TimerMachineProvider>
+          <Content />
+        </TimerMachineProvider>
       </TabsContent>
       <TabsList>
         {tabs.map(({ tab, label }) => (

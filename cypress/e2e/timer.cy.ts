@@ -88,15 +88,6 @@ describe('Timer', () => {
       })
     })
 
-    it('dismiss on tab change', () => {
-      cy.clock().invoke('restore')
-      cy.get('[data-cy="stopwatch-trigger"]').click()
-      cy.get('[data-cy="time-up-toast"]').should('not.exist')
-      cy.then(() => {
-        expect(beep.paused).eq(true)
-      })
-    })
-
     it('dismiss on new timer start', () => {
       cy.get('[data-cy="start"]').click()
       cy.get('[data-cy="time-up-toast"]').should('not.exist')

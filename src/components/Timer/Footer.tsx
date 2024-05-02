@@ -1,31 +1,22 @@
-import type { TimerEvents } from '../../machines/timer'
+import { useContext } from 'react'
+import { TimerMachineContext } from '../../providers/TimerMachineProvider'
 import { Button } from '../Button'
 
 type FooterProps = {
-  send: (event: TimerEvents) => void
-  dismiss: () => void
-  stopped: boolean
-  running: boolean
-  paused: boolean
   timeInput: number
 }
 
-export function Footer({
-  send,
-  dismiss,
-  stopped,
-  running,
-  paused,
-  timeInput,
-}: FooterProps) {
+export function Footer({ timeInput }: FooterProps) {
+  const { timer, send, dismissToast } = useContext(TimerMachineContext)
+
   return (
     <div className="flex w-full max-w-screen-sm justify-evenly">
-      {stopped && (
+      {timer.matches('stopped') && (
         <Button
           data-cy="start"
           disabled={timeInput === 0}
           onClick={() => {
-            dismiss()
+            dismissToast()
             send({
               type: 'start',
               time: timeInput,
@@ -35,7 +26,7 @@ export function Footer({
           Start
         </Button>
       )}
-      {paused && (
+      {timer.matches('paused') && (
         <Button
           data-cy="resume"
           onClick={() => {
@@ -45,7 +36,7 @@ export function Footer({
           Resume
         </Button>
       )}
-      {running && (
+      {timer.matches('running') && (
         <Button
           data-cy="pause"
           onClick={() => {
@@ -56,7 +47,7 @@ export function Footer({
           Pause
         </Button>
       )}
-      {!stopped && (
+      {!timer.matches('stopped') && (
         <Button
           data-cy="reset"
           onClick={() => {
