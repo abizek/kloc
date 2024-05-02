@@ -1,5 +1,5 @@
-import clsx from 'clsx'
 import type { ClassValue } from 'clsx'
+import clsx from 'clsx'
 import { invert } from 'lodash'
 import type { FC } from 'react'
 import { twMerge } from 'tailwind-merge'
@@ -17,7 +17,7 @@ export function cn(...inputs: ClassValue[]) {
 
 const routes = ['/', '/stopwatch', '/timer'] as const
 
-type Route = (typeof routes)[number]
+export type Route = (typeof routes)[number]
 
 export const routeTabRecord: Record<Route, Tab> = {
   '/': 'kloc',
@@ -57,10 +57,17 @@ export function isRoute(path: string): path is Route {
   return Boolean(routes.find((route) => route === path))
 }
 
+export const LAST_VISITED_PATH = 'last-visited-path'
+
 export function redirectToHome() {
+  localStorage.setItem(LAST_VISITED_PATH, '/')
   history.replaceState(null, '', '/')
 }
 
 export function handleTabChange(tab: string) {
   history.pushState(null, '', tabRouteRecord[tab])
+}
+
+export function restoreLastVisitedPath() {
+  history.replaceState(null, '', localStorage.getItem(LAST_VISITED_PATH))
 }

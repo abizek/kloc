@@ -1,4 +1,11 @@
 import { useSyncExternalStore } from 'react'
+import type { Route } from '../utils'
+import {
+  LAST_VISITED_PATH,
+  isRoute,
+  redirectToHome,
+  restoreLastVisitedPath,
+} from '../utils'
 
 function getObserver(callback: () => void) {
   let currentPath = location.pathname
@@ -12,18 +19,36 @@ function getObserver(callback: () => void) {
   return observer
 }
 
-function subscribe(callback: () => void): () => void {
-  const observer = getObserver(callback)
+function subscribe(onChange: () => void): () => void {
+  const handleChange = () => {
+    localStorage.setItem(LAST_VISITED_PATH, location.pathname)
+    onChange()
+  }
+
+  const observer = getObserver(handleChange)
   const body = document.querySelector('body')!
   observer.observe(body, { subtree: true, attributes: true })
-  window.addEventListener('popstate', callback)
+  window.addEventListener('popstate', handleChange)
 
   return () => {
     observer.disconnect()
-    window.removeEventListener('popstate', callback)
+    window.removeEventListener('popstate', handleChange)
   }
 }
 
 export function usePathname() {
-  return useSyncExternalStore(subscribe, () => location.pathname)
+  if (!isRoute(location.pathname)) {
+    redirectToHome()
+  }
+
+  if (location.pathname === '/') {
+    restoreLastVisitedPath()
+  } else {
+    localStorage.setItem(LAST_VISITED_PATH, location.pathname)
+  }
+
+  return useSyncExternalStore(
+    subscribe,
+    () => (localStorage.getItem(LAST_VISITED_PATH) ?? '/') as Route,
+  )
 }

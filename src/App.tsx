@@ -7,8 +7,6 @@ import { usePathname } from './hooks/usePathname'
 import { TimerMachineProvider } from './providers/TimerMachineProvider'
 import {
   handleTabChange,
-  isRoute,
-  redirectToHome,
   routeTabRecord,
   tabs,
   tabsRecord,
@@ -18,11 +16,6 @@ export default function App() {
   const path = usePathname()
   const [selectedTab, setSelectedTab] = useState<Tab | null>(null)
   const previousTab = usePrevious(selectedTab)
-
-  if (!isRoute(path)) {
-    redirectToHome()
-    return null
-  }
 
   if (routeTabRecord[path] !== selectedTab) {
     setSelectedTab(routeTabRecord[path])
