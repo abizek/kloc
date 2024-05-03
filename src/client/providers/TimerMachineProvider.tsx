@@ -1,32 +1,35 @@
 import { BellRing } from 'lucide-react'
 import type { FC, PropsWithChildren } from 'react'
 import { createContext, useEffect } from 'react'
-import { MachineSnapshot, NonReducibleUnknown } from 'xstate'
+import type { MachineSnapshot, NonReducibleUnknown } from 'xstate'
 import { stopBeep } from '../beep'
 import { Button } from '../components/Button'
 import { ToastAction } from '../components/Toast/Toast'
 import { useToast } from '../components/Toast/useToast'
 import { useMachine } from '../hooks/useMachine'
 import type {
-  TimerEvents,
+  TimerEvent,
   TimerContext as TimerXstateContext,
 } from '../machines/timer'
 import { timerMachine } from '../machines/timer'
 
+type TimerStateValue =
+  | 'running'
+  | 'paused'
+  | {
+      stopped?: 'beepStopped' | 'beepPlaying' | undefined
+    }
+
 type TimerMachineContextType = {
   timer: MachineSnapshot<
     TimerXstateContext,
-    TimerEvents,
+    TimerEvent,
     Record<string, never>,
-    | 'running'
-    | 'paused'
-    | {
-        stopped?: 'beepStopped' | 'beepPlaying' | undefined
-      },
+    TimerStateValue,
     string,
     NonReducibleUnknown
   >
-  send: (event: TimerEvents) => void
+  send: (event: TimerEvent) => void
   dismissToast: () => void
 }
 

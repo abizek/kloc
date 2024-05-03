@@ -4,13 +4,9 @@ import { useState } from 'react'
 import { Header } from './components/Header'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/Tabs'
 import { usePathname } from './hooks/usePathname'
+import { StopwatchMachineProvider } from './providers/StopwatchMachineProvider'
 import { TimerMachineProvider } from './providers/TimerMachineProvider'
-import {
-  handleTabChange,
-  routeTabRecord,
-  tabs,
-  tabsRecord,
-} from './utils'
+import { handleTabChange, routeTabRecord, tabs, tabsRecord } from './utils'
 
 export default function App() {
   const path = usePathname()
@@ -33,9 +29,11 @@ export default function App() {
         previousValue={previousTab}
         data-cy={`${selectedTab}-content`}
       >
-        <TimerMachineProvider>
-          <Content />
-        </TimerMachineProvider>
+        <StopwatchMachineProvider>
+          <TimerMachineProvider>
+            <Content />
+          </TimerMachineProvider>
+        </StopwatchMachineProvider>
       </TabsContent>
       <TabsList>
         {tabs.map(({ tab, label }) => (

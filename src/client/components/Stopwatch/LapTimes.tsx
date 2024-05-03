@@ -1,13 +1,13 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useMemo, useState } from 'react'
 import { ArrowDown, ArrowUp } from 'lucide-react'
-import type { Lap } from '../../machines/stopwatch'
+import { useEffect, useMemo, useState } from 'react'
+import type { StopwatchContext } from '../../machines/stopwatch'
 import { prefixZero } from '../../utils'
 import { ScrollArea } from './ScrollArea'
 import { TimeView } from './TimeView'
 
 type LapTimesProps = {
-  laps: Lap[]
+  laps: StopwatchContext['laps']
 }
 
 export function LapTimes({ laps }: LapTimesProps) {

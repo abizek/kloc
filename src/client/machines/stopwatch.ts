@@ -1,13 +1,7 @@
 import { nanoid } from 'nanoid'
-import { setup, assign } from 'xstate'
+import { assign, setup } from 'xstate'
 
-export type Lap = {
-  id: string
-  elapsed: number
-  overall: number
-}
-
-export type StopwatchEvents =
+export type StopwatchEvent =
   | { type: 'start' }
   | { type: 'lap' }
   | { type: 'pause' }
@@ -15,16 +9,22 @@ export type StopwatchEvents =
   | { type: 'reset' }
   | { type: 'jumpstart' }
 
+export type StopwatchContext = {
+  origin: number
+  elapsed: number
+  lapOrigin: number
+  lapElapsed: number
+  laps: {
+    id: string
+    elapsed: number
+    overall: number
+  }[]
+}
+
 export const stopwatchMachine = setup({
   types: {
-    context: {} as {
-      origin: number
-      elapsed: number
-      lapOrigin: number
-      lapElapsed: number
-      laps: Lap[]
-    },
-    events: {} as StopwatchEvents,
+    context: {} as StopwatchContext,
+    events: {} as StopwatchEvent,
   },
   actions: {
     resetStopwatch: assign({

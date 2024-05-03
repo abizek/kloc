@@ -1,14 +1,17 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Footer } from './Footer'
-import { TimeView } from './TimeView'
-import { LapTimes } from './LapTimes'
-import { stopwatchMachine } from '../../machines/stopwatch'
+import { useContext } from 'react'
+import { StopwatchMachineContext } from '../../providers/StopwatchMachineProvider'
 import { cn } from '../../utils'
-import { useMachine } from '../../hooks/useMachine'
+import { Footer } from './Footer'
+import { LapTimes } from './LapTimes'
+import { TimeView } from './TimeView'
 
 export function Stopwatch() {
-  const [stopwatch, send] = useMachine(stopwatchMachine)
-  const { laps, elapsed, lapElapsed } = stopwatch.context
+  const {
+    stopwatch: {
+      context: { elapsed, lapElapsed, laps },
+    },
+  } = useContext(StopwatchMachineContext)
 
   return (
     <div className="grid size-full grid-rows-[auto_80px]">
@@ -36,12 +39,7 @@ export function Stopwatch() {
           )}
         </AnimatePresence>
       </motion.main>
-      <Footer
-        stopped={stopwatch.matches('stopped')}
-        started={stopwatch.matches('started')}
-        paused={stopwatch.matches('paused')}
-        send={send}
-      />
+      <Footer />
     </div>
   )
 }

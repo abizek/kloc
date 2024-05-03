@@ -1,7 +1,7 @@
-import { assertEvent, assign, setup, stateIn } from 'xstate';
-import { playBeep, stopBeep } from '../beep';
+import { assertEvent, assign, setup, stateIn } from 'xstate'
+import { playBeep, stopBeep } from '../beep'
 
-export type TimerEvents =
+export type TimerEvent =
   | { type: 'start'; time: number }
   | { type: 'pause' }
   | { type: 'resume' }
@@ -9,12 +9,16 @@ export type TimerEvents =
   | { type: 'jumpstart' }
   | { type: 'stopBeep' }
 
-export type TimerContext = { remaining: number; destination: number; duration: number }
+export type TimerContext = {
+  remaining: number
+  destination: number
+  duration: number
+}
 
 export const timerMachine = setup({
   types: {
     context: {} as TimerContext,
-    events: {} as TimerEvents,
+    events: {} as TimerEvent,
   },
   actions: {
     resetTimer: assign({

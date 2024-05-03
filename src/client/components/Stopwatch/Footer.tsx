@@ -1,24 +1,15 @@
-import type { StopwatchEvents } from '../../machines/stopwatch'
+import { useContext } from 'react'
+import { StopwatchMachineContext } from '../../providers/StopwatchMachineProvider'
 import { Button } from '../Button'
 
-type FooterProps = {
-  send: (event: StopwatchEvents) => void
-  stopped: boolean
-  started: boolean
-  paused: boolean
-}
+export function Footer() {
+  const { send, stopwatch } = useContext(StopwatchMachineContext)
 
-export function Footer({
-  send,
-  stopped,
-  started,
-  paused,
-}: FooterProps) {
   return (
     <footer className="absolute z-10 grid h-[calc(100svh_-_76px)] w-full grid-rows-[auto_160px] place-items-center">
       <div />
       <div className="mb-20 flex w-full max-w-screen-sm justify-evenly">
-        {stopped && (
+        {stopwatch.matches('stopped') && (
           <>
             <Button data-cy="lap" disabled variant="secondary">
               Lap
@@ -28,7 +19,7 @@ export function Footer({
             </Button>
           </>
         )}
-        {started && (
+        {stopwatch.matches('started') && (
           <>
             <Button
               data-cy="lap"
@@ -46,7 +37,7 @@ export function Footer({
             </Button>
           </>
         )}
-        {paused && (
+        {stopwatch.matches('paused') && (
           <>
             <Button
               data-cy="reset"
