@@ -1,6 +1,5 @@
 import type { ClassValue } from 'clsx'
 import clsx from 'clsx'
-import { invert } from 'lodash'
 import type { FC } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { Kloc } from './components/Kloc/Kloc'
@@ -15,17 +14,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-const routes = ['/', '/stopwatch', '/timer'] as const
+const tabs = ['kloc', 'stopwatch', 'timer'] as const
 
-export type Route = (typeof routes)[number]
-
-export const routeTabRecord: Record<Route, Tab> = {
-  '/': 'kloc',
-  '/stopwatch': 'stopwatch',
-  '/timer': 'timer',
-}
-
-const tabRouteRecord = invert(routeTabRecord)
+export type Tab = (typeof tabs)[number]
 
 type TabData = {
   tab: Tab
@@ -33,7 +24,7 @@ type TabData = {
   Content: FC
 }
 
-export const tabsRecord: Record<Tab, TabData> = {
+export const tabRecord: Record<Tab, TabData> = {
   kloc: {
     tab: 'kloc',
     label: 'Kloc',
@@ -51,21 +42,36 @@ export const tabsRecord: Record<Tab, TabData> = {
   },
 }
 
-export const tabs = Object.values(tabsRecord)
+export const tabList = Object.values(tabRecord)
 
-export function isRoute(path: string): path is Route {
-  return Boolean(routes.find((route) => route === path))
+export function isValidRoute(path: string): path is Tab {
+  return typeof tabs.find((route) => route === path) === 'string'
 }
 
 export const LAST_VISITED_PATH = 'last-visited-path'
 
+export function getPage(path: string) {
+  return path.split('/')[1] ?? ''
+}
+
+export function getSlug(path: string) {
+  return path.split('/')[2] ?? ''
+}
+
 export function redirectToHome() {
-  localStorage.setItem(LAST_VISITED_PATH, '/')
-  history.replaceState(null, '', '/')
+  const homePage = '/kloc'
+  localStorage.setItem(LAST_VISITED_PATH, homePage)
+  history.replaceState(null, '', homePage)
+}
+
+export function redirectToTab(tab: string) {
+  const slug = getSlug(location.pathname)
+  history.replaceState(null, '', `/${tab}${slug ? `/${slug}` : ''}`)
 }
 
 export function handleTabChange(tab: string) {
-  history.pushState(null, '', tabRouteRecord[tab])
+  const slug = getSlug(location.pathname)
+  history.pushState(null, '', `/${tab}${slug ? `/${slug}` : ''}`)
 }
 
 export function restoreLastVisitedPath() {

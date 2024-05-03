@@ -1,11 +1,28 @@
 import { useSyncExternalStore } from 'react'
-import type { Route } from '../utils'
+import type { Tab } from '../utils'
 import {
   LAST_VISITED_PATH,
-  isRoute,
+  getPage,
+  getSlug,
+  redirectToTab,
+  isValidRoute,
   redirectToHome,
   restoreLastVisitedPath,
 } from '../utils'
+
+type Store = {
+  route: Tab
+  slug: string
+}
+
+let store = {} as Store
+
+function setStore() {
+  store = {
+    route: getPage(location.pathname) as Tab,
+    slug: getSlug(location.pathname),
+  }
+}
 
 function getObserver(callback: () => void) {
   let currentPath = location.pathname
@@ -22,6 +39,7 @@ function getObserver(callback: () => void) {
 function subscribe(onChange: () => void): () => void {
   const handleChange = () => {
     localStorage.setItem(LAST_VISITED_PATH, location.pathname)
+    setStore()
     onChange()
   }
 
@@ -37,18 +55,19 @@ function subscribe(onChange: () => void): () => void {
 }
 
 export function usePathname() {
-  if (!isRoute(location.pathname)) {
-    redirectToHome()
-  }
-
   if (location.pathname === '/') {
     restoreLastVisitedPath()
+  } else if (location.pathname.split('/').length > 3) {
+    redirectToTab(getPage(location.pathname))
   } else {
     localStorage.setItem(LAST_VISITED_PATH, location.pathname)
   }
 
-  return useSyncExternalStore(
-    subscribe,
-    () => (localStorage.getItem(LAST_VISITED_PATH) ?? '/') as Route,
-  )
+  if (!isValidRoute(getPage(location.pathname))) {
+    redirectToHome()
+  }
+
+  setStore()
+
+  return useSyncExternalStore(subscribe, () => store)
 }

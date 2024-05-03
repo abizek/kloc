@@ -5,7 +5,6 @@ category: 'stopwatch' | 'timer'
 state: <sm data>
 }
 
-XXX: update route handling to handle room id
 XXX: party provider connecting to websocket at the app level (shared room for stopwatch and timer)
 XXX: on enable sharing generate new room id, update route, connect to the room and send type join with state
 XXX: on routes with room id connect to the room and send type join with state

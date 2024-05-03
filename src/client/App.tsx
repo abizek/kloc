@@ -6,20 +6,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/Tabs'
 import { usePathname } from './hooks/usePathname'
 import { StopwatchMachineProvider } from './providers/StopwatchMachineProvider'
 import { TimerMachineProvider } from './providers/TimerMachineProvider'
-import { handleTabChange, routeTabRecord, tabs, tabsRecord } from './utils'
+import type { Tab } from './utils'
+import { handleTabChange, tabList, tabRecord } from './utils'
 
 export default function App() {
-  const path = usePathname()
+  const { route } = usePathname()
   const [selectedTab, setSelectedTab] = useState<Tab | null>(null)
   const previousTab = usePrevious(selectedTab)
 
-  if (routeTabRecord[path] !== selectedTab) {
-    setSelectedTab(routeTabRecord[path])
+  if (route !== selectedTab) {
+    setSelectedTab(route)
   }
 
   if (selectedTab === null) return null
 
-  const { Content } = tabsRecord[selectedTab]
+  const { Content } = tabRecord[selectedTab]
 
   return (
     <Tabs value={selectedTab} onValueChange={handleTabChange}>
@@ -36,7 +37,7 @@ export default function App() {
         </StopwatchMachineProvider>
       </TabsContent>
       <TabsList>
-        {tabs.map(({ tab, label }) => (
+        {tabList.map(({ tab, label }) => (
           <TabsTrigger key={label} value={tab} data-cy={`${tab}-trigger`}>
             {label}
             {tab === selectedTab ? (
