@@ -8,11 +8,7 @@ interface TimeViewProps extends VariantProps<typeof timeViewVariants> {
   id: string
 }
 
-export function TimeView({
-  time,
-  variant,
-  id,
-}: TimeViewProps) {
+export function TimeView({ time, variant, id }: TimeViewProps) {
   let padding: number
   switch (variant) {
     case 'unstyled':

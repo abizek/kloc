@@ -81,7 +81,7 @@ export function useMachine<TMachine extends AnyStateMachine>(
       actorRef.stop()
 
       // 'always' actions don't trigger listeners without this weird private property mutation
-      // ¯\_(ツ)_/¯ don't know why or how, it just works™. Source: https://github.com/statelyai/xstate/blob/a67e99f13d1770f3a6eeda9887bb5fff666c0db8/packages/xstate-react/src/stopRootWithRehydration.ts#L34 
+      // ¯\_(ツ)_/¯ don't know why or how, it just works™. Source: https://github.com/statelyai/xstate/blob/a67e99f13d1770f3a6eeda9887bb5fff666c0db8/packages/xstate-react/src/stopRootWithRehydration.ts#L34
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ;(actorRef as any)._snapshot = snapshot
     }
