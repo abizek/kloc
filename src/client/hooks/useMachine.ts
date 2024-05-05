@@ -1,4 +1,4 @@
-import { isEmpty, isEqual, omit } from 'lodash'
+import { isEmpty, isEqual, pick } from 'lodash'
 import {
   useCallback,
   useEffect,
@@ -31,14 +31,16 @@ export function useMachine<TMachine extends AnyStateMachine>(
     (value: object) => {
       sessionStorage.setItem(
         machineId,
-        JSON.stringify(omit(value, ['children', 'historyValue'])),
+        JSON.stringify(pick(value, ['context', 'status', 'value'])),
       )
     },
     [machineId],
   )
 
   const [actorRef, setActorRef] = useState(() => {
-    const isSnapshotPersisted = !isEmpty(omit(persistedSnapshot, 'children'))
+    const isSnapshotPersisted = !isEmpty(
+      pick(persistedSnapshot, ['context', 'status', 'value']),
+    )
     const actorRef = createActor(machine, {
       ...(isSnapshotPersisted && {
         snapshot: { ...persistedSnapshot },
