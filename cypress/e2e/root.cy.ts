@@ -9,45 +9,38 @@ describe('Root', () => {
     { tab: 'timer', label: 'Timer', route: '/timer' },
   ]
 
+  const assertTabPresence = (tab: string, presence: boolean) => {
+    const matchValue = presence ? /^active$/ : /^inactive$/
+    cy.get(`[data-cy="${tab}-trigger"]`)
+      .should('have.attr', 'data-state')
+      .and('match', matchValue)
+    presence
+      ? cy
+          .get(`[data-cy="${tab}-content"]`)
+          .should('have.attr', 'data-state')
+          .and('match', matchValue)
+      : cy.get(`[data-cy="${tab}-content"]`).should('not.exist')
+  }
+
   describe('Handle 404', () => {
     it('redirects to home on invalid route', () => {
       cy.visit('/foo')
       cy.location('pathname').should('eq', '/kloc')
-      cy.get('[data-cy="kloc-trigger"]')
-        .should('have.attr', 'data-state')
-        .and('match', /^active$/)
-      cy.get('[data-cy="kloc-content"]')
-        .should('have.attr', 'data-state')
-        .and('match', /^active$/)
-
-      cy.get('[data-cy="stopwatch-trigger"]')
-        .should('have.attr', 'data-state')
-        .and('match', /^inactive$/)
-      cy.get('[data-cy="stopwatch-content"]').should('not.exist')
-      cy.get('[data-cy="timer-trigger"]')
-        .should('have.attr', 'data-state')
-        .and('match', /^inactive$/)
-      cy.get('[data-cy="timer-content"]').should('not.exist')
+      assertTabPresence('kloc', true)
+      assertTabPresence('stopwatch', false)
+      assertTabPresence('timer', false)
     })
 
     it('redirects to requested page on invalid slug', () => {
       tabs.forEach(({ route, tab }) => {
         cy.visit(route + '/foo/bar')
         cy.location('pathname').should('eq', route + '/foo')
-        cy.get(`[data-cy="${tab}-trigger"]`)
-          .should('have.attr', 'data-state')
-          .and('match', /^active$/)
-        cy.get(`[data-cy="${tab}-content"]`)
-          .should('have.attr', 'data-state')
-          .and('match', /^active$/)
+        assertTabPresence(tab, true)
 
         tabs
           .filter(({ tab: otherTab }) => tab !== otherTab)
           .forEach(({ tab }) => {
-            cy.get(`[data-cy="${tab}-trigger"]`)
-              .should('have.attr', 'data-state')
-              .and('match', /^inactive$/)
-            cy.get(`[data-cy="${tab}-content"]`).should('not.exist')
+            assertTabPresence(tab, false)
           })
       })
     })
@@ -58,19 +51,12 @@ describe('Root', () => {
       tabs.forEach(({ tab, route }, _, tabs) => {
         cy.clearAllLocalStorage()
         cy.visit(route)
-        cy.get(`[data-cy="${tab}-trigger"]`)
-          .should('have.attr', 'data-state')
-          .and('match', /^active$/)
-        cy.get(`[data-cy="${tab}-content"]`)
-          .should('have.attr', 'data-state')
-          .and('match', /^active$/)
+        assertTabPresence(tab, true)
+
         tabs
           .filter(({ tab: otherTab }) => tab !== otherTab)
           .forEach(({ tab }) => {
-            cy.get(`[data-cy="${tab}-trigger"]`)
-              .should('have.attr', 'data-state')
-              .and('match', /^inactive$/)
-            cy.get(`[data-cy="${tab}-content"]`).should('not.exist')
+            assertTabPresence(tab, false)
           })
       })
     })
@@ -79,19 +65,12 @@ describe('Root', () => {
       tabs.forEach(({ tab, route }, _, tabs) => {
         cy.clearAllLocalStorage()
         cy.visit(route + '/foo')
-        cy.get(`[data-cy="${tab}-trigger"]`)
-          .should('have.attr', 'data-state')
-          .and('match', /^active$/)
-        cy.get(`[data-cy="${tab}-content"]`)
-          .should('have.attr', 'data-state')
-          .and('match', /^active$/)
+        assertTabPresence(tab, true)
+
         tabs
           .filter(({ tab: otherTab }) => tab !== otherTab)
           .forEach(({ tab }) => {
-            cy.get(`[data-cy="${tab}-trigger"]`)
-              .should('have.attr', 'data-state')
-              .and('match', /^inactive$/)
-            cy.get(`[data-cy="${tab}-content"]`).should('not.exist')
+            assertTabPresence(tab, false)
           })
       })
     })
@@ -100,12 +79,8 @@ describe('Root', () => {
       tabs.forEach(({ tab: fromTab, label: fromLabel, route: fromRoute }) => {
         cy.get(`[data-cy="${fromTab}-trigger"]`).contains(fromLabel).click()
         cy.location('pathname').should('eq', fromRoute)
-        cy.get(`[data-cy="${fromTab}-trigger"]`)
-          .should('have.attr', 'data-state')
-          .and('match', /^active$/)
-        cy.get(`[data-cy="${fromTab}-content"]`)
-          .should('have.attr', 'data-state')
-          .and('match', /^active$/)
+        assertTabPresence(fromTab, true)
+
         tabs
           .filter(({ tab: otherTab }) => fromTab !== otherTab)
           .forEach(
@@ -113,23 +88,44 @@ describe('Root', () => {
               cy.get(`[data-cy="${toTab}-trigger"]`).contains(toLabel).click()
               cy.location('pathname').should('not.eq', fromRoute)
               cy.location('pathname').should('eq', toRoute)
-              cy.get(`[data-cy="${fromTab}-trigger"]`)
-                .should('have.attr', 'data-state')
-                .and('match', /^inactive$/)
-              cy.get(`[data-cy="${toTab}-trigger"]`)
-                .should('have.attr', 'data-state')
-                .and('match', /^active$/)
-              cy.get(`[data-cy="${fromTab}-content"]`).should('not.exist')
-              cy.get(`[data-cy="${toTab}-content"]`)
-                .should('have.attr', 'data-state')
-                .and('match', /^active$/)
+              assertTabPresence(fromTab, false)
+              assertTabPresence(toTab, true)
+
               tabs
                 .filter(({ tab: otherTab }) => toTab !== otherTab)
                 .forEach(({ tab }) => {
-                  cy.get(`[data-cy="${tab}-trigger"]`)
-                    .should('have.attr', 'data-state')
-                    .and('match', /^inactive$/)
-                  cy.get(`[data-cy="${tab}-content"]`).should('not.exist')
+                  assertTabPresence(tab, false)
+                })
+            },
+          )
+      })
+    })
+
+    it('via trigger with slug', () => {
+      const slug = '/foo'
+      cy.visit('/kloc' + slug)
+      tabs.forEach(({ tab: fromTab, label: fromLabel, route: fromRoute }) => {
+        cy.get(`[data-cy="${fromTab}-trigger"]`).contains(fromLabel).click()
+        cy.location('pathname').should('not.eq', fromRoute)
+        cy.location('pathname').should('eq', fromRoute + slug)
+        assertTabPresence(fromTab, true)
+
+        tabs
+          .filter(({ tab: otherTab }) => fromTab !== otherTab)
+          .forEach(
+            ({ tab: toTab, label: toLabel, route: toRoute }, _, tabs) => {
+              cy.get(`[data-cy="${toTab}-trigger"]`).contains(toLabel).click()
+              cy.location('pathname').should('not.eq', fromRoute)
+              cy.location('pathname').should('not.eq', fromRoute + slug)
+              cy.location('pathname').should('not.eq', toRoute)
+              cy.location('pathname').should('eq', toRoute + slug)
+              assertTabPresence(fromTab, false)
+              assertTabPresence(toTab, true)
+
+              tabs
+                .filter(({ tab: otherTab }) => toTab !== otherTab)
+                .forEach(({ tab }) => {
+                  assertTabPresence(tab, false)
                 })
             },
           )
@@ -157,6 +153,13 @@ describe('Root', () => {
             cy.location('pathname').should('eq', fromRoute)
             cy.visit(toRoute)
             cy.location('pathname').should('eq', toRoute)
+            cy.clearAllLocalStorage()
+            const fromRouteWithSlug = fromRoute + '/foo'
+            const toRouteWithSlug = toRoute + '/bar'
+            cy.visit(fromRouteWithSlug)
+            cy.location('pathname').should('eq', fromRouteWithSlug)
+            cy.visit(toRouteWithSlug)
+            cy.location('pathname').should('eq', toRouteWithSlug)
           })
       })
     })

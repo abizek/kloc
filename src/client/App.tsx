@@ -1,25 +1,15 @@
 import { usePrevious } from '@uidotdev/usehooks'
 import { motion } from 'framer-motion'
-import { useState } from 'react'
 import { Header } from './components/Header'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/Tabs'
-import { usePathname } from './hooks/usePathname'
+import { useRouter } from './hooks/useRouter'
 import { StopwatchMachineProvider } from './providers/StopwatchMachineProvider'
 import { TimerMachineProvider } from './providers/TimerMachineProvider'
-import type { Tab } from './utils'
-import { handleTabChange, tabList, tabRecord } from './utils'
+import { tabList, tabRecord } from './utils'
 
 export default function App() {
-  const { route } = usePathname()
-  const [selectedTab, setSelectedTab] = useState<Tab | null>(null)
+  const { tab: selectedTab, handleTabChange } = useRouter()
   const previousTab = usePrevious(selectedTab)
-
-  if (route !== selectedTab) {
-    setSelectedTab(route)
-  }
-
-  if (selectedTab === null) return null
-
   const { Content } = tabRecord[selectedTab]
 
   return (

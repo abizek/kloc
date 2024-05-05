@@ -51,29 +51,9 @@ export function isValidRoute(path: string): path is Tab {
 export const LAST_VISITED_PATH = 'last-visited-path'
 
 export function getPage(path: string) {
-  return path.split('/')[1] ?? ''
+  return path.split('/')[1]
 }
 
 export function getSlug(path: string) {
   return path.split('/')[2] ?? ''
-}
-
-export function redirectToHome() {
-  const homePage = '/kloc'
-  localStorage.setItem(LAST_VISITED_PATH, homePage)
-  history.replaceState(null, '', homePage)
-}
-
-export function redirectToTab(tab: string) {
-  const slug = getSlug(location.pathname)
-  history.replaceState(null, '', `/${tab}${slug ? `/${slug}` : ''}`)
-}
-
-export function handleTabChange(tab: string) {
-  const slug = getSlug(location.pathname)
-  history.pushState(null, '', `/${tab}${slug ? `/${slug}` : ''}`)
-}
-
-export function restoreLastVisitedPath() {
-  history.replaceState(null, '', localStorage.getItem(LAST_VISITED_PATH))
 }
