@@ -1,13 +1,13 @@
 schema
 {
-type: 'join' | 'update' | 'delete'
+type: 'create' | 'join' | 'update' | 'delete'
 category: 'stopwatch' | 'timer'
 state: <sm data>
 }
 
 XXX: party provider connecting to websocket at the app level (shared room for stopwatch and timer)
-XXX: on enable sharing generate new room id, update route, connect to the room and send type join with state
-XXX: on routes with room id connect to the room and send type join with state
+XXX: on enable sharing generate new room id, update route, connect to the room and send type create with state
+XXX: on routes with room id connect to the room and send type join
 XXX: handle 404 room id by redirecting and showing a Toast for a short time period
 XXX: on sm event changes send type update with state
 XXX: listen for update messages and trigger <category>-create event
@@ -17,6 +17,7 @@ XXX: (on deletion events update route based on shared status of both stopwatch a
 
 XXX: Share menu with link icon has enable shraing switch and exit room button to exit without disabling sharing
 XXX: link for share with copy, and qr code
+XXX: ?: ability to create room with custom id
 XXX: test state sharing
 XXX: update readme app description and development instructions
 

@@ -29,3 +29,6 @@ cypress/screenshots/**
 cypress/downloads/**
 coverage
 .nyc_output
+
+# Partykit
+.partykit
