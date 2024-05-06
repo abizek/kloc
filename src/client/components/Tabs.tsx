@@ -1,5 +1,6 @@
 import * as TabsPrimitive from '@radix-ui/react-tabs'
 import { AnimatePresence, motion } from 'framer-motion'
+import type { Tab } from '../utils'
 
 const Tabs = ({ ...props }: TabsPrimitive.TabsProps) => (
   <TabsPrimitive.Root
