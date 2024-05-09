@@ -1,12 +1,14 @@
 import { useRef, useSyncExternalStore } from 'react'
 import type { Tab } from '../utils'
-import { LAST_VISITED_PATH, getPage, getSlug, isValidRoute } from '../utils'
+import { tabs } from '../utils'
 
 type Router = {
   tab: Tab
   roomId: string
   handleTabChange: (tab: string) => void
 }
+
+const LAST_VISITED_PATH = 'last-visited-path'
 
 export function useRouter() {
   const router = useRef<Router>(getRouter())
@@ -15,7 +17,6 @@ export function useRouter() {
   if (location.pathname === '/') {
     if (lastVisitedPath) {
       replaceState(lastVisitedPath)
-      router.current = getRouter()
     }
   } else {
     if (location.pathname.split('/').length > 3) {
@@ -31,10 +32,6 @@ export function useRouter() {
     const homePage = '/kloc'
     localStorage.setItem(LAST_VISITED_PATH, homePage)
     replaceState(homePage)
-    router.current = {
-      ...getRouter(),
-      tab: 'kloc',
-    }
   }
 
   const subscribe = (onChange: () => void): (() => void) => {
@@ -47,7 +44,7 @@ export function useRouter() {
     const observer = getObserver(handleChange)
     const body = document.querySelector('body')!
     observer.observe(body, { subtree: true, attributes: true })
-    window.addEventListener('popstate', handleChange)
+    window.addEventListener('popstate', handleChange, { passive: true })
 
     return () => {
       observer.disconnect()
@@ -55,6 +52,7 @@ export function useRouter() {
     }
   }
 
+  router.current = getRouter()
   return useSyncExternalStore(subscribe, () => router.current)
 }
 
@@ -89,4 +87,16 @@ function getObserver(callback: () => void) {
   })
 
   return observer
+}
+
+function isValidRoute(path: string): path is Tab {
+  return typeof tabs.find((route) => route === path) === 'string'
+}
+
+function getPage(path: string) {
+  return path.split('/')[1]
+}
+
+function getSlug(path: string) {
+  return path.split('/')[2] ?? ''
 }

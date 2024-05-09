@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { TimerMachineContext } from '../../providers/TimerMachineProvider'
-import { Button } from '../Button'
+import { Button } from '../Button/Button'
 
 type FooterProps = {
   timeInput: number

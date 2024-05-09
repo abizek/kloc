@@ -1,11 +1,15 @@
+import { TooltipProvider } from '@radix-ui/react-tooltip'
 import { usePrevious } from '@uidotdev/usehooks'
 import { motion } from 'framer-motion'
-import { Header } from './components/Header'
+import { Suspense, lazy } from 'react'
+import { HeaderSkeleton } from './components/Header/Skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/Tabs'
 import { useRouter } from './hooks/useRouter'
 import { StopwatchMachineProvider } from './providers/StopwatchMachineProvider'
 import { TimerMachineProvider } from './providers/TimerMachineProvider'
 import { tabList, tabRecord } from './utils'
+
+const Header = lazy(() => import('./components/Header'))
 
 export default function App() {
   const { tab: selectedTab, handleTabChange } = useRouter()
@@ -14,7 +18,11 @@ export default function App() {
 
   return (
     <Tabs value={selectedTab} onValueChange={handleTabChange}>
-      <Header />
+      <Suspense fallback={<HeaderSkeleton />}>
+        <TooltipProvider>
+          <Header />
+        </TooltipProvider>
+      </Suspense>
       <TabsContent
         value={selectedTab}
         previousValue={previousTab}

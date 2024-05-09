@@ -1,8 +1,7 @@
-import { VariantProps, cva } from 'class-variance-authority'
-import { cn } from '../utils'
+import { cva } from 'class-variance-authority'
 
-const buttonVariants = cva(
-  'min-h-11 min-w-28 scale-[1.15] rounded-full font-semibold',
+export const buttonVariants = cva(
+  'min-h-11 min-w-28 scale-[1.15] rounded-full font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/70 focus-visible:ring-offset-gray-200 dark:focus-visible:ring-gray-200',
   {
     variants: {
       variant: {
@@ -12,6 +11,7 @@ const buttonVariants = cva(
           'bg-gray-300/60 text-gray-700 hover:bg-gray-200 active:bg-gray-300/60 disabled:bg-gray-200 disabled:text-gray-400 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-900/80 dark:hover:text-gray-200/80 dark:active:bg-gray-900/70 dark:disabled:bg-gray-900 dark:disabled:text-gray-700',
         destructive:
           'bg-red-700/90 text-white hover:bg-red-700/80 dark:bg-red-950 dark:text-gray-200 dark:hover:bg-red-950/80 dark:hover:dark:text-gray-200/90',
+        icon: 'min-h-fit min-w-fit scale-100 rounded-sm font-normal transition-transform duration-300 hover:scale-125 hover:duration-150 active:scale-90',
       },
     },
     defaultVariants: {
@@ -19,13 +19,3 @@ const buttonVariants = cva(
     },
   },
 )
-
-interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
-
-export function Button({ className, variant, ...props }: ButtonProps) {
-  return (
-    <button className={cn(buttonVariants({ variant, className }))} {...props} />
-  )
-}

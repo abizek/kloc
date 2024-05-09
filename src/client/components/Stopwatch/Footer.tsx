@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { StopwatchMachineContext } from '../../providers/StopwatchMachineProvider'
-import { Button } from '../Button'
+import { Button } from '../Button/Button'
 
 export function Footer() {
   const { send, stopwatch } = useContext(StopwatchMachineContext)

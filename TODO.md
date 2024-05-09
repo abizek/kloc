@@ -15,8 +15,6 @@ XXX: on disable sharing, disconnect room, update route and send type delete
 XXX: listen for delete events, disconnect room, update route and show toast on delete
 XXX: (on deletion events update route based on shared status of both stopwatch and timer)
 
-XXX: Share menu with link icon has enable shraing switch and exit room button to exit without disabling sharing
-XXX: link for share with copy, and qr code
 XXX: ?: ability to create room with custom id
 XXX: test state sharing
 XXX: update readme app description and development instructions
@@ -41,6 +39,7 @@ XXX: animate timer buttons
 XXX: animate with morphing icons (lottie?)
 
 XXX: update meta title, description with each page (react-helmet maybe?)
+XXX: update github repo name and desc
 
 XXX: error correction on write input
 XXX: R&D: scrolling input with stiffness and damping and momentum
@@ -65,7 +64,7 @@ XXX: add days, years timer tests
 
 XXX: kloc.live domain
 
-XXX: capacitor app with timer notifications, open app via link, convert local and session storage stuff, link for share using android share
+XXX: capacitor app with timer notifications, open app via link, convert local and session storage stuff, link for share using android share, fullscreen
 XXX: update Readme with capacitor stuff
 
 XXX: ?: negative timer in toast description (upto seconds only)
