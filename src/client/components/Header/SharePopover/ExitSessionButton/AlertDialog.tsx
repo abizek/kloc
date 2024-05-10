@@ -30,7 +30,7 @@ const AlertDialogContent = React.forwardRef<
     <AlertDialogOverlay />
     <AlertDialogPrimitive.Content
       ref={ref}
-      className="fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 rounded-lg border border-black/10 bg-gray-50/60 p-6 text-gray-800 shadow-lg backdrop-blur-md backdrop-brightness-200 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] dark:border-white/10 dark:bg-black/40 dark:text-gray-200"
+      className="fixed left-1/2 top-1/2 z-50 grid w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 rounded-lg border border-black/10 bg-gray-50/60 p-6 text-gray-800 shadow-lg backdrop-blur-md backdrop-brightness-200 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-75 data-[state=open]:zoom-in-75 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] data-[state=closed]:has-[[data-action=true]]:zoom-out-125 dark:border-white/10 dark:bg-black/40 dark:text-gray-200"
       {...props}
     />
   </AlertDialogPortal>
@@ -78,14 +78,23 @@ AlertDialogDescription.displayName =
 
 const AlertDialogAction = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Action>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action>
->(({ ...props }, ref) => (
-  <AlertDialogPrimitive.Action
-    ref={ref}
-    className={cn(buttonVariants(), 'scale-95')}
-    {...props}
-  />
-))
+  AlertDialogPrimitive.AlertDialogActionProps
+>(({ onClick, ...props }, ref) => {
+  const isActionTriggered = React.useRef<boolean>(false)
+
+  return (
+    <AlertDialogPrimitive.Action
+      ref={ref}
+      data-action={isActionTriggered.current}
+      onClick={(event) => {
+        isActionTriggered.current = true
+        onClick?.(event)
+      }}
+      className={cn(buttonVariants(), 'scale-95')}
+      {...props}
+    />
+  )
+})
 AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName
 
 const AlertDialogCancel = React.forwardRef<
