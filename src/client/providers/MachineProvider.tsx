@@ -8,10 +8,32 @@ import { ToastAction } from '../components/Toast/Toast'
 import { useToast } from '../components/Toast/useToast'
 import { useMachine } from '../hooks/useMachine'
 import type {
+  StopwatchEvent,
+  StopwatchContext as StopwatchXstateContext,
+} from '../machines/stopwatch'
+import { stopwatchMachine } from '../machines/stopwatch'
+import type {
   TimerEvent,
   TimerContext as TimerXstateContext,
 } from '../machines/timer'
 import { timerMachine } from '../machines/timer'
+
+type StopwatchStateValue =
+  | 'paused'
+  | 'stopped'
+  | {
+      started?:
+        | Required<{
+            mainStopwatch?: 'running' | undefined
+            lapStopwatch?:
+              | 'stopped'
+              | {
+                  started?: 'running' | undefined
+                }
+              | undefined
+          }>
+        | undefined
+    }
 
 type TimerStateValue =
   | 'running'
@@ -20,7 +42,16 @@ type TimerStateValue =
       stopped?: 'beepStopped' | 'beepPlaying' | undefined
     }
 
-type TimerMachineContextType = {
+type MachineContextType = {
+  stopwatch: MachineSnapshot<
+    StopwatchXstateContext,
+    StopwatchEvent,
+    Record<string, never>,
+    StopwatchStateValue,
+    string,
+    NonReducibleUnknown
+  >
+  stopwatchSend: (event: StopwatchEvent) => void
   timer: MachineSnapshot<
     TimerXstateContext,
     TimerEvent,
@@ -29,17 +60,18 @@ type TimerMachineContextType = {
     string,
     NonReducibleUnknown
   >
-  send: (event: TimerEvent) => void
-  dismissToast: () => void
+  timerSend: (event: TimerEvent) => void
+  dismissTimerToast: () => void
 }
 
-export const TimerMachineContext = createContext<TimerMachineContextType>(
-  {} as TimerMachineContextType,
+export const MachineContext = createContext<MachineContextType>(
+  {} as MachineContextType,
 )
 
-export const TimerMachineProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { toast, dismiss: dismissToast } = useToast()
-  const [timer, send] = useMachine(
+export const MachineProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { toast, dismiss: dismissTimerToast } = useToast()
+  const [stopwatch, stopwatchSend] = useMachine(stopwatchMachine)
+  const [timer, timerSend] = useMachine(
     timerMachine.provide({
       actions: {
         onComplete: () => {
@@ -56,7 +88,7 @@ export const TimerMachineProvider: FC<PropsWithChildren> = ({ children }) => {
                   variant="secondary"
                   className="scale-90"
                   onClick={() => {
-                    send({ type: 'stopBeep' })
+                    timerSend({ type: 'stopBeep' })
                   }}
                 >
                   Dismiss
@@ -72,8 +104,16 @@ export const TimerMachineProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => stopBeep, [])
 
   return (
-    <TimerMachineContext.Provider value={{ timer, send, dismissToast }}>
+    <MachineContext.Provider
+      value={{
+        stopwatch,
+        stopwatchSend,
+        timer,
+        timerSend,
+        dismissTimerToast,
+      }}
+    >
       {children}
-    </TimerMachineContext.Provider>
+    </MachineContext.Provider>
   )
 }

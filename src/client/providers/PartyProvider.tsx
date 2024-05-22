@@ -4,8 +4,7 @@ import usePartySocket from 'partysocket/react'
 import type { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useState } from 'react'
 import { useRouter } from '../hooks/useRouter'
-import { StopwatchMachineContext } from './StopwatchMachineProvider'
-import { TimerMachineContext } from './TimerMachineProvider'
+import { MachineContext } from './MachineProvider'
 
 type PartyContextType = {
   ws: PartySocket
@@ -21,8 +20,7 @@ export const PartyProvider: FC<PropsWithChildren> = ({ children }) => {
   const { roomId } = useRouter()
   const [connected, setConnected] = useState(false)
   const [newRoom, setNewRoom] = useState(false)
-  const { stopwatch } = useContext(StopwatchMachineContext)
-  const { timer } = useContext(TimerMachineContext)
+  const { stopwatch, timer } = useContext(MachineContext)
 
   const ws = usePartySocket({
     host: import.meta.env.VITE_PARTYKIT_HOST,

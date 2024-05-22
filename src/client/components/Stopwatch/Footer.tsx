@@ -1,9 +1,9 @@
 import { useContext } from 'react'
-import { StopwatchMachineContext } from '../../providers/StopwatchMachineProvider'
+import { MachineContext } from '../../providers/MachineProvider'
 import { Button } from '../Button/Button'
 
 export function Footer() {
-  const { send, stopwatch } = useContext(StopwatchMachineContext)
+  const { stopwatch, stopwatchSend: send } = useContext(MachineContext)
 
   return (
     <footer className="absolute z-10 grid h-[calc(100svh_-_76px)] w-full grid-rows-[auto_160px] place-items-center">
