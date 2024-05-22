@@ -1,20 +1,26 @@
 import { Presence } from '@radix-ui/react-presence'
 import { Cloud, CloudOff } from 'lucide-react'
+import { useContext } from 'react'
 import { useOnline } from '../../hooks/useOnline'
 import { useRouter } from '../../hooks/useRouter'
+import { PartyContext } from '../../providers/PartyProvider'
 import { Button } from '../Button/Button'
 import { Popover, PopoverContent, PopoverTrigger } from './Popover'
 
-// TODO: show ws connection status also 'offline' | 'disconnected' | 'connecting' | 'connected'
 export function NetworkStatusPopover() {
   const { roomId } = useRouter()
   const isOnline = useOnline()
+  const { connected } = useContext(PartyContext)
 
   let CloudIcon = CloudOff
   let status = 'Offline'
   if (isOnline) {
-    CloudIcon = Cloud
-    status = 'Online'
+    if (connected) {
+      CloudIcon = Cloud
+      status = 'Connected'
+    } else {
+      status = 'Disconnected'
+    }
   }
   return (
     <Popover>
@@ -30,7 +36,7 @@ export function NetworkStatusPopover() {
           </Button>
         </PopoverTrigger>
       </Presence>
-      <PopoverContent>Network Status: {status}</PopoverContent>
+      <PopoverContent>{status}</PopoverContent>
     </Popover>
   )
 }
