@@ -3,14 +3,15 @@ import { Cloud, CloudOff } from 'lucide-react'
 import { useContext } from 'react'
 import { useOnline } from '../../hooks/useOnline'
 import { useRouter } from '../../hooks/useRouter'
-import { PartyContext } from '../../providers/PartyProvider'
+import { MachinePartyContext } from '../../providers/MachinePartyProvider'
 import { Button } from '../Button/Button'
 import { Popover, PopoverContent, PopoverTrigger } from './Popover'
 
+// XXX: Show connecting state with spinning loader
 export function NetworkStatusPopover() {
   const { roomId } = useRouter()
   const isOnline = useOnline()
-  const { connected } = useContext(PartyContext)
+  const { connected } = useContext(MachinePartyContext)
 
   let CloudIcon = CloudOff
   let status = 'Offline'

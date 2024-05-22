@@ -1,4 +1,5 @@
 import { isEmpty, isEqual, pick } from 'lodash'
+import type PartySocket from 'partysocket'
 import {
   useCallback,
   useEffect,
@@ -6,17 +7,19 @@ import {
   useState,
   useSyncExternalStore,
 } from 'react'
-import { createActor } from 'xstate'
 import type {
   Actor,
+  ActorOptions,
   AnyStateMachine,
   EventFromLogic,
   StateFrom,
-  ActorOptions,
 } from 'xstate'
+import { createActor } from 'xstate'
 
-export function useMachine<TMachine extends AnyStateMachine>(
+export function useMachineParty<TMachine extends AnyStateMachine>(
   machine: TMachine,
+  ws: PartySocket,
+  connected: boolean,
 ): [StateFrom<TMachine>, Actor<TMachine>['send'], Actor<TMachine>] {
   const machineId = useMemo(() => machine.config.id!, [machine.config.id])
 
@@ -28,13 +31,20 @@ export function useMachine<TMachine extends AnyStateMachine>(
   }, [persistedSnapshotUnparsed])
 
   const persist = useCallback(
-    (value: object) => {
-      sessionStorage.setItem(
-        machineId,
-        JSON.stringify(pick(value, ['context', 'status', 'value'])),
-      )
+    (value: object, updateRoom: boolean = true) => {
+      const pickedValue = pick(value, ['context', 'status', 'value'])
+      sessionStorage.setItem(machineId, JSON.stringify(pickedValue))
+
+      if (updateRoom && connected) {
+        ws.send(
+          JSON.stringify({
+            type: 'update',
+            [machineId]: pickedValue,
+          }),
+        )
+      }
     },
-    [machineId],
+    [connected, machineId, ws],
   )
 
   const [actorRef, setActorRef] = useState(() => {
@@ -56,7 +66,7 @@ export function useMachine<TMachine extends AnyStateMachine>(
 
   useEffect(() => {
     const listener = (event: CustomEvent) => {
-      persist(event.detail)
+      persist(event.detail, false)
       setActorRef(
         createActor(machine, {
           ...(!isEmpty(event.detail) && {

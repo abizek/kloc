@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useContext } from 'react'
-import { MachineContext } from '../../providers/MachineProvider'
+import { MachinePartyContext } from '../../providers/MachinePartyProvider'
 import { cn } from '../../utils'
 import { Footer } from './Footer'
 import { LapTimes } from './LapTimes'
@@ -11,7 +11,7 @@ export function Stopwatch() {
     stopwatch: {
       context: { elapsed, lapElapsed, laps },
     },
-  } = useContext(MachineContext)
+  } = useContext(MachinePartyContext)
 
   return (
     <div className="grid size-full grid-rows-[auto_80px]">

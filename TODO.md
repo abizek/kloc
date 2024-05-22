@@ -6,7 +6,6 @@ state: <sm data>
 }
 
 XXX: handle 404 room id by redirecting and showing a Toast for a short time period
-XXX: on sm event changes send type update with state
 XXX: listen for update messages and trigger <category>-create event
 XXX: on disable sharing, disconnect room, update route and send type delete
 XXX: listen for delete events, disconnect room, update route and show toast on delete

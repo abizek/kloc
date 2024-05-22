@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { MachineContext } from '../../providers/MachineProvider'
+import { MachinePartyContext } from '../../providers/MachinePartyProvider'
 import { Button } from '../Button/Button'
 
 type FooterProps = {
@@ -11,7 +11,7 @@ export function Footer({ timeInput }: FooterProps) {
     timer,
     timerSend: send,
     dismissTimerToast: dismissToast,
-  } = useContext(MachineContext)
+  } = useContext(MachinePartyContext)
 
   return (
     <div className="flex w-full max-w-screen-sm justify-evenly">

@@ -5,8 +5,7 @@ import { Suspense, lazy } from 'react'
 import { HeaderSkeleton } from './components/Header/Skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/Tabs'
 import { useRouter } from './hooks/useRouter'
-import { MachineProvider } from './providers/MachineProvider'
-import { PartyProvider } from './providers/PartyProvider'
+import { MachinePartyProvider } from './providers/MachinePartyProvider'
 import { tabList, tabRecord } from './utils'
 
 const Header = lazy(() => import('./components/Header'))
@@ -17,14 +16,12 @@ export default function App() {
   const { Content } = tabRecord[selectedTab]
 
   return (
-    <MachineProvider>
+    <MachinePartyProvider>
       <Tabs value={selectedTab} onValueChange={handleTabChange}>
         <Suspense fallback={<HeaderSkeleton />}>
-          <PartyProvider>
-            <TooltipProvider>
-              <Header />
-            </TooltipProvider>
-          </PartyProvider>
+          <TooltipProvider>
+            <Header />
+          </TooltipProvider>
         </Suspense>
         <TabsContent
           value={selectedTab}
@@ -47,6 +44,6 @@ export default function App() {
           ))}
         </TabsList>
       </Tabs>
-    </MachineProvider>
+    </MachinePartyProvider>
   )
 }

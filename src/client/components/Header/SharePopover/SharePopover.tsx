@@ -6,7 +6,7 @@ import {
 import { Share2 } from 'lucide-react'
 import { useContext, useState } from 'react'
 import { useRouter } from '../../../hooks/useRouter'
-import { PartyContext } from '../../../providers/PartyProvider'
+import { MachinePartyContext } from '../../../providers/MachinePartyProvider'
 import { Button } from '../../Button'
 import { Popover, PopoverContent, PopoverTrigger } from '../Popover'
 import { ExitSessionButton } from './ExitSessionButton'
@@ -16,7 +16,7 @@ import { Switch } from './Switch'
 export function SharePopover() {
   const { roomId, tab } = useRouter()
   const [shared, setShared] = useState(!!roomId)
-  const { setNewRoom } = useContext(PartyContext)
+  const { setNewRoom } = useContext(MachinePartyContext)
 
   const handleToggle = (checked: boolean) => {
     setShared(checked)

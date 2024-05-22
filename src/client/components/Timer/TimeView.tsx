@@ -1,12 +1,12 @@
 import { useContext } from 'react'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar'
-import { MachineContext } from '../../providers/MachineProvider'
+import { MachinePartyContext } from '../../providers/MachinePartyProvider'
 import { cn, prefixZero } from '../../utils'
 import { TimeView as TimeViewBase } from '../TimeView/TimeView'
 import { DestinationPreview } from './DestinationPreview'
 
 export function TimeView() {
-  const { timer } = useContext(MachineContext)
+  const { timer } = useContext(MachinePartyContext)
   const {
     context: { remaining: time, duration: maxValue, destination },
   } = timer

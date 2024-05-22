@@ -1,12 +1,16 @@
+import { pick } from 'lodash'
 import { BellRing } from 'lucide-react'
-import type { FC, PropsWithChildren } from 'react'
-import { createContext, useEffect } from 'react'
+import type PartySocket from 'partysocket'
+import usePartySocket from 'partysocket/react'
+import type { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import type { MachineSnapshot, NonReducibleUnknown } from 'xstate'
 import { stopBeep } from '../beep'
 import { Button } from '../components/Button/Button'
 import { ToastAction } from '../components/Toast/Toast'
 import { useToast } from '../components/Toast/useToast'
-import { useMachine } from '../hooks/useMachine'
+import { useMachineParty } from '../hooks/useMachineParty'
+import { useRouter } from '../hooks/useRouter'
 import type {
   StopwatchEvent,
   StopwatchContext as StopwatchXstateContext,
@@ -42,7 +46,7 @@ type TimerStateValue =
       stopped?: 'beepStopped' | 'beepPlaying' | undefined
     }
 
-type MachineContextType = {
+type MachinePartyContextType = {
   stopwatch: MachineSnapshot<
     StopwatchXstateContext,
     StopwatchEvent,
@@ -52,6 +56,7 @@ type MachineContextType = {
     NonReducibleUnknown
   >
   stopwatchSend: (event: StopwatchEvent) => void
+
   timer: MachineSnapshot<
     TimerXstateContext,
     TimerEvent,
@@ -62,16 +67,61 @@ type MachineContextType = {
   >
   timerSend: (event: TimerEvent) => void
   dismissTimerToast: () => void
+
+  ws: PartySocket
+  connected: boolean
+  setNewRoom: Dispatch<SetStateAction<boolean>>
 }
 
-export const MachineContext = createContext<MachineContextType>(
-  {} as MachineContextType,
+export const MachinePartyContext = createContext<MachinePartyContextType>(
+  {} as MachinePartyContextType,
 )
 
-export const MachineProvider: FC<PropsWithChildren> = ({ children }) => {
+export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { roomId } = useRouter()
+  const [connected, setConnected] = useState(false)
+  const [newRoom, setNewRoom] = useState(false)
+
+  const ws = usePartySocket({
+    host: import.meta.env.VITE_PARTYKIT_HOST,
+    room: roomId,
+    maxEnqueuedMessages: 0,
+    startClosed: !roomId,
+    debug: import.meta.env.DEV,
+    onOpen() {
+      setConnected(true)
+      if (newRoom) {
+        ws.send(
+          JSON.stringify({
+            type: 'create',
+            stopwatch: pick(stopwatch, ['context', 'status', 'value']),
+            timer: pick(timer, ['context', 'status', 'value']),
+          }),
+        )
+        setNewRoom(false)
+      } else {
+        ws.send(JSON.stringify({ type: 'join' }))
+      }
+    },
+    onMessage(event) {
+      console.log('message', event.data)
+      // handle update, delete, 409 and 404 here
+    },
+    onClose() {
+      setConnected(false)
+    },
+    onError(e) {
+      console.log('Error', e)
+    },
+  })
+
   const { toast, dismiss: dismissTimerToast } = useToast()
-  const [stopwatch, stopwatchSend] = useMachine(stopwatchMachine)
-  const [timer, timerSend] = useMachine(
+  const [stopwatch, stopwatchSend] = useMachineParty(
+    stopwatchMachine,
+    ws,
+    connected,
+  )
+  const [timer, timerSend] = useMachineParty(
     timerMachine.provide({
       actions: {
         onComplete: () => {
@@ -99,21 +149,30 @@ export const MachineProvider: FC<PropsWithChildren> = ({ children }) => {
         },
       },
     }),
+    ws,
+    connected,
   )
 
   useEffect(() => stopBeep, [])
 
+  if (!roomId) {
+    ws.close()
+  }
+
   return (
-    <MachineContext.Provider
+    <MachinePartyContext.Provider
       value={{
         stopwatch,
         stopwatchSend,
         timer,
         timerSend,
         dismissTimerToast,
+        ws,
+        connected,
+        setNewRoom,
       }}
     >
       {children}
-    </MachineContext.Provider>
+    </MachinePartyContext.Provider>
   )
 }
