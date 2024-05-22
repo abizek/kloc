@@ -78,6 +78,10 @@ export default class Server implements Party.Server {
             JSON.stringify({ type: 'delete' } satisfies DeleteMessage),
             [sender.id],
           )
+          break
+        }
+        default: {
+          throw new Error(`Unknown message type ${parsedMessage}`);
         }
       }
     } catch (error) {
