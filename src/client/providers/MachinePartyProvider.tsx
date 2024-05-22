@@ -5,6 +5,7 @@ import usePartySocket from 'partysocket/react'
 import type { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useEffect, useState } from 'react'
 import type { MachineSnapshot, NonReducibleUnknown } from 'xstate'
+import type { Category, Message } from '../../types'
 import { stopBeep } from '../beep'
 import { Button } from '../components/Button/Button'
 import { ToastAction } from '../components/Toast/Toast'
@@ -105,7 +106,20 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
     },
     onMessage(event) {
       console.log('message', event.data)
-      // handle update, delete, 409 and 404 here
+      const parsedMessage: Message = JSON.parse(event.data)
+      switch (parsedMessage.type) {
+        case 'update': {
+          const { type, ...parsedMessageData } = parsedMessage
+
+          Object.keys(parsedMessageData).forEach((key) => {
+            const event = new CustomEvent(`${key}-update`, {
+              detail: parsedMessageData[key as Category],
+            })
+            window.dispatchEvent(event)
+          })
+        }
+        // handle delete, 409 and 404 here
+      }
     },
     onClose() {
       setConnected(false)

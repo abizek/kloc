@@ -1,22 +1,13 @@
 import type * as Party from 'partykit/server'
-
-const categories = ['stopwatch', 'timer'] as const
-type Category = (typeof categories)[number]
-
-type State = {
-  context: object
-  status: string
-  value: string | object
-}
-
-type CreateMessage = { type: 'create' } & { [index in Category]: State }
-type JoinMessage = { type: 'join' }
-type UpdateMessage = { type: 'update' } & { [index in Category]?: State }
-type DeleteMessage = { type: 'delete' }
-type NotFoundMessage = { type: 404 }
-type ConflictMessage = { type: 409 }
-
-type Message = CreateMessage | JoinMessage | UpdateMessage | DeleteMessage
+import type {
+  Category,
+  ConflictMessage,
+  DeleteMessage,
+  Message,
+  NotFoundMessage,
+  State,
+  UpdateMessage,
+} from '../types'
 
 export default class Server implements Party.Server {
   constructor(readonly room: Party.Room) {}
@@ -47,8 +38,12 @@ export default class Server implements Party.Server {
           break
         }
         case 'join': {
-          const stopwatch = await this.room.storage.get<State>(categories[0])
-          const timer = await this.room.storage.get<State>(categories[1])
+          const stopwatch = await this.room.storage.get<State>(
+            'stopwatch' satisfies Category,
+          )
+          const timer = await this.room.storage.get<State>(
+            'timer' satisfies Category,
+          )
           if (!stopwatch && !timer) {
             sender.send(JSON.stringify({ type: 404 } satisfies NotFoundMessage))
             return
@@ -81,7 +76,7 @@ export default class Server implements Party.Server {
           break
         }
         default: {
-          throw new Error(`Unknown message type ${parsedMessage}`);
+          throw new Error(`Unknown message type ${parsedMessage}`)
         }
       }
     } catch (error) {

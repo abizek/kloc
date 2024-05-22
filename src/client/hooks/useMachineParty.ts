@@ -70,7 +70,7 @@ export function useMachineParty<TMachine extends AnyStateMachine>(
       setActorRef(
         createActor(machine, {
           ...(!isEmpty(event.detail) && {
-            snapshot: { ...event.detail },
+            snapshot: { ...event.detail, children: {} },
           }),
         } as ActorOptions<TMachine>),
       )
