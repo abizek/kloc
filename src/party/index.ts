@@ -9,7 +9,7 @@ type State = {
   value: string | object
 }
 
-type CreateMessage = { type: 'create' } & { [index in Category]?: State }
+type CreateMessage = { type: 'create' } & { [index in Category]: State }
 type JoinMessage = { type: 'join' }
 type UpdateMessage = { type: 'update' } & { [index in Category]?: State }
 type DeleteMessage = { type: 'delete' }

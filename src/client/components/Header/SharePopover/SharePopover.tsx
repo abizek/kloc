@@ -4,8 +4,9 @@ import {
   uniqueNamesGenerator,
 } from '@joaomoreno/unique-names-generator'
 import { Share2 } from 'lucide-react'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useRouter } from '../../../hooks/useRouter'
+import { PartyContext } from '../../../providers/PartyProvider'
 import { Button } from '../../Button'
 import { Popover, PopoverContent, PopoverTrigger } from '../Popover'
 import { ExitSessionButton } from './ExitSessionButton'
@@ -15,6 +16,7 @@ import { Switch } from './Switch'
 export function SharePopover() {
   const { roomId, tab } = useRouter()
   const [shared, setShared] = useState(!!roomId)
+  const { setNewRoom } = useContext(PartyContext)
 
   const handleToggle = (checked: boolean) => {
     setShared(checked)
@@ -27,6 +29,7 @@ export function SharePopover() {
           separator: '-',
         })}`,
       )
+      setNewRoom(true)
     } else {
       history.pushState(null, '', `/${tab}`)
     }

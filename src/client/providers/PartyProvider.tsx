@@ -1,11 +1,16 @@
+import { pick } from 'lodash'
 import type PartySocket from 'partysocket'
 import usePartySocket from 'partysocket/react'
-import { FC, PropsWithChildren, createContext, useState } from 'react'
+import type { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react'
+import { createContext, useContext, useState } from 'react'
 import { useRouter } from '../hooks/useRouter'
+import { StopwatchMachineContext } from './StopwatchMachineProvider'
+import { TimerMachineContext } from './TimerMachineProvider'
 
 type PartyContextType = {
   ws: PartySocket
   connected: boolean
+  setNewRoom: Dispatch<SetStateAction<boolean>>
 }
 
 export const PartyContext = createContext<PartyContextType>(
@@ -15,6 +20,9 @@ export const PartyContext = createContext<PartyContextType>(
 export const PartyProvider: FC<PropsWithChildren> = ({ children }) => {
   const { roomId } = useRouter()
   const [connected, setConnected] = useState(false)
+  const [newRoom, setNewRoom] = useState(false)
+  const { stopwatch } = useContext(StopwatchMachineContext)
+  const { timer } = useContext(TimerMachineContext)
 
   const ws = usePartySocket({
     host: import.meta.env.VITE_PARTYKIT_HOST,
@@ -24,14 +32,22 @@ export const PartyProvider: FC<PropsWithChildren> = ({ children }) => {
     debug: import.meta.env.DEV,
     onOpen() {
       setConnected(true)
-      console.log('connected', ws.readyState)
+      if (newRoom) {
+        ws.send(
+          JSON.stringify({
+            type: 'create',
+            stopwatch: pick(stopwatch, ['context', 'status', 'value']),
+            timer: pick(timer, ['context', 'status', 'value']),
+          }),
+        )
+        setNewRoom(false)
+      }
     },
     onMessage(event) {
       console.log('message', event.data)
     },
     onClose() {
       setConnected(false)
-      console.log('closed', ws.readyState)
     },
     onError(e) {
       console.log('Error', e)
@@ -43,7 +59,7 @@ export const PartyProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   return (
-    <PartyContext.Provider value={{ ws, connected }}>
+    <PartyContext.Provider value={{ ws, connected, setNewRoom }}>
       {children}
     </PartyContext.Provider>
   )

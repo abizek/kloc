@@ -5,7 +5,6 @@ category: 'stopwatch' | 'timer'
 state: <sm data>
 }
 
-XXX: on enable sharing generate new room id, update route, connect to the room and send type create with state
 XXX: on routes with room id connect to the room and send type join
 XXX: handle 404 room id by redirecting and showing a Toast for a short time period
 XXX: on sm event changes send type update with state
