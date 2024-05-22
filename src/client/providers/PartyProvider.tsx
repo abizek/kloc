@@ -41,10 +41,13 @@ export const PartyProvider: FC<PropsWithChildren> = ({ children }) => {
           }),
         )
         setNewRoom(false)
+      } else {
+        ws.send(JSON.stringify({ type: 'join' }))
       }
     },
     onMessage(event) {
       console.log('message', event.data)
+      // handle update, delete, 409 and 404 here
     },
     onClose() {
       setConnected(false)

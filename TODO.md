@@ -5,13 +5,11 @@ category: 'stopwatch' | 'timer'
 state: <sm data>
 }
 
-XXX: on routes with room id connect to the room and send type join
 XXX: handle 404 room id by redirecting and showing a Toast for a short time period
 XXX: on sm event changes send type update with state
 XXX: listen for update messages and trigger <category>-create event
 XXX: on disable sharing, disconnect room, update route and send type delete
 XXX: listen for delete events, disconnect room, update route and show toast on delete
-XXX: (on deletion events update route based on shared status of both stopwatch and timer)
 
 XXX: ?: ability to create room with custom id
 XXX: test state sharing
