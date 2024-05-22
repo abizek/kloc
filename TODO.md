@@ -5,7 +5,6 @@ category: 'stopwatch' | 'timer'
 state: <sm data>
 }
 
-XXX: party provider connecting to websocket at the app level (shared room for stopwatch and timer)
 XXX: on enable sharing generate new room id, update route, connect to the room and send type create with state
 XXX: on routes with room id connect to the room and send type join
 XXX: handle 404 room id by redirecting and showing a Toast for a short time period
@@ -76,5 +75,5 @@ XXX: ?: countdown animation for timeView (except ms)
 XXX: ?: 3 body problem easter egg in timer timeview
 XXX: ?: electron app with timer notifications
 
-XXX: Deadpool 3 timer and linkedin post
+XXX: Deadpool 3 timer and linkedin/reactiflux discord post
 XXX: ?: blog post on dev.to

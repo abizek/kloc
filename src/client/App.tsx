@@ -5,6 +5,7 @@ import { Suspense, lazy } from 'react'
 import { HeaderSkeleton } from './components/Header/Skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/Tabs'
 import { useRouter } from './hooks/useRouter'
+import { PartyProvider } from './providers/PartyProvider'
 import { StopwatchMachineProvider } from './providers/StopwatchMachineProvider'
 import { TimerMachineProvider } from './providers/TimerMachineProvider'
 import { tabList, tabRecord } from './utils'
@@ -19,9 +20,11 @@ export default function App() {
   return (
     <Tabs value={selectedTab} onValueChange={handleTabChange}>
       <Suspense fallback={<HeaderSkeleton />}>
-        <TooltipProvider>
-          <Header />
-        </TooltipProvider>
+        <PartyProvider>
+          <TooltipProvider>
+            <Header />
+          </TooltipProvider>
+        </PartyProvider>
       </Suspense>
       <TabsContent
         value={selectedTab}
