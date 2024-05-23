@@ -1,5 +1,5 @@
 import { pick } from 'lodash'
-import { BellRing } from 'lucide-react'
+import { Ban, BellRing } from 'lucide-react'
 import usePartySocket from 'partysocket/react'
 import type { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useCallback, useEffect, useState } from 'react'
@@ -13,6 +13,7 @@ import type {
   State,
   UpdateMessage,
 } from '../../types'
+import { categories } from '../../types'
 import { stopBeep } from '../beep'
 import { Button } from '../components/Button/Button'
 import { ToastAction } from '../components/Toast/Toast'
@@ -86,9 +87,10 @@ export const MachinePartyContext = createContext<MachinePartyContextType>(
 )
 
 export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { roomId } = useRouter()
+  const { roomId, exitRoom } = useRouter()
   const [connected, setConnected] = useState(false)
   const [newRoom, setNewRoom] = useState(false)
+  const { toast: roomDeletedToast } = useToast()
 
   const ws = usePartySocket({
     host: import.meta.env.VITE_PARTYKIT_HOST,
@@ -124,8 +126,34 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
             })
             window.dispatchEvent(event)
           })
+          break
         }
-        // handle delete, 409 and 404 here
+        case 'delete': {
+          categories.forEach((category) => {
+            window.dispatchEvent(new CustomEvent(`${category}-reset`))
+          })
+          exitRoom()
+          roomDeletedToast({
+            title: (
+              <div className="flex items-center gap-3">
+                <Ban /> Sharing was disabled
+              </div>
+            ),
+            action: (
+              <ToastAction altText="Dismiss" asChild>
+                <Button
+                  data-cy="dismiss"
+                  variant="secondary"
+                  className="scale-90"
+                >
+                  Ok
+                </Button>
+              </ToastAction>
+            ),
+          })
+          break
+        }
+        // handle 409 and 404 here
       }
     },
     onClose() {

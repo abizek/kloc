@@ -6,7 +6,6 @@ state: <sm data>
 }
 
 XXX: handle 404 room id by redirecting and showing a Toast for a short time period
-XXX: listen for delete events, disconnect room, update route and show toast on delete
 
 XXX: ?: ability to create room with custom id
 XXX: test state sharing
