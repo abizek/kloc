@@ -1,4 +1,4 @@
-const categories = ['stopwatch', 'timer'] as const
+export const categories = ['stopwatch', 'timer'] as const
 export type Category = (typeof categories)[number]
 
 export type State = {

@@ -1,6 +1,5 @@
 import type * as Party from 'partykit/server'
 import type {
-  Category,
   ConflictMessage,
   DeleteMessage,
   MessageFromClient,
@@ -8,6 +7,7 @@ import type {
   State,
   UpdateMessage,
 } from '../types'
+import { categories } from '../types'
 
 export default class Server implements Party.Server {
   constructor(readonly room: Party.Room) {}
@@ -38,11 +38,10 @@ export default class Server implements Party.Server {
           break
         }
         case 'join': {
-          const stopwatch = await this.room.storage.get<State>(
-            'stopwatch' satisfies Category,
-          )
-          const timer = await this.room.storage.get<State>(
-            'timer' satisfies Category,
+          const [stopwatch, timer] = await Promise.all(
+            categories.map((category) =>
+              this.room.storage.get<State>(category),
+            ),
           )
           if (!stopwatch && !timer) {
             sender.send(JSON.stringify({ type: 404 } satisfies NotFoundMessage))
