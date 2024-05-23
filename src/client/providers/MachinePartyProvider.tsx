@@ -1,5 +1,5 @@
 import { pick } from 'lodash'
-import { Ban, BellRing } from 'lucide-react'
+import { Ban, BellRing, CircleAlert } from 'lucide-react'
 import usePartySocket from 'partysocket/react'
 import type { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useCallback, useEffect, useState } from 'react'
@@ -90,6 +90,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
   const [connected, setConnected] = useState(false)
   const [newRoom, setNewRoom] = useState(false)
   const { toast: roomDeletedToast } = useToast()
+  const { toast: roomNotFoundToast } = useToast()
 
   const ws = usePartySocket({
     host: import.meta.env.VITE_PARTYKIT_HOST,
@@ -146,7 +147,23 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
           exitRoom()
           break
         }
-        // handle 409 and 404 here
+        case 404: {
+          roomNotFoundToast({
+            title: (
+              <>
+                <CircleAlert />
+                <span>
+                  Room <strong>{roomId}</strong> does not exist
+                </span>
+              </>
+            ),
+            action: <ToastAction>Ok</ToastAction>,
+            duration: 60000,
+          })
+          exitRoom()
+          break
+        }
+        // handle 409 here
       }
     },
     onClose() {
@@ -191,11 +208,11 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
             ),
             action: (
               <ToastAction
-                  onClick={() => {
-                    timerSend({ type: 'stopBeep' })
-                  }}
-                >
-                  Dismiss
+                onClick={() => {
+                  timerSend({ type: 'stopBeep' })
+                }}
+              >
+                Dismiss
               </ToastAction>
             ),
             duration: 300000,

@@ -5,8 +5,6 @@ category: 'stopwatch' | 'timer'
 state: <sm data>
 }
 
-XXX: handle 404 room id by redirecting and showing a Toast for a short time period
-
 XXX: ?: ability to create room with custom id
 XXX: test state sharing
 XXX: update readme app description and development instructions
