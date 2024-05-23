@@ -1,5 +1,4 @@
 import { isEmpty, isEqual, pick } from 'lodash'
-import type PartySocket from 'partysocket'
 import {
   useCallback,
   useEffect,
@@ -15,10 +14,11 @@ import type {
   StateFrom,
 } from 'xstate'
 import { createActor } from 'xstate'
+import type { Category, State } from '../../types'
 
 export function useMachineParty<TMachine extends AnyStateMachine>(
   machine: TMachine,
-  ws: PartySocket,
+  updateRoom: (data: { [index in Category]?: State }) => void,
   connected: boolean,
 ): [StateFrom<TMachine>, Actor<TMachine>['send'], Actor<TMachine>] {
   const machineId = useMemo(() => machine.config.id!, [machine.config.id])
@@ -31,20 +31,15 @@ export function useMachineParty<TMachine extends AnyStateMachine>(
   }, [persistedSnapshotUnparsed])
 
   const persist = useCallback(
-    (value: object, updateRoom: boolean = true) => {
+    (value: object, shouldUpdateRoom: boolean = true) => {
       const pickedValue = pick(value, ['context', 'status', 'value'])
       sessionStorage.setItem(machineId, JSON.stringify(pickedValue))
 
-      if (updateRoom && connected) {
-        ws.send(
-          JSON.stringify({
-            type: 'update',
-            [machineId]: pickedValue,
-          }),
-        )
+      if (shouldUpdateRoom && connected) {
+        updateRoom({ [machineId]: pickedValue })
       }
     },
-    [connected, machineId, ws],
+    [connected, machineId],
   )
 
   const [actorRef, setActorRef] = useState(() => {

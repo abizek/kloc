@@ -1,11 +1,17 @@
 import { pick } from 'lodash'
 import { BellRing } from 'lucide-react'
-import type PartySocket from 'partysocket'
 import usePartySocket from 'partysocket/react'
 import type { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useEffect, useState } from 'react'
 import type { MachineSnapshot, NonReducibleUnknown } from 'xstate'
-import type { Category, Message } from '../../types'
+import type {
+  Category,
+  CreateMessage,
+  JoinMessage,
+  Message,
+  State,
+  UpdateMessage,
+} from '../../types'
 import { stopBeep } from '../beep'
 import { Button } from '../components/Button/Button'
 import { ToastAction } from '../components/Toast/Toast'
@@ -69,7 +75,6 @@ type MachinePartyContextType = {
   timerSend: (event: TimerEvent) => void
   dismissTimerToast: () => void
 
-  ws: PartySocket
   connected: boolean
   setNewRoom: Dispatch<SetStateAction<boolean>>
 }
@@ -97,11 +102,11 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
             type: 'create',
             stopwatch: pick(stopwatch, ['context', 'status', 'value']),
             timer: pick(timer, ['context', 'status', 'value']),
-          }),
+          } satisfies CreateMessage),
         )
         setNewRoom(false)
       } else {
-        ws.send(JSON.stringify({ type: 'join' }))
+        ws.send(JSON.stringify({ type: 'join' } satisfies JoinMessage))
       }
     },
     onMessage(event) {
@@ -129,10 +134,22 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
     },
   })
 
+  const updateRoom = useCallback(
+    (data: { [index in Category]?: State }) => {
+      ws.send(
+        JSON.stringify({
+          type: 'update',
+          ...data,
+        } satisfies UpdateMessage),
+      )
+    },
+    [ws],
+  )
+
   const { toast, dismiss: dismissTimerToast } = useToast()
   const [stopwatch, stopwatchSend] = useMachineParty(
     stopwatchMachine,
-    ws,
+    updateRoom,
     connected,
   )
   const [timer, timerSend] = useMachineParty(
@@ -163,7 +180,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
         },
       },
     }),
-    ws,
+    updateRoom,
     connected,
   )
 
@@ -181,7 +198,6 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
         timer,
         timerSend,
         dismissTimerToast,
-        ws,
         connected,
         setNewRoom,
       }}
