@@ -163,7 +163,11 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
           exitRoom()
           break
         }
-        // handle 409 here
+        case 409: {
+          break
+        }
+        default:
+          console.error('Unknown message type', parsedMessage)
       }
     },
     onClose() {

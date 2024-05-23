@@ -74,9 +74,8 @@ export default class Server implements Party.Server {
           )
           break
         }
-        default: {
-          throw new Error(`Unknown message type ${parsedMessage}`)
-        }
+        default:
+          console.error('Unknown message type', parsedMessage)
       }
     } catch (error) {
       console.error('Error in onMessage', error)
