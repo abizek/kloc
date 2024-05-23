@@ -1,3 +1,8 @@
+import {
+  adjectives,
+  animals,
+  uniqueNamesGenerator,
+} from '@joaomoreno/unique-names-generator'
 import { useRef, useSyncExternalStore } from 'react'
 import type { Tab } from '../utils'
 import { tabs } from '../utils'
@@ -6,7 +11,7 @@ type Router = {
   tab: Tab
   roomId: string
   handleTabChange: (tab: string) => void
-  enterRoom: (roomId: string) => void
+  enterNewRoom: () => void
   exitRoom: () => void
 }
 
@@ -63,7 +68,7 @@ function getRouter(): Router {
     tab: getPage() as Tab,
     roomId: getSlug(),
     handleTabChange,
-    enterRoom,
+    enterNewRoom,
     exitRoom,
   }
 }
@@ -73,8 +78,12 @@ function handleTabChange(tab: string) {
   pushState(`/${tab}${slug ? `/${slug}` : ''}`)
 }
 
-function enterRoom(roomId: string) {
+function enterNewRoom() {
   const tab = getPage()
+  const roomId = uniqueNamesGenerator({
+    dictionaries: [adjectives, animals],
+    separator: '-',
+  })
   pushState(`/${tab}/${roomId}`)
 }
 

@@ -1,8 +1,3 @@
-import {
-  adjectives,
-  animals,
-  uniqueNamesGenerator,
-} from '@joaomoreno/unique-names-generator'
 import { Share2 } from 'lucide-react'
 import { useContext, useState } from 'react'
 import { useRouter } from '../../../hooks/useRouter'
@@ -14,19 +9,14 @@ import { ShareableLink } from './ShareableLink'
 import { Switch } from './Switch'
 
 export function SharePopover() {
-  const { roomId, enterRoom, exitRoom } = useRouter()
+  const { roomId, enterNewRoom, exitRoom } = useRouter()
   const [shared, setShared] = useState(!!roomId)
   const { setNewRoom, deleteRoom } = useContext(MachinePartyContext)
 
   const handleToggle = (checked: boolean, deleteRoomOnExit: boolean = true) => {
     setShared(checked)
     if (checked) {
-      enterRoom(
-        uniqueNamesGenerator({
-          dictionaries: [adjectives, animals],
-          separator: '-',
-        }),
-      )
+      enterNewRoom()
       setNewRoom(true)
     } else {
       if (deleteRoomOnExit) {
