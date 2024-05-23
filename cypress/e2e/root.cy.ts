@@ -9,38 +9,25 @@ describe('Root', () => {
     { tab: 'timer', label: 'Timer', route: '/timer' },
   ]
 
-  const assertTabPresence = (tab: string, presence: boolean) => {
-    const matchValue = presence ? /^active$/ : /^inactive$/
-    cy.get(`[data-cy="${tab}-trigger"]`)
-      .should('have.attr', 'data-state')
-      .and('match', matchValue)
-    presence
-      ? cy
-          .get(`[data-cy="${tab}-content"]`)
-          .should('have.attr', 'data-state')
-          .and('match', matchValue)
-      : cy.get(`[data-cy="${tab}-content"]`).should('not.exist')
-  }
-
   describe('Handle 404', () => {
     it('redirects to home on invalid route', () => {
       cy.visit('/foo')
       cy.location('pathname').should('eq', '/kloc')
-      assertTabPresence('kloc', true)
-      assertTabPresence('stopwatch', false)
-      assertTabPresence('timer', false)
+      cy.assertTabPresence('kloc')
+      cy.assertTabAbsence('stopwatch')
+      cy.assertTabAbsence('timer')
     })
 
     it('redirects to requested page on invalid slug', () => {
       tabs.forEach(({ route, tab }) => {
         cy.visit(route + '/foo/bar')
         cy.location('pathname').should('eq', route + '/foo')
-        assertTabPresence(tab, true)
+        cy.assertTabPresence(tab)
 
         tabs
           .filter(({ tab: otherTab }) => tab !== otherTab)
           .forEach(({ tab }) => {
-            assertTabPresence(tab, false)
+            cy.assertTabAbsence(tab)
           })
       })
     })
@@ -51,12 +38,12 @@ describe('Root', () => {
       tabs.forEach(({ tab, route }, _, tabs) => {
         cy.clearAllLocalStorage()
         cy.visit(route)
-        assertTabPresence(tab, true)
+        cy.assertTabPresence(tab)
 
         tabs
           .filter(({ tab: otherTab }) => tab !== otherTab)
           .forEach(({ tab }) => {
-            assertTabPresence(tab, false)
+            cy.assertTabAbsence(tab)
           })
       })
     })
@@ -65,12 +52,12 @@ describe('Root', () => {
       tabs.forEach(({ tab, route }, _, tabs) => {
         cy.clearAllLocalStorage()
         cy.visit(route + '/foo')
-        assertTabPresence(tab, true)
+        cy.assertTabPresence(tab)
 
         tabs
           .filter(({ tab: otherTab }) => tab !== otherTab)
           .forEach(({ tab }) => {
-            assertTabPresence(tab, false)
+            cy.assertTabAbsence(tab)
           })
       })
     })
@@ -79,7 +66,7 @@ describe('Root', () => {
       tabs.forEach(({ tab: fromTab, label: fromLabel, route: fromRoute }) => {
         cy.get(`[data-cy="${fromTab}-trigger"]`).contains(fromLabel).click()
         cy.location('pathname').should('eq', fromRoute)
-        assertTabPresence(fromTab, true)
+        cy.assertTabPresence(fromTab)
 
         tabs
           .filter(({ tab: otherTab }) => fromTab !== otherTab)
@@ -88,13 +75,13 @@ describe('Root', () => {
               cy.get(`[data-cy="${toTab}-trigger"]`).contains(toLabel).click()
               cy.location('pathname').should('not.eq', fromRoute)
               cy.location('pathname').should('eq', toRoute)
-              assertTabPresence(fromTab, false)
-              assertTabPresence(toTab, true)
+              cy.assertTabAbsence(fromTab)
+              cy.assertTabPresence(toTab)
 
               tabs
                 .filter(({ tab: otherTab }) => toTab !== otherTab)
                 .forEach(({ tab }) => {
-                  assertTabPresence(tab, false)
+                  cy.assertTabAbsence(tab)
                 })
             },
           )
@@ -108,7 +95,7 @@ describe('Root', () => {
         cy.get(`[data-cy="${fromTab}-trigger"]`).contains(fromLabel).click()
         cy.location('pathname').should('not.eq', fromRoute)
         cy.location('pathname').should('eq', fromRoute + slug)
-        assertTabPresence(fromTab, true)
+        cy.assertTabPresence(fromTab)
 
         tabs
           .filter(({ tab: otherTab }) => fromTab !== otherTab)
@@ -119,13 +106,13 @@ describe('Root', () => {
               cy.location('pathname').should('not.eq', fromRoute + slug)
               cy.location('pathname').should('not.eq', toRoute)
               cy.location('pathname').should('eq', toRoute + slug)
-              assertTabPresence(fromTab, false)
-              assertTabPresence(toTab, true)
+              cy.assertTabAbsence(fromTab)
+              cy.assertTabPresence(toTab)
 
               tabs
                 .filter(({ tab: otherTab }) => toTab !== otherTab)
                 .forEach(({ tab }) => {
-                  assertTabPresence(tab, false)
+                  cy.assertTabAbsence(tab)
                 })
             },
           )
