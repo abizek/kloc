@@ -79,6 +79,7 @@ type MachinePartyContextType = {
   connected: boolean
   setNewRoom: Dispatch<SetStateAction<boolean>>
   deleteRoom: () => void
+  readyState: number
 }
 
 export const MachinePartyContext = createContext<MachinePartyContextType>(
@@ -97,7 +98,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
     room: roomId,
     maxEnqueuedMessages: 0,
     startClosed: !roomId,
-    debug: import.meta.env.DEV,
+    debug: true,
     onOpen() {
       setConnected(true)
       if (newRoom) {
@@ -177,8 +178,11 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
     },
     onError(e) {
       console.log('Error', e)
+      console.log('readystate', ws.readyState)
     },
   })
+
+  console.log('readystate', ws.readyState)
 
   const updateRoom = useCallback(
     (data: { [index in Category]?: State }) => {
@@ -247,6 +251,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
         connected,
         setNewRoom,
         deleteRoom,
+        readyState: ws.readyState,
       }}
     >
       {children}

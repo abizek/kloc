@@ -11,18 +11,19 @@ import { Popover, PopoverContent, PopoverTrigger } from './Popover'
 export function NetworkStatusPopover() {
   const { roomId } = useRouter()
   const isOnline = useOnline()
-  const { connected } = useContext(MachinePartyContext)
+  const { connected, readyState } = useContext(MachinePartyContext)
 
-  let CloudIcon = CloudOff
+  let NetworkIcon = CloudOff
   let status = 'Offline'
   if (isOnline) {
     if (connected) {
-      CloudIcon = Cloud
+      NetworkIcon = Cloud
       status = 'Connected'
     } else {
       status = 'Disconnected'
     }
   }
+
   return (
     <Popover>
       <Presence present={!!roomId}>
@@ -33,7 +34,8 @@ export function NetworkStatusPopover() {
             data-state-shared={!!roomId}
             className="data-[state-shared=true]:animate-in data-[state-shared=false]:animate-out data-[state-shared=false]:fade-out data-[state-shared=true]:fade-in data-[state-shared=false]:zoom-out-50 data-[state-shared=true]:zoom-in-50"
           >
-            <CloudIcon className="size-7" />
+            <span className="text-white">{readyState}</span>
+            <NetworkIcon className="size-7" />
           </Button>
         </PopoverTrigger>
       </Presence>
