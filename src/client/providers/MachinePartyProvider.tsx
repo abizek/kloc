@@ -29,7 +29,7 @@ import type {
   TimerContext as TimerXstateContext,
 } from '../machines/timer'
 import { timerMachine } from '../machines/timer'
-import { stopBeepSfx } from '../sounds'
+import { playNotificationSfx, stopBeepSfx } from '../sounds'
 
 type StopwatchStateValue =
   | 'paused'
@@ -133,6 +133,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
             window.dispatchEvent(new CustomEvent(`${category}-reset`))
           })
           exitRoom()
+          playNotificationSfx()
           roomDeletedToast({
             title: (
               <div className="flex items-center gap-3">

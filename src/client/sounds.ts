@@ -9,3 +9,7 @@ const switchOffSfx = new Audio('/sounds/switch-off.mp3')
 
 export const playSwitchOnSfx = () => switchOnSfx.play()
 export const playSwitchOffSfx = () => switchOffSfx.play()
+
+const notificationSfx = new Audio('/sounds/notification.mp3')
+
+export const playNotificationSfx = () => notificationSfx.play()
