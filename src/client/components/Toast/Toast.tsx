@@ -1,5 +1,6 @@
 import * as ToastPrimitives from '@radix-ui/react-toast'
 import * as React from 'react'
+import { Button } from '../Button'
 
 const ToastProvider = ToastPrimitives.Provider
 
@@ -31,15 +32,25 @@ Toast.displayName = ToastPrimitives.Root.displayName
 
 const ToastAction = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Action>,
-  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Action>
->(({ ...props }, ref) => <ToastPrimitives.Action ref={ref} {...props} />)
+  ToastPrimitives.ToastCloseProps
+>(({ children, ...props }, ref) => (
+  <ToastPrimitives.Action ref={ref} {...props} altText="Dismiss" asChild>
+    <Button data-cy="dismiss" variant="secondary" className="scale-90">
+      {children}
+    </Button>
+  </ToastPrimitives.Action>
+))
 ToastAction.displayName = ToastPrimitives.Action.displayName
 
 const ToastTitle = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Title>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title>
 >(({ ...props }, ref) => (
-  <ToastPrimitives.Title ref={ref} className="pl-1 text-lg" {...props} />
+  <ToastPrimitives.Title
+    ref={ref}
+    className="flex items-center gap-3 pl-1 text-base"
+    {...props}
+  />
 ))
 ToastTitle.displayName = ToastPrimitives.Title.displayName
 
@@ -69,3 +80,4 @@ export {
   type ToastActionElement,
   type ToastProps,
 }
+

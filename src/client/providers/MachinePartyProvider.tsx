@@ -14,7 +14,6 @@ import type {
   UpdateMessage,
 } from '../../types'
 import { categories } from '../../types'
-import { Button } from '../components/Button/Button'
 import { ToastAction } from '../components/Toast/Toast'
 import { useToast } from '../components/Toast/useToast'
 import { useMachineParty } from '../hooks/useMachineParty'
@@ -132,26 +131,19 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
           categories.forEach((category) => {
             window.dispatchEvent(new CustomEvent(`${category}-reset`))
           })
-          exitRoom()
           playNotificationSfx()
           roomDeletedToast({
             title: (
-              <div className="flex items-center gap-3">
-                <Ban /> Sharing was disabled
-              </div>
+              <>
+                <Ban />
+                <span>
+                  Sharing was disabled for <strong>{roomId}</strong>
+                </span>
+              </>
             ),
-            action: (
-              <ToastAction altText="Dismiss" asChild>
-                <Button
-                  data-cy="dismiss"
-                  variant="secondary"
-                  className="scale-90"
-                >
-                  Ok
-                </Button>
-              </ToastAction>
-            ),
+            action: <ToastAction>Ok</ToastAction>,
           })
+          exitRoom()
           break
         }
         // handle 409 and 404 here
@@ -193,22 +185,17 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
         onComplete: () => {
           timerToast({
             title: (
-              <div className="flex items-center gap-3">
-                <BellRing /> {"Time's up"}
-              </div>
+              <>
+                <BellRing /> <strong>{"Time's up"}</strong>
+              </>
             ),
             action: (
-              <ToastAction altText="Dismiss" asChild>
-                <Button
-                  data-cy="dismiss"
-                  variant="secondary"
-                  className="scale-90"
+              <ToastAction
                   onClick={() => {
                     timerSend({ type: 'stopBeep' })
                   }}
                 >
                   Dismiss
-                </Button>
               </ToastAction>
             ),
             duration: 300000,
