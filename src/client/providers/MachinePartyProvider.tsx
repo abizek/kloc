@@ -152,7 +152,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
     ws.send(JSON.stringify({ type: 'delete' } satisfies DeleteMessage))
   }, [ws])
 
-  const { toast, dismiss: dismissTimerToast } = useToast()
+  const { toast: timerToast, dismiss: dismissTimerToast } = useToast()
   const [stopwatch, stopwatchSend] = useMachineParty(
     stopwatchMachine,
     updateRoom,
@@ -162,7 +162,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
     timerMachine.provide({
       actions: {
         onComplete: () => {
-          toast({
+          timerToast({
             title: (
               <div className="flex items-center gap-3">
                 <BellRing /> {"Time's up"}
@@ -182,6 +182,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
                 </Button>
               </ToastAction>
             ),
+            duration: 300000,
           })
         },
       },
