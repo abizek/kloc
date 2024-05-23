@@ -14,7 +14,6 @@ import type {
   UpdateMessage,
 } from '../../types'
 import { categories } from '../../types'
-import { stopBeep } from '../beep'
 import { Button } from '../components/Button/Button'
 import { ToastAction } from '../components/Toast/Toast'
 import { useToast } from '../components/Toast/useToast'
@@ -30,6 +29,7 @@ import type {
   TimerContext as TimerXstateContext,
 } from '../machines/timer'
 import { timerMachine } from '../machines/timer'
+import { stopBeepSfx } from '../sounds'
 
 type StopwatchStateValue =
   | 'paused'
@@ -219,7 +219,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
     connected,
   )
 
-  useEffect(() => stopBeep, [])
+  useEffect(() => stopBeepSfx, [])
 
   if (!roomId) {
     ws.close()

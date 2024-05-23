@@ -1,5 +1,5 @@
 import { assertEvent, assign, setup, stateIn } from 'xstate'
-import { playBeep, stopBeep } from '../beep'
+import { playBeepSfx, stopBeepSfx } from '../sounds'
 
 export type TimerEvent =
   | { type: 'start'; time: number }
@@ -41,8 +41,8 @@ export const timerMachine = setup({
     updateRemaining: assign(({ context }) => ({
       remaining: context.destination - Date.now(),
     })),
-    playBeep,
-    stopBeep,
+    playBeep: playBeepSfx,
+    stopBeep: stopBeepSfx,
     onComplete: () => {},
   },
   guards: {

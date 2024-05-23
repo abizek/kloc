@@ -1,4 +1,4 @@
-import { stopBeep } from '../../beep'
+import { stopBeepSfx } from '../../sounds'
 import {
   Toast,
   ToastDescription,
@@ -18,8 +18,8 @@ export function Toaster() {
           <Toast
             key={id}
             data-cy="time-up-toast"
-            onSwipeEnd={stopBeep}
-            onEscapeKeyDown={stopBeep}
+            onSwipeEnd={stopBeepSfx}
+            onEscapeKeyDown={stopBeepSfx}
             {...props}
           >
             <div className="grid gap-1">

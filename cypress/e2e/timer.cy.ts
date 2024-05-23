@@ -56,7 +56,7 @@ describe('Timer', () => {
         onBeforeLoad: (win) => {
           const Audio = win.Audio
           cy.stub(win, 'Audio').callsFake(() => {
-            beep = new Audio('/beep.mp3')
+            beep = new Audio('/sounds/beep.mp3')
             return beep
           })
         },
