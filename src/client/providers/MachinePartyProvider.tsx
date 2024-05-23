@@ -86,7 +86,7 @@ export const MachinePartyContext = createContext<MachinePartyContextType>(
 )
 
 export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { roomId, exitRoom } = useRouter()
+  const { roomId, exitRoom, enterNewRoom } = useRouter()
   const [connected, setConnected] = useState(false)
   const [newRoom, setNewRoom] = useState(false)
   const { toast: roomDeletedToast } = useToast()
@@ -164,6 +164,8 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
           break
         }
         case 409: {
+          enterNewRoom()
+          setNewRoom(true)
           break
         }
         default:
