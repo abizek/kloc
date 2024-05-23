@@ -29,7 +29,7 @@
     "eslint-plugin-tailwindcss": "^3.14.3",
     "framer-motion": "^11.0.8",
     "lodash": "^4.17.21",
-    "lucide-react": "^0.344.0",
+    "lucide-react": "^0.379.0",
     "nanoid": "^5.0.6",
     "partysocket": "1.0.1",
     "qrcode.react": "^3.1.0",
