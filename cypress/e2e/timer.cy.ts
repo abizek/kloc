@@ -55,9 +55,13 @@ describe('Timer', () => {
       cy.visit('/timer', {
         onBeforeLoad: (win) => {
           const Audio = win.Audio
-          cy.stub(win, 'Audio').callsFake(() => {
-            beep = new Audio('/sounds/beep.mp3')
-            return beep
+          cy.stub(win, 'Audio').callsFake((src) => {
+            const temp = new Audio(src)
+            if (src.includes('beep.mp3')) {
+              beep = temp
+            }
+
+            return temp
           })
         },
       })
