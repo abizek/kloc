@@ -6,6 +6,8 @@ type Router = {
   tab: Tab
   roomId: string
   handleTabChange: (tab: string) => void
+  enterRoom: (roomId: string) => void
+  exitRoom: () => void
 }
 
 const LAST_VISITED_PATH = 'last-visited-path'
@@ -20,15 +22,15 @@ export function useRouter() {
     }
   } else {
     if (location.pathname.split('/').length > 3) {
-      const page = getPage(location.pathname)
-      const slug = getSlug(location.pathname)
+      const page = getPage()
+      const slug = getSlug()
       replaceState(`/${page}/${slug}`)
     }
 
     localStorage.setItem(LAST_VISITED_PATH, location.pathname)
   }
 
-  if (!isValidRoute(getPage(location.pathname))) {
+  if (!isValidRoute(getPage())) {
     const homePage = '/kloc'
     localStorage.setItem(LAST_VISITED_PATH, homePage)
     replaceState(homePage)
@@ -58,15 +60,27 @@ export function useRouter() {
 
 function getRouter(): Router {
   return {
-    tab: getPage(location.pathname) as Tab,
-    roomId: getSlug(location.pathname),
+    tab: getPage() as Tab,
+    roomId: getSlug(),
     handleTabChange,
+    enterRoom,
+    exitRoom,
   }
 }
 
 function handleTabChange(tab: string) {
-  const slug = getSlug(location.pathname)
+  const slug = getSlug()
   pushState(`/${tab}${slug ? `/${slug}` : ''}`)
+}
+
+function enterRoom(roomId: string) {
+  const tab = getPage()
+  pushState(`/${tab}/${roomId}`)
+}
+
+function exitRoom() {
+  const tab = getPage()
+  pushState(`/${tab}`)
 }
 
 function pushState(value: string) {
@@ -93,10 +107,10 @@ function isValidRoute(path: string): path is Tab {
   return typeof tabs.find((route) => route === path) === 'string'
 }
 
-function getPage(path: string) {
-  return path.split('/')[1]
+function getPage() {
+  return location.pathname.split('/')[1]
 }
 
-function getSlug(path: string) {
-  return path.split('/')[2] ?? ''
+function getSlug() {
+  return location.pathname.split('/')[2] ?? ''
 }

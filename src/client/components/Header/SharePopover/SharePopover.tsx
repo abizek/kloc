@@ -14,27 +14,25 @@ import { ShareableLink } from './ShareableLink'
 import { Switch } from './Switch'
 
 export function SharePopover() {
-  const { roomId, tab } = useRouter()
+  const { roomId, enterRoom, exitRoom } = useRouter()
   const [shared, setShared] = useState(!!roomId)
   const { setNewRoom, deleteRoom } = useContext(MachinePartyContext)
 
   const handleToggle = (checked: boolean, deleteRoomOnExit: boolean = true) => {
     setShared(checked)
     if (checked) {
-      history.pushState(
-        null,
-        '',
-        `/${tab}/${uniqueNamesGenerator({
+      enterRoom(
+        uniqueNamesGenerator({
           dictionaries: [adjectives, animals],
           separator: '-',
-        })}`,
+        }),
       )
       setNewRoom(true)
     } else {
       if (deleteRoomOnExit) {
         deleteRoom()
       }
-      history.pushState(null, '', `/${tab}`)
+      exitRoom()
     }
   }
 
