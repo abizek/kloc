@@ -58,7 +58,7 @@ export function useMachineParty<TMachine extends AnyStateMachine>(
     } as ActorOptions<TMachine>)
 
     if (!isSnapshotPersisted) {
-      persist(actorRef.getPersistedSnapshot())
+      persist(actorRef.getPersistedSnapshot(), false)
     }
 
     return actorRef
