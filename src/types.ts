@@ -14,8 +14,14 @@ export type DeleteMessage = { type: 'delete' }
 export type NotFoundMessage = { type: 404 }
 export type ConflictMessage = { type: 409 }
 
-export type Message =
+export type MessageFromClient =
   | CreateMessage
   | JoinMessage
   | UpdateMessage
   | DeleteMessage
+
+export type MessageFromServer =
+  | UpdateMessage
+  | DeleteMessage
+  | NotFoundMessage
+  | ConflictMessage

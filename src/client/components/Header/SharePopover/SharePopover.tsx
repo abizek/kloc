@@ -16,9 +16,9 @@ import { Switch } from './Switch'
 export function SharePopover() {
   const { roomId, tab } = useRouter()
   const [shared, setShared] = useState(!!roomId)
-  const { setNewRoom } = useContext(MachinePartyContext)
+  const { setNewRoom, deleteRoom } = useContext(MachinePartyContext)
 
-  const handleToggle = (checked: boolean) => {
+  const handleToggle = (checked: boolean, deleteRoomOnExit: boolean = true) => {
     setShared(checked)
     if (checked) {
       history.pushState(
@@ -31,6 +31,9 @@ export function SharePopover() {
       )
       setNewRoom(true)
     } else {
+      if (deleteRoomOnExit) {
+        deleteRoom()
+      }
       history.pushState(null, '', `/${tab}`)
     }
   }
@@ -66,7 +69,7 @@ export function SharePopover() {
 
           <ExitSessionButton
             shared={shared}
-            onExitSession={() => handleToggle(false)}
+            onExitSession={() => handleToggle(false, false)}
           />
         </div>
       </PopoverContent>

@@ -7,8 +7,9 @@ import type { MachineSnapshot, NonReducibleUnknown } from 'xstate'
 import type {
   Category,
   CreateMessage,
+  DeleteMessage,
   JoinMessage,
-  Message,
+  MessageFromServer,
   State,
   UpdateMessage,
 } from '../../types'
@@ -77,6 +78,7 @@ type MachinePartyContextType = {
 
   connected: boolean
   setNewRoom: Dispatch<SetStateAction<boolean>>
+  deleteRoom: () => void
 }
 
 export const MachinePartyContext = createContext<MachinePartyContextType>(
@@ -111,7 +113,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
     },
     onMessage(event) {
       console.log('message', event.data)
-      const parsedMessage: Message = JSON.parse(event.data)
+      const parsedMessage: MessageFromServer = JSON.parse(event.data)
       switch (parsedMessage.type) {
         case 'update': {
           const { type, ...parsedMessageData } = parsedMessage
@@ -145,6 +147,10 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
     },
     [ws],
   )
+
+  const deleteRoom = useCallback(() => {
+    ws.send(JSON.stringify({ type: 'delete' } satisfies DeleteMessage))
+  }, [ws])
 
   const { toast, dismiss: dismissTimerToast } = useToast()
   const [stopwatch, stopwatchSend] = useMachineParty(
@@ -200,6 +206,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
         dismissTimerToast,
         connected,
         setNewRoom,
+        deleteRoom,
       }}
     >
       {children}

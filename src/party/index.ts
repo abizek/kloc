@@ -3,7 +3,7 @@ import type {
   Category,
   ConflictMessage,
   DeleteMessage,
-  Message,
+  MessageFromClient,
   NotFoundMessage,
   State,
   UpdateMessage,
@@ -23,7 +23,7 @@ export default class Server implements Party.Server {
     console.log(`connection ${sender.id} sent message: ${message}`)
 
     try {
-      const parsedMessage: Message = JSON.parse(message)
+      const parsedMessage: MessageFromClient = JSON.parse(message)
       switch (parsedMessage.type) {
         case 'create': {
           // handle room collision
