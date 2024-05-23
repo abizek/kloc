@@ -31,15 +31,15 @@ export function useMachineParty<TMachine extends AnyStateMachine>(
   }, [persistedSnapshotUnparsed])
 
   const persist = useCallback(
-    (value: object, shouldUpdateRoom: boolean = true) => {
+    (value: object, updateRoomOnPersist: boolean = true) => {
       const pickedValue = pick(value, ['context', 'status', 'value'])
       sessionStorage.setItem(machineId, JSON.stringify(pickedValue))
 
-      if (shouldUpdateRoom && connected) {
+      if (updateRoomOnPersist && connected) {
         updateRoom({ [machineId]: pickedValue })
       }
     },
-    [connected, machineId],
+    [connected, machineId, updateRoom],
   )
 
   const [actorRef, setActorRef] = useState(() => {
@@ -60,6 +60,22 @@ export function useMachineParty<TMachine extends AnyStateMachine>(
   })
 
   useEffect(() => {
+    const listener = () => {
+      const actorRef = createActor(machine)
+      persist(actorRef.getPersistedSnapshot(), false)
+      setActorRef(actorRef)
+    }
+    window.addEventListener(`${machineId}-reset`, listener as EventListener)
+
+    return () => {
+      window.removeEventListener(
+        `${machineId}-reset`,
+        listener as EventListener,
+      )
+    }
+  }, [machine, machineId, persist])
+
+  useEffect(() => {
     const listener = (event: CustomEvent) => {
       persist(event.detail, false)
       setActorRef(
@@ -78,7 +94,7 @@ export function useMachineParty<TMachine extends AnyStateMachine>(
         listener as EventListener,
       )
     }
-  }, [machine, persist, machineId])
+  }, [machine, machineId, persist])
 
   useEffect(() => {
     actorRef.start()
