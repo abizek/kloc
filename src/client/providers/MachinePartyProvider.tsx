@@ -77,6 +77,7 @@ type MachinePartyContextType = {
   dismissTimerToast: () => void
 
   connected: boolean
+  connecting: boolean
   setNewRoom: Dispatch<SetStateAction<boolean>>
   deleteRoom: () => void
 }
@@ -245,6 +246,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
         timerSend,
         dismissTimerToast,
         connected,
+        connecting: ws.readyState === ws.CONNECTING,
         setNewRoom,
         deleteRoom,
       }}
