@@ -19,21 +19,18 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      { ignoreRestSiblings: true },
+    ],
   },
-  overrides: [
-    {
-      rules: {
-        '@typescript-eslint/no-unused-vars': [
-          'error',
-          { ignoreRestSiblings: true },
-        ],
-      },
-    },
-  ],
   settings: {
     tailwindcss: {
       callees: ['cn', 'clsx', 'cva'],
       config: 'tailwind.config.js',
+    },
+    react: {
+      version: 'detect',
     },
   },
 }
