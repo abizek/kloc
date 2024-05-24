@@ -115,7 +115,6 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
       }
     },
     onMessage(event) {
-      console.log('message', event.data)
       const parsedMessage: MessageFromServer = JSON.parse(event.data)
       switch (parsedMessage.type) {
         case 'update': {
@@ -176,8 +175,8 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
     onClose() {
       setConnected(false)
     },
-    onError(e) {
-      console.log('Error', e)
+    onError(event) {
+      console.error('Error', event)
     },
   })
 
