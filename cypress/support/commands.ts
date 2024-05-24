@@ -83,5 +83,3 @@ Cypress.Commands.addAll({
   createRoom,
   deleteRoom,
 })
-
-// XXX: fix handle 404 2nd test, tab switch via trigger with slug, overrides last visited path if specific path is requested
