@@ -1,21 +1,21 @@
-const assertTab = (tab: string, presence: boolean) => {
-  const matchValue = presence ? /^active$/ : /^inactive$/
-  cy.get(`[data-cy="${tab}-trigger"]`)
-    .should('have.attr', 'data-state')
-    .and('match', matchValue)
-  presence
-    ? cy
-        .get(`[data-cy="${tab}-content"]`)
-        .should('have.attr', 'data-state')
-        .and('match', matchValue)
-    : cy.get(`[data-cy="${tab}-content"]`).should('not.exist')
-}
-
 Cypress.Commands.addAll({
   assertTabPresence: (tab: string) => {
-    assertTab(tab, true)
+    cy.get(`[data-cy="${tab}-trigger"]`)
+      .should('have.attr', 'data-state')
+      .and('match', /^active$/)
+
+    cy.get(`[data-cy="${tab}-content"]`)
+      .should('have.attr', 'data-state')
+      .and('match', /^active$/)
   },
   assertTabAbsence: (tab: string) => {
-    assertTab(tab, false)
+    cy.get(`[data-cy="${tab}-trigger"]`)
+      .should('have.attr', 'data-state')
+      .and('match', /^inactive$/)
+
+    cy.get(`[data-cy="${tab}-content"]`).should('not.exist')
   },
 })
+
+// XXX: add partysocket create room command
+// XXX: fix handle 404 2nd test, tab switch via trigger with slug, overrides last visited path if specific path is requested
