@@ -3,6 +3,7 @@ import { PNG } from 'pngjs'
 
 describe('State sharing', () => {
   let switchOnSfx: HTMLAudioElement
+  let switchOffSfx: HTMLAudioElement
 
   beforeEach(() => {
     cy.visit('/', {
@@ -10,8 +11,13 @@ describe('State sharing', () => {
         const Audio = win.Audio
         cy.stub(win, 'Audio').callsFake((src) => {
           const temp = new Audio(src)
-          if (src.includes('switch-on.mp3')) {
-            switchOnSfx = temp
+          switch (src.replaceAll(/\/sounds\/|.mp3/g, '')) {
+            case 'switch-on':
+              switchOnSfx = temp
+              break
+            case 'switch-off':
+              switchOffSfx = temp
+              break
           }
 
           return temp
@@ -20,7 +26,7 @@ describe('State sharing', () => {
     })
   })
 
-  it('create room and share link', () => {
+  it('create room, share link and delete room', () => {
     cy.get('[data-cy="share"]').click()
     cy.get('[data-cy="share-switch"]')
       .should('have.attr', 'data-state')
@@ -38,9 +44,7 @@ describe('State sharing', () => {
       })
 
     cy.location().then((location) => {
-      cy.get('[data-cy="share-link"]')
-        .should('exist')
-        .contains(location.pathname)
+      cy.get('[data-cy="share-link"]').should('exist').contains(location.href)
     })
     cy.get('[data-cy="exit-session-button"]').should('exist')
 
@@ -82,20 +86,43 @@ describe('State sharing', () => {
     })
 
     cy.location().then((location) => {
-      cy.joinRoom(location.pathname.split('/')[2]).then((result) => {
-        cy.fixture('newRoomJoinSuccessResult').should(
-          'deep.equal',
-          JSON.parse(result),
-        )
-      })
+      const roomId = location.pathname.split('/')[2]
+
+      cy.joinRoom(roomId)
+        .then((result) => {
+          cy.fixture('newRoomJoinSuccessResult').should(
+            'deep.equal',
+            JSON.parse(result),
+          )
+        })
+        .then(() => {
+          expect(switchOffSfx.played).to.have.property('length').to.equal(0)
+          cy.get('[data-cy="share-switch"]')
+            .then(($switch) => {
+              cy.wrap($switch).click()
+            })
+            .then(() => {
+              expect(switchOffSfx.played).to.have.property('length').to.equal(1)
+
+              cy.get('[data-cy="share-link"]').should('not.exist')
+              cy.get('[data-cy="exit-session-button"]').should('not.exist')
+              cy.get('[data-cy="qr-code"]').should('not.exist')
+
+              cy.joinRoom(roomId).then((result) => {
+                cy.fixture('joinRoom404Result').should(
+                  'deep.equal',
+                  JSON.parse(result),
+                )
+              })
+            })
+        })
     })
   })
 })
 
 // XXX: join
 // XXX: update
-// XXX: delete
-// XXX: notification sfx on room delete
+// XXX: notification on room delete
 // XXX: exit without deleting room confirmation all options - dialog + drawer
 // XXX: 404
 // XXX: 409
