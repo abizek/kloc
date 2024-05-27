@@ -6,5 +6,6 @@ declare namespace Cypress {
     assertTabAbsence(tab: string): Chainable
     createRoom(room: string): Chainable
     deleteRoom(room: string): Chainable
+    joinRoom(room: string): Chainable
   }
 }

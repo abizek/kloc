@@ -26,15 +26,16 @@ export function ShareableLink({ shared }: ShareableLinkProps) {
     setShowQrCode(false)
   }
 
-  let ClipboardIcon = Clipboard
+  let clipboardIcon = <Clipboard data-cy="clipboard-icon" className="size-4" />
   if (copied) {
-    ClipboardIcon = Check
+    clipboardIcon = <Check data-cy="check-icon" className="size-4" />
   }
 
   return (
     <>
       <Presence present={shared}>
         <div
+          data-cy="share-link"
           data-state-shared={shared}
           className="flex items-center justify-between rounded-xl border border-black/10 bg-white p-3 text-sm text-gray-600/90 data-[state-shared=true]:animate-in data-[state-shared=false]:animate-out data-[state-shared=false]:fade-out data-[state-shared=true]:fade-in data-[state-shared=false]:zoom-out-90 data-[state-shared=true]:zoom-in-90 dark:border-white/10 dark:bg-zinc-950 dark:text-gray-400"
         >
@@ -43,6 +44,7 @@ export function ShareableLink({ shared }: ShareableLinkProps) {
           <div className="ml-5 flex h-5 items-center gap-2">
             <Button
               variant="icon"
+              data-cy="qr-code-button"
               aria-label="Show QR code"
               onClick={() => {
                 setShowQrCode(!showQrCode)
@@ -52,13 +54,14 @@ export function ShareableLink({ shared }: ShareableLinkProps) {
             </Button>
             <Button
               variant="icon"
+              data-cy="copy"
               aria-label="Copy to clipboard"
               onClick={async () => {
                 await navigator.clipboard.writeText(location.href)
                 setCopied(true)
               }}
             >
-              <ClipboardIcon className="size-4" />
+              {clipboardIcon}
             </Button>
           </div>
         </div>
@@ -66,6 +69,7 @@ export function ShareableLink({ shared }: ShareableLinkProps) {
 
       <Presence present={showQrCode}>
         <div
+          data-cy="qr-code"
           data-state-qr={showQrCode}
           className="rounded-xl border border-black/10 bg-white p-3 data-[state-qr=true]:animate-in data-[state-qr=false]:animate-out data-[state-qr=false]:fade-out data-[state-qr=true]:fade-in data-[state-qr=false]:zoom-out-90 data-[state-qr=true]:zoom-in-90 dark:border-white/10"
         >

@@ -33,7 +33,7 @@ export function SharePopover() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="icon" aria-label="Open share settings">
+        <Button variant="icon" aria-label="Open share settings" data-cy="share">
           <Share2 className="size-6" />
         </Button>
       </PopoverTrigger>
@@ -46,6 +46,7 @@ export function SharePopover() {
                 checked={shared}
                 onCheckedChange={handleToggle}
                 aria-label="Toggle sharing"
+                data-cy="share-switch"
               />
             </div>
             <div className="text-sm text-gray-600/90 dark:text-gray-400">

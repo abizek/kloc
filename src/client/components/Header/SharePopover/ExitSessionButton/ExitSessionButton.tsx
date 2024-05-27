@@ -1,6 +1,7 @@
 import { Presence } from '@radix-ui/react-presence'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { LogOut } from 'lucide-react'
+import { forwardRef } from 'react'
 import { Button } from '../../../Button'
 import {
   AlertDialog,
@@ -23,7 +24,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from './Drawer'
-import { forwardRef } from 'react'
 
 interface ExitSessionButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -41,6 +41,7 @@ const ExitSessionButton = forwardRef<HTMLButtonElement, ExitSessionButtonProps>(
       <Button
         ref={ref}
         variant="secondary"
+        data-cy="exit-session-button"
         data-state-shared={shared}
         className="flex w-fit scale-95 items-center gap-2 self-end px-5 data-[state-shared=true]:animate-in data-[state-shared=false]:animate-out data-[state-shared=false]:fade-out data-[state-shared=true]:fade-in data-[state-shared=false]:zoom-out-90 data-[state-shared=true]:zoom-in-90"
         {...props}
