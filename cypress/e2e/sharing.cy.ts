@@ -64,6 +64,7 @@ describe('State sharing', () => {
       })
       .then(() => {
         cy.get('[data-cy="check-icon"]').should('exist')
+        cy.get('[data-cy="clipboard-icon"]').should('exist')
       })
 
     cy.window().then((window) => {

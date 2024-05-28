@@ -5,24 +5,24 @@ category: 'stopwatch' | 'timer'
 state: <sm data>
 }
 
-XXX: ?: ability to create room with custom id
-XXX: test state sharing
 XXX: update readme app description and development instructions
 
 XXX: view-only links
 XXX: test view-only state sharing
 
-XXX: share UI change on disconnect
+XXX: disable switch until connected
+XXX: fix/account for local date/time drift on different devices
+XXX: fullscreen
+XXX: scroll on tabs with use-gesture
+XXX: mute button in header for timer
+XXX: title and description for shared timer and stopwatch
+
+XXX: ?: ability to create room with custom id
 XXX: notif on disconnect
 XXX: test disconnect
 
 XXX: your timer ended while you were away toast + handle beep play without interaction (or) ?: use alert dialog instead
 XXX: test new toast
-
-XXX: fullscreen
-XXX: scroll on tabs with use-gesture
-XXX: mute button in header for timer
-XXX: title and description for shared timer and stopwatch
 
 XXX: buttons stop using scale by default and scale up on hover and scale down on active but keep font unscaled? (see Josh Comeau's article on CSS Transitions for exact button animation)
 XXX: animate timer buttons
