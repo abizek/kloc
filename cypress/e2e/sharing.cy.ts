@@ -195,8 +195,11 @@ describe('State sharing', () => {
     cy.viewport('iphone-se2')
     cy.testExitSession()
   })
-})
 
-// XXX: 404
-// XXX: 409
-// XXX: network status - connected, offline and disconnected
+  it('404', () => {
+    cy.visit('/kloc/foo-bar')
+    cy.get('[data-cy="toast"]')
+      .should('exist')
+      .contains('Kloc foo-bar does not exist')
+  })
+})
