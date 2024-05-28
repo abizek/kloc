@@ -14,6 +14,13 @@ export default defineConfig({
     viewportHeight: 720,
     viewportWidth: 1280,
     experimentalRunAllSpecs: true,
+    specPattern: [
+      'cypress/e2e/root.cy.ts',
+      'cypress/e2e/kloc.cy.ts',
+      'cypress/e2e/stopwatch.cy.ts',
+      'cypress/e2e/timer.cy.ts',
+      'cypress/e2e/sharing.cy.ts',
+    ],
   },
   env: { baseUrl },
 })
