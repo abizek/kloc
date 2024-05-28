@@ -1,9 +1,11 @@
-import { defineConfig } from 'cypress'
 import codeCoverage from '@cypress/code-coverage/task'
+import { defineConfig } from 'cypress'
+
+const baseUrl = 'http://localhost:5173'
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:5173/',
+    baseUrl,
     setupNodeEvents(on, config) {
       codeCoverage(on, config)
 
@@ -13,4 +15,5 @@ export default defineConfig({
     viewportWidth: 1280,
     experimentalRunAllSpecs: true,
   },
+  env: { baseUrl },
 })

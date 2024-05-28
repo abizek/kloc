@@ -3,7 +3,7 @@ import stopwatchInitialState from '../fixtures/stopwatchInitialState.json'
 import timerInitialState from '../fixtures/timerInitialState.json'
 
 const createRoom = (room: string) =>
-  new Promise<void>((resolve, reject) => {
+  new Promise<object>((resolve, reject) => {
     try {
       const ws = new PartySocket({
         host: 'localhost:1999',
@@ -21,11 +21,23 @@ const createRoom = (room: string) =>
               timer: timerInitialState,
             }),
           )
-          ws.close()
-          resolve()
         },
         { once: true },
       )
+
+      const timeoutId = setTimeout(() => {
+        ws.removeEventListener('message', onMessage)
+        ws.close()
+        resolve(null)
+      }, 1000)
+
+      const onMessage = (event: MessageEvent) => {
+        clearTimeout(timeoutId)
+        ws.close()
+        resolve(event.data)
+      }
+
+      ws.addEventListener('message', onMessage, { once: true })
     } catch (error) {
       reject(error)
     }
@@ -84,6 +96,29 @@ const joinRoom = (room: string) =>
     }
   })
 
+const updateRoom = (room: string, state: object) =>
+  new Promise<void>((resolve, reject) => {
+    try {
+      const ws = new PartySocket({
+        host: 'localhost:1999',
+        room,
+        debug: true,
+      })
+
+      ws.addEventListener(
+        'open',
+        () => {
+          ws.send(JSON.stringify({ type: 'update', ...state }))
+          ws.close()
+          resolve()
+        },
+        { once: true },
+      )
+    } catch (error) {
+      reject(error)
+    }
+  })
+
 Cypress.Commands.addAll({
   assertTabPresence: (tab: string) => {
     cy.get(`[data-cy="${tab}-trigger"]`)
@@ -104,4 +139,5 @@ Cypress.Commands.addAll({
   createRoom,
   deleteRoom,
   joinRoom,
+  updateRoom,
 })

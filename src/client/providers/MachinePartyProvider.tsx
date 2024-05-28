@@ -138,7 +138,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
               <>
                 <Ban />
                 <span>
-                  Sharing was disabled for <strong>{roomId}</strong>
+                  Kloc <strong>{roomId}</strong> was deleted
                 </span>
               </>
             ),
@@ -153,7 +153,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
               <>
                 <CircleAlert />
                 <span>
-                  Room <strong>{roomId}</strong> does not exist
+                  Kloc <strong>{roomId}</strong> does not exist
                 </span>
               </>
             ),

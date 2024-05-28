@@ -72,13 +72,13 @@ describe('Timer', () => {
     })
 
     it('presence', () => {
-      cy.get('[data-cy="time-up-toast"]').should('exist')
+      cy.get('[data-cy="toast"]').should('exist').contains("Time's up")
       expect(beep.paused).eq(false)
     })
 
     it('dismiss', () => {
       cy.get('[data-cy="dismiss"]').contains('Dismiss').click()
-      cy.get('[data-cy="time-up-toast"]').should('not.exist')
+      cy.get('[data-cy="toast"]').should('not.exist')
       cy.then(() => {
         expect(beep.paused).eq(true)
       })
@@ -86,7 +86,7 @@ describe('Timer', () => {
 
     it('esc key dismiss', () => {
       cy.get('#root').type('{esc}')
-      cy.get('[data-cy="time-up-toast"]').should('not.exist')
+      cy.get('[data-cy="toast"]').should('not.exist')
       cy.then(() => {
         expect(beep.paused).eq(true)
       })
@@ -94,7 +94,7 @@ describe('Timer', () => {
 
     it('dismiss on new timer start', () => {
       cy.get('[data-cy="start"]').click()
-      cy.get('[data-cy="time-up-toast"]').should('not.exist')
+      cy.get('[data-cy="toast"]').should('not.exist')
       cy.then(() => {
         expect(beep.paused).eq(true)
       })

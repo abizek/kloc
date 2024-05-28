@@ -32,6 +32,7 @@ export function NetworkStatusPopover() {
         <PopoverTrigger asChild>
           <Button
             variant="icon"
+            data-cy="network-status"
             aria-label="Check network status"
             data-state-shared={!!roomId}
             className="data-[state-shared=true]:animate-in data-[state-shared=false]:animate-out data-[state-shared=false]:fade-out data-[state-shared=true]:fade-in data-[state-shared=false]:zoom-out-50 data-[state-shared=true]:zoom-in-50 [&_svg]:size-7"
