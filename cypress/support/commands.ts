@@ -119,6 +119,39 @@ const updateRoom = (room: string, state: object) =>
     }
   })
 
+const testExitSession = () => {
+  cy.get('[data-cy="share"]').click()
+  cy.get('[data-cy="share-switch"]').click()
+
+  cy.get('[data-cy="exit-session-button"]').contains('Exit Session').click()
+  cy.get('[data-cy="exit-session-confirmation"]').should('exist')
+  cy.get('[data-cy="exit-session-cancel"]').contains('Cancel').click()
+  cy.get('[data-cy="exit-session-confirmation"]').should('not.exist')
+
+  let roomId: string
+  cy.location()
+    .then((location) => {
+      roomId = location.pathname.split('/')[2]
+    })
+    .then(() => {
+      cy.get('[data-cy="exit-session-button"]').click()
+      cy.get('[data-cy="exit-session-confirmation"]').should('exist')
+      cy.get('[data-cy="exit-session-ok"]').contains('Continue').click()
+      cy.location('pathname').should('not.contain', roomId)
+      cy.get('[data-cy="network-status"]').should('not.exist')
+      cy.get('[data-cy="share-switch"]')
+        .should('have.attr', 'data-state')
+        .and('match', /^unchecked$/)
+
+      cy.joinRoom(roomId).then((result) => {
+        cy.fixture('joinRoomSuccessResult').should(
+          'deep.equal',
+          JSON.parse(result),
+        )
+      })
+    })
+}
+
 Cypress.Commands.addAll({
   assertTabPresence: (tab: string) => {
     cy.get(`[data-cy="${tab}-trigger"]`)
@@ -140,4 +173,5 @@ Cypress.Commands.addAll({
   deleteRoom,
   joinRoom,
   updateRoom,
+  testExitSession,
 })

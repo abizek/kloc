@@ -8,5 +8,6 @@ declare namespace Cypress {
     deleteRoom(room: string): Chainable
     joinRoom(room: string): Chainable
     updateRoom(room: string, state: object): Chainable
+    testExitSession(): Chainable
   }
 }

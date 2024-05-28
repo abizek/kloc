@@ -1,5 +1,6 @@
 import { Share2 } from 'lucide-react'
 import { useContext, useState } from 'react'
+import { categories } from '../../../../types'
 import { useRouter } from '../../../hooks/useRouter'
 import { MachinePartyContext } from '../../../providers/MachinePartyProvider'
 import { Button } from '../../Button'
@@ -37,7 +38,7 @@ export function SharePopover() {
           <Share2 className="size-6" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="h-[78px] w-svw max-w-96 has-[[data-state-qr]]:h-[566px] has-[[data-state-shared]]:h-[200px]">
+      <PopoverContent className="h-[78px] w-[calc(100vw_-_1rem)] min-w-[min(calc(100vw_-_1rem),_28rem)] max-w-max has-[[data-state-qr]]:h-[566px] has-[[data-state-shared]]:h-[200px]">
         <div className="flex flex-col gap-4">
           <div>
             <div className="flex justify-between">
@@ -58,7 +59,12 @@ export function SharePopover() {
 
           <ExitSessionButton
             shared={shared}
-            onExitSession={() => handleToggle(false, false)}
+            onExitSession={() => {
+              handleToggle(false, false)
+              categories.forEach((category) => {
+                window.dispatchEvent(new CustomEvent(`${category}-reset`))
+              })
+            }}
           />
         </div>
       </PopoverContent>

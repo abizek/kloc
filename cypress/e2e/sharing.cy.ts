@@ -186,9 +186,17 @@ describe('State sharing', () => {
         })
     })
   })
+
+  it('exit session in desktop', () => {
+    cy.testExitSession()
+  })
+
+  it('exit session in mobile', () => {
+    cy.viewport('iphone-se2')
+    cy.testExitSession()
+  })
 })
 
-// XXX: exit without deleting room confirmation all options - dialog + drawer
 // XXX: 404
 // XXX: 409
 // XXX: network status - connected, offline and disconnected

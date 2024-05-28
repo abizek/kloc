@@ -2,6 +2,7 @@ import { Presence } from '@radix-ui/react-presence'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { LogOut } from 'lucide-react'
 import { forwardRef } from 'react'
+import { useRouter } from '../../../../hooks/useRouter'
 import { Button } from '../../../Button'
 import {
   AlertDialog,
@@ -57,9 +58,10 @@ function ExitSessionButtonWithConfirmation({
   shared,
   onExitSession,
 }: ExitSessionButtonWithConfirmationProps) {
+  const { roomId } = useRouter()
   const isSmallDevice = useMediaQuery('(max-width: 640px)')
   const title = 'Exit Session?'
-  const description = 'The current session will still be shared.'
+  const description = `Kloc ${roomId} will still be shared.`
   const cancelButtonText = 'Cancel'
   const continueButtonText = 'Continue'
 
@@ -70,19 +72,27 @@ function ExitSessionButtonWithConfirmation({
           <ExitSessionButton shared={shared} />
         </DrawerTrigger>
       </Presence>
-      <DrawerContent>
+      <DrawerContent data-cy="exit-session-confirmation">
         <DrawerHeader>
           <DrawerTitle>{title}</DrawerTitle>
           <DrawerDescription>{description}</DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant="secondary" className="scale-95">
+            <Button
+              variant="secondary"
+              data-cy="exit-session-cancel"
+              className="scale-95"
+            >
               {cancelButtonText}
             </Button>
           </DrawerClose>
           <DrawerClose asChild>
-            <Button className="scale-95" onClick={onExitSession}>
+            <Button
+              className="scale-95"
+              data-cy="exit-session-ok"
+              onClick={onExitSession}
+            >
               {continueButtonText}
             </Button>
           </DrawerClose>
@@ -96,14 +106,16 @@ function ExitSessionButtonWithConfirmation({
           <ExitSessionButton shared={shared} />
         </AlertDialogTrigger>
       </Presence>
-      <AlertDialogContent>
+      <AlertDialogContent data-cy="exit-session-confirmation">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{cancelButtonText}</AlertDialogCancel>
-          <AlertDialogAction onClick={onExitSession}>
+          <AlertDialogCancel data-cy="exit-session-cancel">
+            {cancelButtonText}
+          </AlertDialogCancel>
+          <AlertDialogAction data-cy="exit-session-ok" onClick={onExitSession}>
             {continueButtonText}
           </AlertDialogAction>
         </AlertDialogFooter>
