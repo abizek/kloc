@@ -1,0 +1,25 @@
+{
+  "type": "update",
+  "stopwatch": {
+    "context": {
+      "origin": 0,
+      "elapsed": 0,
+      "lapOrigin": 0,
+      "lapElapsed": 0,
+      "laps": []
+    },
+    "status": "active",
+    "value": "stopped"
+  },
+  "timer": {
+    "context": {
+      "remaining": 0,
+      "destination": 0,
+      "duration": 0
+    },
+    "status": "active",
+    "value": {
+      "stopped": "beepStopped"
+    }
+  }
+}
