@@ -39,8 +39,10 @@ export function ShareableLink({ shared }: ShareableLinkProps) {
           data-state-shared={shared}
           className="flex items-center justify-between rounded-xl border border-black/10 bg-white p-3 text-sm text-gray-600/90 data-[state-shared=true]:animate-in data-[state-shared=false]:animate-out data-[state-shared=false]:fade-out data-[state-shared=true]:fade-in data-[state-shared=false]:zoom-out-90 data-[state-shared=true]:zoom-in-90 dark:border-white/10 dark:bg-zinc-950 dark:text-gray-400"
         >
-          <Link className="mr-2 size-4" />
-          <div className="truncate">{location.href}</div>
+          <div className="truncate">
+            <Link className="mr-2 inline size-4 -translate-y-0.5" />
+            {location.href}
+          </div>
           <div className="ml-5 flex h-5 items-center gap-2">
             <Button
               variant="icon"
