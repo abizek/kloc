@@ -5,7 +5,7 @@ category: 'stopwatch' | 'timer'
 state: <sm data>
 }
 
-XXX: update readme app description and development instructions
+XXX: update github repo name and desc
 
 XXX: view-only links
 XXX: test view-only state sharing
@@ -15,6 +15,9 @@ XXX: fix/account for local date/time drift on different devices
 XXX: fullscreen
 XXX: scroll on tabs with use-gesture
 XXX: mute button in header for timer
+XXX: notification permission ux (bell icon button in header with switch in popover?)
+XXX: schedule timer notification in service worker
+XXX: handle firefox requireInteraction support under flag
 XXX: title and description for shared timer and stopwatch
 
 XXX: ?: ability to create room with custom id
@@ -25,11 +28,6 @@ XXX: your timer ended while you were away toast + handle beep play without inter
 XXX: test new toast
 
 XXX: buttons stop using scale by default and scale up on hover and scale down on active but keep font unscaled? (see Josh Comeau's article on CSS Transitions for exact button animation)
-XXX: animate timer buttons
-XXX: animate with morphing icons (lottie?)
-
-XXX: update meta title, description with each page (react-helmet maybe?)
-XXX: update github repo name and desc
 
 XXX: error correction on write input
 XXX: R&D: scrolling input with stiffness and damping and momentum
@@ -45,16 +43,18 @@ XXX: update/add timer input tests
 XXX: timer destination preview (no date if today, localized date if not)
 XXX: update destination preview test
 
-XXX: timer timeView days, years : show units when hours is present
-XXX: timer timeView days, years : units styling
-XXX: timer timeView days, years : do not show units with 0 value when hours is present
-XXX: timer timeView days, years : do not prefix 0 on the biggest unit when hours is present
-XXX: timer timeView days, years : hours, days, years layout
-XXX: add days, years timer tests
+XXX: timer & stopwatch timeView days, years : show units when hours is present
+XXX: timer & stopwatch timeView days, years : units styling
+XXX: timer & stopwatch timeView days, years : do not show units with 0 value when hours is present
+XXX: timer & stopwatch timeView days, years : do not prefix 0 on the biggest unit when hours is present
+XXX: timer & stopwatch timeView days, years : hours, days, years layout
+XXX: add days, years timer & stopwatch tests
 
 XXX: kloc.live domain
 
-XXX: capacitor app with timer notifications, open app via link, convert local and session storage stuff, link for share using android share, fullscreen
+XXX: animate timer buttons
+XXX: animate with morphing icons (lottie?)
+XXX: ?: pwa or capacitor app with timer notifications, open app via link, convert local and session storage stuff, link for share using android share, fullscreen
 XXX: update Readme with capacitor stuff
 
 XXX: ?: negative timer in toast description (upto seconds only)
