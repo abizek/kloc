@@ -2,6 +2,6 @@
   "all": true,
   "extends": "@istanbuljs/nyc-config-typescript",
   "check-coverage": true,
-  "include": ["src/**/*.tsx", "src/**/*.ts"],
+  "include": ["src/client/**/*.tsx", "src/client/**/*.ts"],
   "exclude": ["cypress/**/*.*", "**/*.d.ts", "**/*.cy.ts"]
 }

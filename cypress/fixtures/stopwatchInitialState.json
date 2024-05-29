@@ -1,0 +1,11 @@
+{
+  "context": {
+    "origin": 0,
+    "elapsed": 0,
+    "lapOrigin": 0,
+    "lapElapsed": 0,
+    "laps": []
+  },
+  "status": "active",
+  "value": "stopped"
+}

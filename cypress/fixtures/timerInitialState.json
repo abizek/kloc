@@ -1,0 +1,11 @@
+{
+  "context": {
+    "remaining": 0,
+    "destination": 0,
+    "duration": 0
+  },
+  "status": "active",
+  "value": {
+    "stopped": "beepStopped"
+  }
+}

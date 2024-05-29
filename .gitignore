@@ -25,6 +25,10 @@ dist-ssr
 
 # Cypress
 cypress/videos/**
-cypress/screenshoots/**
+cypress/screenshots/**
+cypress/downloads/**
 coverage
 .nyc_output
+
+# Partykit
+.partykit
