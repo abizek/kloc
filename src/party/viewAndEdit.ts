@@ -93,11 +93,14 @@ export default class ViewAndEditServer implements Party.Server {
             return
           }
 
+          const viewOnlyRoomId =
+            await this.room.storage.get<string>(VIEW_ONLY_ROOM_ID)
           sender.send(
             JSON.stringify({
               type: 'update',
               stopwatch,
               timer,
+              viewOnlyRoomId,
             } satisfies UpdateMessage),
           )
 

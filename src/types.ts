@@ -10,10 +10,12 @@ export type State = {
 export type CreateMessage = { type: 'create' } & { [index in Category]: State }
 export type CreateResponse = {
   type: 'create-response'
-  viewOnlyRoomId: string | null
+  viewOnlyRoomId: string
 }
 export type JoinMessage = { type: 'join' }
-export type UpdateMessage = { type: 'update' } & { [index in Category]?: State }
+export type UpdateMessage = { type: 'update' } & {
+  [index in Category]?: State
+} & { viewOnlyRoomId?: string }
 export type DeleteMessage = { type: 'delete' }
 export type NotFoundMessage = { type: 404 }
 export type ConflictMessage = { type: 409 }

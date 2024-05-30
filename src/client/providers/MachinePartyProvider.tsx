@@ -2,7 +2,7 @@ import { pick } from 'lodash'
 import { Ban, BellRing, CircleAlert } from 'lucide-react'
 import usePartySocket from 'partysocket/react'
 import type { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react'
-import { createContext, useCallback, useEffect, useRef, useState } from 'react'
+import { createContext, useCallback, useEffect, useState } from 'react'
 import type { MachineSnapshot, NonReducibleUnknown } from 'xstate'
 import type {
   Category,
@@ -81,6 +81,8 @@ type MachinePartyContextType = {
   setNewRoom: Dispatch<SetStateAction<boolean>>
   deleteRoom: () => void
 
+  viewOnly: boolean
+  setViewOnly: Dispatch<SetStateAction<boolean>>
   viewOnlyRoomId: string | null
 }
 
@@ -93,9 +95,9 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
   const [connected, setConnected] = useState(false)
   const [newRoom, setNewRoom] = useState(false)
   const [viewOnly, setViewOnly] = useState(false)
+  const [viewOnlyRoomId, setViewOnlyRoomId] = useState<string>('')
   const { toast: roomDeletedToast } = useToast()
   const { toast: roomNotFoundToast } = useToast()
-  const viewOnlyRoomId = useRef<string | null>(null)
 
   const ws = usePartySocket({
     host: import.meta.env.VITE_PARTYKIT_HOST,
@@ -123,11 +125,14 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
       const parsedMessage: MessageFromServer = JSON.parse(event.data)
       switch (parsedMessage.type) {
         case 'create-response': {
-          viewOnlyRoomId.current = parsedMessage.viewOnlyRoomId
+          setViewOnlyRoomId(parsedMessage.viewOnlyRoomId)
           break
         }
         case 'update': {
-          const { type, ...parsedMessageData } = parsedMessage
+          const { type, viewOnlyRoomId, ...parsedMessageData } = parsedMessage
+          if (viewOnlyRoomId) {
+            setViewOnlyRoomId(viewOnlyRoomId)
+          }
 
           Object.keys(parsedMessageData).forEach((key) => {
             const event = new CustomEvent(`${key}-update`, {
@@ -145,9 +150,16 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
           roomDeletedToast({
             title: (
               <>
-                <Ban />
+                <Ban className="shrink-0" />
                 <span>
-                  Kloc <strong>{roomId}</strong> was deleted
+                  Kloc <strong>{roomId}</strong>
+                  {viewOnlyRoomId && (
+                    <>
+                      {', '}
+                      <strong>{viewOnlyRoomId}</strong>
+                    </>
+                  )}{' '}
+                  was deleted
                 </span>
               </>
             ),
@@ -264,7 +276,9 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
         connecting: ws.readyState === ws.CONNECTING,
         setNewRoom,
         deleteRoom,
-        viewOnlyRoomId: viewOnlyRoomId.current,
+        viewOnly,
+        setViewOnly,
+        viewOnlyRoomId,
       }}
     >
       {children}

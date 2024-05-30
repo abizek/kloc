@@ -1,8 +1,9 @@
 import { Presence } from '@radix-ui/react-presence'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { LogOut } from 'lucide-react'
-import { forwardRef } from 'react'
+import { forwardRef, useContext } from 'react'
 import { useRouter } from '../../../../hooks/useRouter'
+import { MachinePartyContext } from '../../../../providers/MachinePartyProvider'
 import { Button } from '../../../Button'
 import {
   AlertDialog,
@@ -44,7 +45,7 @@ const ExitSessionButton = forwardRef<HTMLButtonElement, ExitSessionButtonProps>(
         variant="secondary"
         data-cy="exit-session-button"
         data-state-shared={shared}
-        className="flex w-fit scale-95 items-center gap-2 self-end px-5 data-[state-shared=true]:animate-in data-[state-shared=false]:animate-out data-[state-shared=false]:fade-out data-[state-shared=true]:fade-in data-[state-shared=false]:zoom-out-90 data-[state-shared=true]:zoom-in-90"
+        className="mt-6 flex w-fit scale-95 items-center gap-2 self-end px-5 data-[state-shared=true]:animate-in data-[state-shared=false]:animate-out data-[state-shared=false]:fade-out data-[state-shared=true]:fade-in data-[state-shared=false]:zoom-out-90 data-[state-shared=true]:zoom-in-90"
         {...props}
       >
         <LogOut className="size-5 rotate-180" />
@@ -60,8 +61,9 @@ function ExitSessionButtonWithConfirmation({
 }: ExitSessionButtonWithConfirmationProps) {
   const { roomId } = useRouter()
   const isSmallDevice = useMediaQuery('(max-width: 640px)')
+  const { viewOnlyRoomId } = useContext(MachinePartyContext)
   const title = 'Exit Session?'
-  const description = `Kloc ${roomId} will still be shared.`
+  const description = `Kloc ${roomId}${viewOnlyRoomId ? `, ${viewOnlyRoomId}` : ''} will still be shared.`
   const cancelButtonText = 'Cancel'
   const continueButtonText = 'Continue'
 

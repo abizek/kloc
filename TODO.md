@@ -5,7 +5,6 @@ category: 'stopwatch' | 'timer'
 state: <sm data>
 }
 
-XXX: view-only links
 XXX: notif on opening view only klocs with option to dismiss and don't show again
 XXX: test view-only state sharing
 
