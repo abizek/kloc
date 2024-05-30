@@ -1,9 +1,11 @@
-import { Share2 } from 'lucide-react'
+import { Ban, Share2 } from 'lucide-react'
 import { useContext, useState } from 'react'
 import { categories } from '../../../../types'
 import { useRouter } from '../../../hooks/useRouter'
 import { MachinePartyContext } from '../../../providers/MachinePartyProvider'
 import { Button } from '../../Button'
+import { ToastAction } from '../../Toast/Toast'
+import { useToast } from '../../Toast/useToast'
 import { Popover, PopoverContent, PopoverTrigger } from '../Popover'
 import { ExitSessionButton } from './ExitSessionButton'
 import { ShareableLink } from './ShareableLink'
@@ -13,6 +15,7 @@ export function SharePopover() {
   const { roomId, enterNewRoom, exitRoom } = useRouter()
   const [shared, setShared] = useState(!!roomId)
   const { setNewRoom, deleteRoom } = useContext(MachinePartyContext)
+  const { toast } = useToast()
 
   const handleToggle = (checked: boolean, deleteRoomOnExit: boolean = true) => {
     setShared(checked)
@@ -22,6 +25,17 @@ export function SharePopover() {
     } else {
       if (deleteRoomOnExit) {
         deleteRoom()
+        toast({
+          title: (
+            <>
+              <Ban />
+              <span>
+                Kloc <strong>{roomId}</strong> is deleted
+              </span>
+            </>
+          ),
+          action: <ToastAction>Ok</ToastAction>,
+        })
       }
       exitRoom()
     }
