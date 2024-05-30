@@ -18,7 +18,6 @@ import { ToastAction } from '../components/Toast/Toast'
 import { useToast } from '../components/Toast/useToast'
 import { useMachineParty } from '../hooks/useMachineParty'
 import { useRouter } from '../hooks/useRouter'
-import { useViewOnly } from '../hooks/useViewOnly'
 import type {
   StopwatchEvent,
   StopwatchContext as StopwatchXstateContext,
@@ -93,11 +92,10 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
   const { roomId, exitRoom, enterNewRoom } = useRouter()
   const [connected, setConnected] = useState(false)
   const [newRoom, setNewRoom] = useState(false)
+  const [viewOnly, setViewOnly] = useState(false)
   const { toast: roomDeletedToast } = useToast()
   const { toast: roomNotFoundToast } = useToast()
   const viewOnlyRoomId = useRef<string | null>(null)
-  // XXX: try connecting to viewOnly party on 404 instead of query params
-  const viewOnly = useViewOnly()
 
   const ws = usePartySocket({
     host: import.meta.env.VITE_PARTYKIT_HOST,
@@ -155,10 +153,16 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
             ),
             action: <ToastAction>Ok</ToastAction>,
           })
+          setViewOnly(false)
           exitRoom()
           break
         }
         case 404: {
+          if (!viewOnly) {
+            setViewOnly(true)
+            break
+          }
+
           roomNotFoundToast({
             title: (
               <>
@@ -171,6 +175,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
             action: <ToastAction>Ok</ToastAction>,
             duration: 60000,
           })
+          setViewOnly(false)
           exitRoom()
           break
         }
