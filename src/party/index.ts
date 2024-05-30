@@ -26,15 +26,21 @@ export default class Server implements Party.Server {
       const parsedMessage: MessageFromClient = JSON.parse(message)
       switch (parsedMessage.type) {
         case 'create': {
-          // handle room collision
-          const keys = [...(await this.room.storage.list()).keys()]
-          if (keys.length > 0) {
-            sender.send(JSON.stringify({ type: 409 } satisfies ConflictMessage))
-            return
-          }
+          await this.room.blockConcurrencyWhile(async () => {
+            // handle room collision
+            const keys = [...(await this.room.storage.list()).keys()]
+            if (keys.length > 0) {
+              sender.send(
+                JSON.stringify({ type: 409 } satisfies ConflictMessage),
+              )
+              sender.close()
+              return
+            }
 
-          const { type, ...messageData } = parsedMessage
-          await this.room.storage.put<State>({ ...messageData })
+            const { type, ...messageData } = parsedMessage
+            await this.room.storage.put<State>({ ...messageData })
+          })
+
           break
         }
         case 'join': {
@@ -45,6 +51,7 @@ export default class Server implements Party.Server {
           )
           if (!stopwatch && !timer) {
             sender.send(JSON.stringify({ type: 404 } satisfies NotFoundMessage))
+            sender.close()
             return
           }
 
@@ -55,15 +62,19 @@ export default class Server implements Party.Server {
               timer,
             } satisfies UpdateMessage),
           )
+
           break
         }
         case 'update': {
-          const { type, ...messageData } = parsedMessage
-          this.room.broadcast(
-            JSON.stringify({ type, ...messageData } satisfies UpdateMessage),
-            [sender.id],
-          )
-          await this.room.storage.put({ ...messageData })
+          await this.room.blockConcurrencyWhile(async () => {
+            this.room.broadcast(
+              JSON.stringify(parsedMessage satisfies UpdateMessage),
+              [sender.id],
+            )
+            const { type, ...messageData } = parsedMessage
+            await this.room.storage.put({ ...messageData })
+          })
+
           break
         }
         case 'delete': {
@@ -72,10 +83,14 @@ export default class Server implements Party.Server {
             JSON.stringify({ type: 'delete' } satisfies DeleteMessage),
             [sender.id],
           )
+          for (const connection of this.room.getConnections()) {
+            connection.close()
+          }
+
           break
         }
         default:
-          console.error('Unknown message type', parsedMessage)
+          console.error('Unknown message type', parsedMessage satisfies never)
       }
     } catch (error) {
       console.error('Error in onMessage', error)
