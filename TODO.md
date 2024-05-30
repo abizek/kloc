@@ -5,9 +5,8 @@ category: 'stopwatch' | 'timer'
 state: <sm data>
 }
 
-XXX: update github repo name and desc
-
 XXX: view-only links
+XXX: notif on opening view only klocs with option to dismiss and don't show again
 XXX: test view-only state sharing
 
 XXX: disable switch until connected

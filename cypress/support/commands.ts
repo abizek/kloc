@@ -8,6 +8,7 @@ const createRoom = (room: string) =>
       const ws = new PartySocket({
         host: 'localhost:1999',
         room,
+        party: 'view_and_edit',
         debug: true,
       })
 
@@ -49,6 +50,7 @@ const deleteRoom = (room: string) =>
       const ws = new PartySocket({
         host: 'localhost:1999',
         room,
+        party: 'view_and_edit',
         debug: true,
       })
 
@@ -72,6 +74,7 @@ const joinRoom = (room: string) =>
       const ws = new PartySocket({
         host: 'localhost:1999',
         room,
+        party: 'view_and_edit',
         debug: true,
       })
 
@@ -102,6 +105,7 @@ const updateRoom = (room: string, state: object) =>
       const ws = new PartySocket({
         host: 'localhost:1999',
         room,
+        party: 'view_and_edit',
         debug: true,
       })
 

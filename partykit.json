@@ -1,6 +1,10 @@
 {
   "$schema": "https://www.partykit.io/schema.json",
   "name": "kloc",
-  "main": "src/party/index.ts",
+  "main": "src/party/main.ts",
+  "parties": {
+    "view_only": "src/party/viewOnly.ts",
+    "view_and_edit": "src/party/viewAndEdit.ts"
+  },
   "compatibilityDate": "2024-05-03"
 }

@@ -1,6 +1,13 @@
+import {
+  adjectives,
+  animals,
+  uniqueNamesGenerator,
+} from '@joaomoreno/unique-names-generator'
 import type * as Party from 'partykit/server'
 import type {
   ConflictMessage,
+  CreateMessage,
+  CreateResponse,
   DeleteMessage,
   MessageFromClient,
   NotFoundMessage,
@@ -9,7 +16,9 @@ import type {
 } from '../types'
 import { categories } from '../types'
 
-export default class Server implements Party.Server {
+const VIEW_ONLY_ROOM_ID = 'view_only-room-id' as const
+
+export default class ViewAndEditServer implements Party.Server {
   constructor(readonly room: Party.Room) {}
   options: Party.ServerOptions = {
     hibernate: true,
@@ -38,7 +47,36 @@ export default class Server implements Party.Server {
             }
 
             const { type, ...messageData } = parsedMessage
-            await this.room.storage.put<State>({ ...messageData })
+            await this.room.storage.put<State>(messageData)
+
+            let res: Response
+            let viewOnlyRoomId: string
+            do {
+              viewOnlyRoomId = uniqueNamesGenerator({
+                dictionaries: [adjectives, animals],
+                separator: '-',
+              })
+              res = await this.room.context.parties['view_only']
+                .get(viewOnlyRoomId)
+                .fetch({
+                  method: 'POST',
+                  body: JSON.stringify(
+                    messageData satisfies Omit<CreateMessage, 'type'>,
+                  ),
+                })
+            } while (res.status === 409)
+
+            await this.room.storage.put<string>(
+              VIEW_ONLY_ROOM_ID,
+              viewOnlyRoomId,
+            )
+
+            sender.send(
+              JSON.stringify({
+                type: 'create-response',
+                viewOnlyRoomId,
+              } satisfies CreateResponse),
+            )
           })
 
           break
@@ -72,13 +110,24 @@ export default class Server implements Party.Server {
               [sender.id],
             )
             const { type, ...messageData } = parsedMessage
-            await this.room.storage.put({ ...messageData })
+            await this.room.storage.put(messageData)
+            const viewOnlyRoomId =
+              await this.room.storage.get<string>(VIEW_ONLY_ROOM_ID)
+            if (viewOnlyRoomId) {
+              await this.room.context.parties['view_only']
+                .get(viewOnlyRoomId)
+                .fetch({
+                  method: 'PATCH',
+                  body: JSON.stringify(
+                    messageData satisfies Omit<UpdateMessage, 'type'>,
+                  ),
+                })
+            }
           })
 
           break
         }
         case 'delete': {
-          this.room.storage.deleteAll()
           this.room.broadcast(
             JSON.stringify({ type: 'delete' } satisfies DeleteMessage),
             [sender.id],
@@ -87,10 +136,21 @@ export default class Server implements Party.Server {
             connection.close()
           }
 
+          const viewOnlyRoomId =
+            await this.room.storage.get<string>(VIEW_ONLY_ROOM_ID)
+          if (viewOnlyRoomId) {
+            await this.room.context.parties['view_only']
+              .get(viewOnlyRoomId)
+              .fetch({ method: 'DELETE' })
+          }
+
+          await this.room.storage.deleteAll()
+
           break
         }
         default:
           console.error('Unknown message type', parsedMessage satisfies never)
+          throw new Error('Unknown message type')
       }
     } catch (error) {
       console.error('Error in onMessage', error)
@@ -102,4 +162,4 @@ export default class Server implements Party.Server {
   }
 }
 
-Server satisfies Party.Worker
+ViewAndEditServer satisfies Party.Worker

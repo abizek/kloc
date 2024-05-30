@@ -8,6 +8,10 @@ export type State = {
 }
 
 export type CreateMessage = { type: 'create' } & { [index in Category]: State }
+export type CreateResponse = {
+  type: 'create-response'
+  viewOnlyRoomId: string | null
+}
 export type JoinMessage = { type: 'join' }
 export type UpdateMessage = { type: 'update' } & { [index in Category]?: State }
 export type DeleteMessage = { type: 'delete' }
@@ -21,6 +25,7 @@ export type MessageFromClient =
   | DeleteMessage
 
 export type MessageFromServer =
+  | CreateResponse
   | UpdateMessage
   | DeleteMessage
   | NotFoundMessage

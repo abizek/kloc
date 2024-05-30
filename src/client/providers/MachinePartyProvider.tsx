@@ -2,7 +2,7 @@ import { pick } from 'lodash'
 import { Ban, BellRing, CircleAlert } from 'lucide-react'
 import usePartySocket from 'partysocket/react'
 import type { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react'
-import { createContext, useCallback, useEffect, useState } from 'react'
+import { createContext, useCallback, useEffect, useRef, useState } from 'react'
 import type { MachineSnapshot, NonReducibleUnknown } from 'xstate'
 import type {
   Category,
@@ -18,6 +18,7 @@ import { ToastAction } from '../components/Toast/Toast'
 import { useToast } from '../components/Toast/useToast'
 import { useMachineParty } from '../hooks/useMachineParty'
 import { useRouter } from '../hooks/useRouter'
+import { useViewOnly } from '../hooks/useViewOnly'
 import type {
   StopwatchEvent,
   StopwatchContext as StopwatchXstateContext,
@@ -80,6 +81,8 @@ type MachinePartyContextType = {
   connecting: boolean
   setNewRoom: Dispatch<SetStateAction<boolean>>
   deleteRoom: () => void
+
+  viewOnlyRoomId: string | null
 }
 
 export const MachinePartyContext = createContext<MachinePartyContextType>(
@@ -92,10 +95,14 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
   const [newRoom, setNewRoom] = useState(false)
   const { toast: roomDeletedToast } = useToast()
   const { toast: roomNotFoundToast } = useToast()
+  const viewOnlyRoomId = useRef<string | null>(null)
+  // XXX: try connecting to viewOnly party on 404 instead of query params
+  const viewOnly = useViewOnly()
 
   const ws = usePartySocket({
     host: import.meta.env.VITE_PARTYKIT_HOST,
     room: roomId,
+    party: viewOnly ? 'view_only' : 'view_and_edit',
     maxEnqueuedMessages: 0,
     startClosed: !roomId,
     debug: import.meta.env.DEV,
@@ -117,6 +124,10 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
     onMessage(event) {
       const parsedMessage: MessageFromServer = JSON.parse(event.data)
       switch (parsedMessage.type) {
+        case 'create-response': {
+          viewOnlyRoomId.current = parsedMessage.viewOnlyRoomId
+          break
+        }
         case 'update': {
           const { type, ...parsedMessageData } = parsedMessage
 
@@ -169,7 +180,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
           break
         }
         default:
-          console.error('Unknown message type', parsedMessage)
+          console.error('Unknown message type', parsedMessage satisfies never)
       }
     },
     onClose() {
@@ -248,6 +259,7 @@ export const MachinePartyProvider: FC<PropsWithChildren> = ({ children }) => {
         connecting: ws.readyState === ws.CONNECTING,
         setNewRoom,
         deleteRoom,
+        viewOnlyRoomId: viewOnlyRoomId.current,
       }}
     >
       {children}
